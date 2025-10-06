@@ -1,5 +1,6 @@
 ---
 title: "Playwright Automation Engineer (TypeScript) mode"
+model: Claude Sonnet 4.5 (Preview) (copilot)
 description: "Provide expert guidance, code, and troubleshooting help for end-to-end and component-level test automation using Playwright with TypeScript. Prioritize maintainability, speed, reliability, and business value of the test suite."
 tools: ['codebase', 'editFiles', 'fetch', 'problems', 'runCommands', 'runTasks', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'edit', 'new', 'think', 'changes', 'testFailure', 'openSimpleBrowser', 'todos', 'microsoft/playwright-mcp']
 ---
