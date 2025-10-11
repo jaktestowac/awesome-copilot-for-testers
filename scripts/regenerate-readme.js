@@ -3,6 +3,8 @@
 const fs = require("fs");
 const path = require("path");
 
+const FILES_TO_PROCESS = ["README.md", "README.pl.md"];
+
 // Configuration for the repository
 const REPO_CONFIG = {
   owner: "jaktestowac",
@@ -19,7 +21,7 @@ const SECTIONS_CONFIG = {
     fileExtension: ".md",
     installType: "instructions",
     regex:
-      /(### Custom Instructions\s*\n+)([\s\S]*?)(\| Title[\s\S]*?)(?=\n### |$)/,
+      /(<!-- START_CUSTOM_INSTRUCTIONS -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_INSTRUCTIONS -->)/,
     defaultDescription: (title) => {
       const topic = title.split(" ").pop().replace(/s$/, "");
       return `${topic} specific coding standards and best practices`;
@@ -31,7 +33,7 @@ const SECTIONS_CONFIG = {
     fileExtension: ".prompt.md",
     installType: "prompt",
     regex:
-      /(### Custom Prompt Templates\s*\n+)([\s\S]*?)(\| Title[\s\S]*?)(?=\n### |$)/,
+      /(<!-- START_CUSTOM_PROMPT_TEMPLATES -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_PROMPT_TEMPLATES -->)/,
     defaultDescription: () => "",
   },
   chatmodes: {
@@ -40,7 +42,7 @@ const SECTIONS_CONFIG = {
     fileExtension: ".chatmode.md",
     installType: "mode",
     regex:
-      /(### Custom Chat Modes\s*\n+)([\s\S]*?)(\| Title[\s\S]*?)(?=\n## |$)/,
+      /(<!-- START_CUSTOM_CHAT_MODES -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_CHAT_MODES -->)/,
     defaultDescription: () => "",
   },
 };
@@ -285,7 +287,8 @@ function generateSection(sectionConfig) {
     content += `| [${title}](${link}) | ${description} | ${badges} |\n`;
   }
 
-  return content;
+  // Remove trailing newline to prevent extra newlines in the file
+  return content.trimEnd();
 }
 
 // Section update with error handling
@@ -296,25 +299,15 @@ function updateSection(readmeContent, sectionConfig) {
     if (sectionConfig.regex.test(readmeContent)) {
       const updatedContent = readmeContent.replace(
         sectionConfig.regex,
-        (match, header, preservedContent, oldTable) => {
-          // Check if there's any preserved content (like TIP blocks)
-          // If the preserved content contains only whitespace or starts with a table, don't preserve it
-          const trimmedPreserved = preservedContent.trim();
-          if (
-            trimmedPreserved === "" ||
-            trimmedPreserved.startsWith("| Title")
-          ) {
-            return `${header}${newTable}\n`;
-          } else {
-            // Preserve the content between header and table
-            return `${header}${preservedContent}${newTable}\n`;
-          }
+        (match, header, oldTableContent, endComment) => {
+          // Replace the old table content with the new table, keeping header and end comment
+          return `${header}${newTable}${endComment}`;
         }
       );
       logConsole(`✅ Updated ${sectionConfig.title} section`);
       return updatedContent;
     } else {
-      logConsole(`${sectionConfig.title} section not found in README`);
+      logConsole(`⚠️ ${sectionConfig.title} section not found in README`);
       return readmeContent;
     }
   } catch (error) {
@@ -327,12 +320,10 @@ function updateSection(readmeContent, sectionConfig) {
 }
 
 // Main update function
-function updateReadmeSections() {
-  const readmePath = path.join(__dirname, "..", "README.md");
-
+function updateReadmeSections(readmePath) {
   // Read the existing README
   let readmeContent = fs.readFileSync(readmePath, "utf8");
-  logConsole("Read existing README.md");
+  logConsole(`-> Read existing ${path.basename(readmePath)}`);
 
   // Store original content for rollback if needed
   const originalContent = readmeContent;
@@ -357,62 +348,87 @@ function updateReadmeSections() {
 
 // Main execution with enhanced error handling
 function main() {
-  logConsole("Regenerating README.md sections for directories...");
+  logConsole("Regenerating README sections for directories...");
 
-  const readmePath = path.join(__dirname, "..", "README.md");
+  const repoRoot = path.join(__dirname, "..");
+  const readmeFiles = FILES_TO_PROCESS;
 
-  // Validate README exists
-  if (!fs.existsSync(readmePath)) {
-    console.error("❌ README.md does not exist. Please create it first.");
+  if (readmeFiles.length === 0) {
+    console.error("❌ No files specified in FILES_TO_PROCESS.");
     process.exit(1);
   }
 
-  let originalContent;
-  let newReadmeContent;
+  logConsole(`Processing README files: ${readmeFiles.join(", ")}`);
 
-  try {
-    // Read original content (keep as in-memory backup)
-    originalContent = fs.readFileSync(readmePath, "utf8");
-    logConsole("📄 Original content loaded into memory as backup");
+  let hasAnyChanges = false;
 
-    // Generate new content
-    newReadmeContent = updateReadmeSections();
+  for (const readmeFile of readmeFiles) {
+    const readmePath = path.join(repoRoot, readmeFile);
 
-    // Check if there were any changes
-    const hasChanges = originalContent !== newReadmeContent;
-
-    if (hasChanges) {
-      // Write new content directly (original content is kept in memory)
-      fs.writeFileSync(readmePath, newReadmeContent);
-      logConsole("✅ README.md updated successfully!");
-      logConsole(
-        "💾 Original content preserved in memory for rollback if needed"
-      );
-    } else {
-      logConsole("💡 README.md is already up to date. No changes needed.");
+    // Validate README exists
+    if (!fs.existsSync(readmePath)) {
+      console.error(`❌ ${readmeFile} does not exist. Skipping.`);
+      continue;
     }
-  } catch (error) {
-    console.error(`❌ Error regenerating README.md: ${error.message}`);
 
-    // If we have original content and something went wrong after reading it,
-    // try to restore the original content from memory
-    if (originalContent && fs.existsSync(readmePath)) {
-      try {
-        const currentContent = fs.readFileSync(readmePath, "utf8");
-        if (currentContent !== originalContent) {
-          fs.writeFileSync(readmePath, originalContent);
-          logConsole(
-            "🔄 Restored original README.md content from memory backup"
-          );
-        }
-      } catch (restoreError) {
-        console.error(
-          `❌ Could not restore original content: ${restoreError.message}`
+    let originalContent;
+    let newReadmeContent;
+
+    try {
+      // Read original content (keep as in-memory backup)
+      originalContent = fs.readFileSync(readmePath, "utf8");
+      logConsole(
+        `📄 Original content for ${readmeFile} loaded into memory as backup`
+      );
+
+      // Generate new content
+      newReadmeContent = updateReadmeSections(readmePath);
+
+      // Check if there were any changes
+      const hasChanges = originalContent !== newReadmeContent;
+
+      if (hasChanges) {
+        // Write new content directly (original content is kept in memory)
+        fs.writeFileSync(readmePath, newReadmeContent);
+        logConsole(`✅ ${readmeFile} updated successfully!`);
+        logConsole(
+          `💾 Original content preserved in memory for rollback if needed`
+        );
+        hasAnyChanges = true;
+      } else {
+        logConsole(
+          `💡 ${readmeFile} is already up to date. No changes needed.`
         );
       }
-    }
+    } catch (error) {
+      console.error(`❌ Error regenerating ${readmeFile}: ${error.message}`);
 
-    process.exit(1);
+      // If we have original content and something went wrong after reading it,
+      // try to restore the original content from memory
+      if (originalContent && fs.existsSync(readmePath)) {
+        try {
+          const currentContent = fs.readFileSync(readmePath, "utf8");
+          if (currentContent !== originalContent) {
+            fs.writeFileSync(readmePath, originalContent);
+            logConsole(
+              `🔄 Restored original ${readmeFile} content from memory backup`
+            );
+          }
+        } catch (restoreError) {
+          console.error(
+            `❌ Could not restore original content for ${readmeFile}: ${restoreError.message}`
+          );
+        }
+      }
+
+      // Continue with next file instead of exiting
+    }
+  }
+
+  if (hasAnyChanges) {
+    logConsole("🎉 All README files processed. Some were updated.");
+  } else {
+    logConsole("🎉 All README files are up to date.");
   }
 }
 
