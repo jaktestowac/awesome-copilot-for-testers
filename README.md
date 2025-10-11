@@ -1,6 +1,7 @@
 # 🤖 Awesome GitHub Copilot for Testers
 
 This repository is a collection of resources (prompts, instructions, and chat modes) for using GitHub Copilot to enhance test automation and quality engineering workflows.
+
 It is designed to help testers, developers, and quality engineers leverage AI to improve their testing practices, automate repetitive tasks, and enhance the overall quality of software products.
 
 > [!TIP]

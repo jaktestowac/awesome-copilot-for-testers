@@ -1,7 +1,8 @@
 # 🤖 Awesome GitHub Copilot for Testers
 
-To repozytorium jest kolekcją zasobów (promptów, instrukcji i trybów czatu) do wykorzystania GitHub Copilota w celu poprawy automatyzacji testów i procesów inżynierii jakości.
-Jest zaprojektowane, aby pomóc testerom, programistom i inżynierom jakości w wykorzystaniu AI do poprawy praktyk testowych, automatyzacji powtarzalnych zadań i zwiększenia ogólnej jakości produktów oprogramowania.
+To repozytorium jest kolekcją zasobów (promptów, instrukcji i trybów czatu) do wykorzystania z GitHub Copilotem, specjalnie dostosowanych do potrzeb testerów i automatyzacji testów.
+
+Zasoby te pomogą Ci dostosować Copilota do Twoich specyficznych potrzeb, wytycznych zespołu i wymagań projektu.
 
 > [!TIP]
 > 💡 Wybierz swój język:
@@ -29,11 +30,11 @@ Spis Treści
 
 ## 🎯 Funkcje Dostosowywania GitHub Copilota
 
-GitHub Copilot zapewnia trzy główne sposoby dostosowywania odpowiedzi AI i dopasowywania pomocy do Twoich specyficznych przepływów pracy, wytycznych zespołu i wymagań projektu:
+GitHub Copilot zapewnia trzy główne sposoby dostosowywania odpowiedzi AI:
 
-- **Niestandardowe Instrukcje**: Zdefiniuj, jak Copilot ma się zachowywać, co priorytetować i jak komunikować.
-- **Tryby Czatu**: Twórz specjalistyczne tryby czatu dla różnych ról lub zadań, każdy z własnym zestawem narzędzi i instrukcji.
-- **Szablony Promptów**: Wstępnie zdefiniowane szablony dla typowych zadań lub pytań, umożliwiające szybkie i spójne odpowiedzi.
+- **Custom Instructions**: Zdefiniuj, jak Copilot ma się zachowywać, co priorytetować i jak komunikować.
+- **Chat Modes**: Twórz specjalistyczne tryby czatu dla różnych ról lub zadań, każdy z własnym zestawem narzędzi i instrukcji.
+- **Prompt Templates**: Wstępnie zdefiniowane szablony dla typowych zadań lub pytań, umożliwiające szybkie i spójne odpowiedzi.
 
 > [!TIP]
 > Więcej możesz dowiedzieć się o tych funkcjach w [oficjalnej dokumentacji](https://code.visualstudio.com/docs/copilot/overview) oraz:
