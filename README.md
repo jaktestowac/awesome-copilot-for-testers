@@ -6,8 +6,8 @@ It is designed to help testers, developers, and quality engineers leverage AI to
 > [!TIP]
 > 💡 Choose your language:
 >
-> - 🇬🇧 [English](./README.eng.md)
-> - 🇵🇱 [Polski](./README.md)
+> - 🇬🇧 [English](./README.md)
+> - 🇵🇱 [Polski](./README.pl.md)
 
 > [!TIP]
 > This project is heavily inspired by [Awesome GitHub Copilot](https://github.com/github/awesome-copilot) - a curated list of resources for using GitHub Copilot effectively.
