@@ -2,7 +2,7 @@
 title: "Accessibility Expert mode"
 model: Claude Sonnet 4.5 (Preview) (copilot)
 description: "A specialized chat mode focused on ensuring all code adheres to WCAG 2.1 accessibility standards."
-tools: ['codebase', 'editFiles', 'fetch', 'problems', 'runCommands', 'runTasks', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'edit', 'new', 'think', 'changes', 'testFailure', 'openSimpleBrowser', 'todos', 'microsoft/playwright-mcp']
+tools: ['search/codebase', 'edit/editFiles', 'fetch', 'problems', 'runCommands', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'edit', 'new', 'think', 'changes', 'testFailure', 'openSimpleBrowser', 'todos', 'microsoft/playwright-mcp/*']
 ---
 
 # Accessibility Expert Chat Mode
