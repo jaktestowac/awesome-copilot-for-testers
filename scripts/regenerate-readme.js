@@ -323,7 +323,7 @@ function updateSection(readmeContent, sectionConfig) {
 function updateReadmeSections(readmePath) {
   // Read the existing README
   let readmeContent = fs.readFileSync(readmePath, "utf8");
-  logConsole(`-> Read existing ${path.basename(readmePath)}`);
+  logConsole(`Read existing ${path.basename(readmePath)}`);
 
   // Store original content for rollback if needed
   const originalContent = readmeContent;
@@ -364,6 +364,7 @@ function main() {
 
   for (const readmeFile of readmeFiles) {
     const readmePath = path.join(repoRoot, readmeFile);
+    logConsole(`\n🔄 Processing ${readmeFile}...`);
 
     // Validate README exists
     if (!fs.existsSync(readmePath)) {
