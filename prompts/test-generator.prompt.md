@@ -2,7 +2,7 @@
 mode: 'agent'
 model: GPT-5 (copilot)
 tools: ['codebase', 'editFiles', 'fetch', 'problems', 'runCommands', 'runTasks', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'edit', 'new', 'think', 'changes', 'testFailure', 'openSimpleBrowser', 'todos', 'microsoft/playwright-mcp']
-description: 'Prepare a basic test plan for a website'
+description: 'Generate tests based on test plan for a website'
 ---
 Your goal is to generate tests based on the test plan. Ask the user for a URL if not provided.
 
