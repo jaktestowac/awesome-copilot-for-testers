@@ -28,6 +28,13 @@ Table of Contents
   - [🇵🇱 Polish Resources](#-polish-resources)
   - [🇬🇧 English Resources](#-english-resources)
 
+
+> [!IMPORTANT]
+> Check out our free YouTube video to learn more about GitHub Copilot Chat Modes:
+>
+> [![GitHub Copilot - Chat Modes](./assets/github-copilot-chat-modes.jpg)](https://www.youtube.com/watch?v=hHrOJlk6ET8&list=PLfKhn9AcZ-cCqD34AG5YRejujaBqCBgl4)
+
+
 ## 🎯 GitHub Copilot Customization Features
 
 GitHub Copilot provides three main ways to customize AI responses and tailor assistance to your specific workflows, team guidelines, and project requirements:

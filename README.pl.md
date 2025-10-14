@@ -28,6 +28,13 @@ Spis Treści
   - [🇵🇱 Polskie Zasoby](#-polskie-zasoby)
   - [🇬🇧 Angielskie Zasoby](#-angielskie-zasoby)
 
+
+> [!IMPORTANT]
+> Sprawdź nasze darmowe nagranie na YouTube, aby dowiedzieć się więcej o GitHub Copilot Chat Modes:
+>
+> [![GitHub Copilot - Chat Modes](./assets/github-copilot-chat-modes.jpg)](https://www.youtube.com/watch?v=hHrOJlk6ET8&list=PLfKhn9AcZ-cCqD34AG5YRejujaBqCBgl4)
+
+
 ## 🎯 Funkcje Dostosowywania GitHub Copilota
 
 GitHub Copilot zapewnia trzy główne sposoby dostosowywania odpowiedzi AI:
