@@ -1,9 +1,9 @@
 ---
 title: Analyze and explain code
 mode: 'agent'
+description: 'Analysis of the code you provide, select, or open'
 model: GPT-5 (copilot)
 tools: ['search/codebase', 'edit/editFiles', 'fetch', 'problems', 'runCommands', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'edit', 'new', 'think', 'changes', 'testFailure', 'openSimpleBrowser', 'todos', 'microsoft/playwright-mcp/*']
-description: 'Analysis of the code you provide, select, or open'
 ---
 
 # Role

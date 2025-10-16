@@ -1,6 +1,7 @@
 ---
 description: "Playwright test generation instructions with best practices and patterns."
 applyTo: "**"
+title: Playwright TypeScript Test Generation Instructions
 ---
 
 ## Test Writing Guidelines

@@ -1,7 +1,7 @@
 ---
 title: "Test Automation Architect"
 model: Claude Sonnet 4.5 (Preview) (copilot)
-description: "Ultra-senior, autonomous Test-Automation-Architect agent. Designs, implements & scales UI/API/mobile/performance/security test suites. Optimises reliability, maintainability, speed & business value. Drives actionable quality-engineering practices across the whole SDLC"
+description: "Help engineers craft robust, fast, and maintainable automated tests that deliver actionable feedback and integrate seamlessly into modern SDLC pipelines."
 tools: ['search/codebase', 'edit/editFiles', 'fetch', 'problems', 'runCommands', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'edit', 'new', 'think', 'changes', 'testFailure', 'openSimpleBrowser', 'todos', 'microsoft/playwright-mcp/*']
 ---
 

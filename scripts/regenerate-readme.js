@@ -290,7 +290,66 @@ function extractDescription(filePath) {
   return safeFileOperation(
     () => {
       const content = fs.readFileSync(filePath, "utf8");
-      return extractFrontmatterField(content, "description");
+      let desc = extractFrontmatterField(content, "description");
+      if (typeof desc === "string") {
+        const trimmed = desc.trim();
+        if (trimmed && trimmed.toLowerCase() !== "null") return trimmed;
+      }
+
+      // Fallback: directly parse frontmatter block for description
+      const textNoBom =
+        content && content.charCodeAt(0) === 0xfeff
+          ? content.slice(1)
+          : content;
+      const fmMatch = textNoBom.match(/^---\s*[\r\n]+([\s\S]*?)\r?\n---/);
+      if (fmMatch) {
+        const fmBlock = fmMatch[1];
+        const lines = fmBlock.split(/\r?\n/);
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          const m = line.match(/^\s*description\s*:\s*(.*)$/i);
+          if (!m) continue;
+          let value = (m[1] || "").trim();
+          // Handle block scalar for description
+          if (
+            value === "|" ||
+            value === ">" ||
+            value === "|-" ||
+            value === ">-"
+          ) {
+            // Determine base indent from next line
+            const next = lines[i + 1] || "";
+            const indentMatch = next.match(/^(\s+)/);
+            const baseIndent = indentMatch ? indentMatch[1].length : 2;
+            const block = [];
+            for (let j = i + 1; j < lines.length; j++) {
+              const l = lines[j];
+              if (l.trim() === "") {
+                block.push("");
+                continue;
+              }
+              const leadingSpaces = (l.match(/^(\s*)/) || ["", ""][1]).length;
+              if (leadingSpaces < baseIndent) break;
+              block.push(l.slice(baseIndent));
+            }
+            const out = block.join(" ").trim();
+            if (out) return out;
+          }
+          // Quoted single/ double
+          if (
+            (value.startsWith('"') && value.endsWith('"')) ||
+            (value.startsWith("'") && value.endsWith("'"))
+          ) {
+            value = value.slice(1, -1);
+          }
+          value = value.replace(/''/g, "'");
+          const hashIdx = value.indexOf(" #");
+          if (hashIdx !== -1) value = value.slice(0, hashIdx).trim();
+          if (value && value.toLowerCase() !== "null") return value;
+        }
+      }
+
+      return null;
     },
     filePath,
     null
