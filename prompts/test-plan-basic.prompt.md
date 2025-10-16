@@ -6,6 +6,8 @@ model: GPT-5 (copilot)
 mode: 'agent'
 ---
 
+# Task
+
 Your goal is to prepare a test plan for a website based on exploration and analysis. Ask the user for a URL if not provided.
 
 Do the following:

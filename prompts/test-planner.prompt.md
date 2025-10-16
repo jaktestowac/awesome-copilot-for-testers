@@ -5,6 +5,8 @@ tools: ['edit', 'search', 'new', 'runCommands', 'runTasks', 'think', 'problems',
 mode: agent
 ---
 
+# Task
+
 Your goal is to prepare a comprehensive test plan for a website. Ask the user for a URL if not provided. Tell user that he should enable chat mode `Test Planner` (test-planner) for Agent for best results.
 
 Ask me first for:

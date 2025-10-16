@@ -81,64 +81,102 @@ function logConsole(message) {
 
 // Content extraction functions
 function extractFrontmatterField(content, fieldName) {
-  const lines = content.split("\n");
+  // Normalize potential UTF-8 BOM and grab the frontmatter block first for simpler parsing
+  let text = content;
+  if (text && text.charCodeAt(0) === 0xfeff) {
+    text = text.slice(1);
+  }
+  const lines = text.split("\n");
   let inFrontmatter = false;
-  let isMultilineField = false;
-  let multilineContent = [];
+  const fmLines = [];
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-
-    if (line.trim() === "---") {
+    const rawLine = lines[i];
+    const trimmed = rawLine.trim();
+    if (trimmed === "---") {
       if (!inFrontmatter) {
         inFrontmatter = true;
         continue;
-      }
-      break;
-    }
-
-    if (inFrontmatter) {
-      // Check for multi-line field with pipe syntax (|)
-      const multilineMatch = line.match(
-        new RegExp(`^${fieldName}:\\s*\\|(\\s*)$`)
-      );
-      if (multilineMatch) {
-        isMultilineField = true;
-        continue;
-      }
-
-      // If we're collecting a multi-line field
-      if (isMultilineField) {
-        // If the line has no indentation or has another frontmatter key, stop collecting
-        if (!line.startsWith("  ") || line.match(/^[a-zA-Z0-9_-]+:/)) {
-          return multilineContent.join(" ").trim();
-        }
-        multilineContent.push(line.substring(2));
       } else {
-        // Look for single-line field in frontmatter
-        const fieldMatch = line.match(
-          new RegExp(`^${fieldName}:\\s*['"]?(.+?)['"]?\\s*$`)
-        );
-        if (fieldMatch) {
-          let fieldValue = fieldMatch[1];
-
-          // Check if the field is wrapped in single quotes and handle escaped quotes
-          const singleQuoteMatch = line.match(
-            new RegExp(`^${fieldName}:\\s*'(.+?)'\\s*$`)
-          );
-          if (singleQuoteMatch) {
-            fieldValue = singleQuoteMatch[1].replace(/''/g, "'");
-          }
-
-          return fieldValue;
-        }
+        // end of frontmatter
+        break;
       }
+    }
+    if (inFrontmatter) {
+      fmLines.push(rawLine);
     }
   }
 
-  // If we've collected multi-line content but the frontmatter ended
-  if (multilineContent.length > 0) {
-    return multilineContent.join(" ").trim();
+  if (fmLines.length === 0) return null;
+
+  // Case-insensitive match for the field with optional indentation
+  const fieldLineRegex = new RegExp(`^\\s*${fieldName}\\s*:\\s*(.*)$`, "i");
+
+  for (let i = 0; i < fmLines.length; i++) {
+    const line = fmLines[i];
+    const match = line.match(fieldLineRegex);
+    if (!match) continue;
+
+    let valuePart = match[1] !== undefined ? String(match[1]).trim() : "";
+
+    // Handle block scalars: | or > (including |-, >- etc.)
+    if (
+      valuePart === "|" ||
+      valuePart === ">" ||
+      valuePart === "|-" ||
+      valuePart === ">-" ||
+      valuePart === "|+" ||
+      valuePart === ">+"
+    ) {
+      // Determine base indentation from the next line; default to 2 spaces
+      const nextLine = fmLines[i + 1] || "";
+      const indentMatch = nextLine.match(/^(\s+)/);
+      const baseIndent = indentMatch ? indentMatch[1].length : 2;
+
+      const block = [];
+      for (let j = i + 1; j < fmLines.length; j++) {
+        const l = fmLines[j];
+        if (l.trim() === "") {
+          block.push("");
+          continue;
+        }
+        const leadingSpaces = (l.match(/^(\s*)/) || ["", ""][1]).length;
+        if (leadingSpaces < baseIndent) break;
+        block.push(l.slice(baseIndent));
+      }
+      return block.join(" ").trim();
+    }
+
+    // Single line value handling
+    if (valuePart === "") return "";
+
+    // If quoted, extract inside quotes and unescape when needed
+    const firstChar = valuePart[0];
+    if (firstChar === '"' || firstChar === "'") {
+      // Capture until the matching quote; allow trailing inline comments
+      const quoteRegex =
+        firstChar === '"'
+          ? /^"([\s\S]*?)"(?:\s+#.*)?$/
+          : /^'([\s\S]*?)'(?:\s+#.*)?$/;
+      const m = valuePart.match(quoteRegex);
+      if (m) {
+        let v = m[1];
+        if (firstChar === "'") {
+          // YAML single-quote escaping: '' -> '
+          v = v.replace(/''/g, "'");
+        }
+        return v.trim();
+      }
+      // Fallback: strip the surrounding quotes if present
+      return valuePart.replace(/^['"]|['"]$/g, "").trim();
+    }
+
+    // Unquoted: strip inline comments (only when preceded by space to avoid URLs)
+    const hashIdx = valuePart.indexOf(" #");
+    if (hashIdx !== -1) {
+      valuePart = valuePart.slice(0, hashIdx).trim();
+    }
+    return valuePart.trim();
   }
 
   return null;
@@ -151,9 +189,36 @@ function extractTitle(filePath) {
       const lines = content.split("\n");
 
       // Step 1: Look for title in frontmatter for all file types
-      const frontmatterTitle = extractFrontmatterField(content, "title");
-      if (frontmatterTitle) {
-        return frontmatterTitle;
+      let frontmatterTitle = extractFrontmatterField(content, "title");
+      if (
+        typeof frontmatterTitle === "string" &&
+        frontmatterTitle.trim() !== ""
+      ) {
+        return frontmatterTitle.trim();
+      }
+      // Fallback: directly parse the frontmatter block for a title
+      const textNoBom =
+        content && content.charCodeAt(0) === 0xfeff
+          ? content.slice(1)
+          : content;
+      const fmMatch = textNoBom.match(/^---\s*[\r\n]+([\s\S]*?)\r?\n---/);
+      if (fmMatch) {
+        const fmBlock = fmMatch[1];
+        const titleLine = fmBlock.match(/^\s*title\s*:\s*(.*)$/im);
+        if (titleLine && typeof titleLine[1] === "string") {
+          let v = titleLine[1].trim();
+          // Handle quoted values
+          if (
+            (v.startsWith('"') && v.endsWith('"')) ||
+            (v.startsWith("'") && v.endsWith("'"))
+          ) {
+            v = v.slice(1, -1);
+          }
+          v = v.replace(/''/g, "'");
+          const hashIdx = v.indexOf(" #");
+          if (hashIdx !== -1) v = v.slice(0, hashIdx).trim();
+          if (v) return v;
+        }
       }
 
       // Step 2: For specific file types, look for heading after frontmatter
@@ -166,6 +231,13 @@ function extractTitle(filePath) {
       if (isSpecialFile) {
         let inFrontmatter = false;
         let frontmatterEnded = false;
+        const GENERIC_H1 = new Set([
+          "Role",
+          "Task",
+          "Methodology",
+          "Output format",
+          "Critical",
+        ]);
 
         for (const line of lines) {
           if (line.trim() === "---") {
@@ -178,7 +250,11 @@ function extractTitle(filePath) {
           }
 
           if (frontmatterEnded && line.startsWith("# ")) {
-            return line.substring(2).trim();
+            const candidate = line.substring(2).trim();
+            if (!GENERIC_H1.has(candidate)) {
+              return candidate;
+            }
+            // skip generic heading and continue searching for a better one
           }
         }
 
