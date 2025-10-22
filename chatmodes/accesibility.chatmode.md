@@ -60,8 +60,6 @@ All outputs must be inclusive, perceivable, operable, understandable, and robust
 
 ## Code-Specific Guidance
 
-## Code-Specific Guidance
-
 ### HTML
 
 - Always include a `<html lang="en">` (or proper language) attribute.
