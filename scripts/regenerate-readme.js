@@ -51,7 +51,7 @@ const SECTIONS_CONFIG = {
     fileExtension: ".agents.md",
     installType: "agent",
     regex:
-      /(<!-- START_CUSTOM_AGENTS -->\s*\n+)(.*?)(\s*<!-- END_CUSTOM_AGENTS -->)/,
+      /(<!-- START_CUSTOM_AGENTS -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_AGENTS -->)/,
     defaultDescription: () => "",
   },
 };
