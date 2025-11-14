@@ -45,6 +45,15 @@ const SECTIONS_CONFIG = {
       /(<!-- START_CUSTOM_CHAT_MODES -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_CHAT_MODES -->)/,
     defaultDescription: () => "",
   },
+  agents: {
+    title: "Custom Agents",
+    directory: "agents",
+    fileExtension: ".agents.md",
+    installType: "agent",
+    regex:
+      /(<!-- START_CUSTOM_AGENTS -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_AGENTS -->)/,
+    defaultDescription: () => "",
+  },
 };
 
 // Badge configuration
@@ -225,6 +234,7 @@ function extractTitle(filePath) {
       const isSpecialFile = [
         ".prompt.md",
         ".chatmode.md",
+        ".agents.md",
         ".instructions.md",
       ].some((ext) => filePath.includes(ext));
 
@@ -259,14 +269,12 @@ function extractTitle(filePath) {
         }
 
         // Step 3: Format filename for special files if no heading found
-        const basename = path.basename(
-          filePath,
-          filePath.includes(".prompt.md")
-            ? ".prompt.md"
-            : filePath.includes(".chatmode.md")
-            ? ".chatmode.md"
-            : ".instructions.md"
-        );
+        let ext = ".md";
+        if (filePath.includes(".prompt.md")) ext = ".prompt.md";
+        else if (filePath.includes(".chatmode.md")) ext = ".chatmode.md";
+        else if (filePath.includes(".agents.md")) ext = ".agents.md";
+        else if (filePath.includes(".instructions.md")) ext = ".instructions.md";
+        const basename = path.basename(filePath, ext);
         return formatTitleFromFilename(basename);
       }
 

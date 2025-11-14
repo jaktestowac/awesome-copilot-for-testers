@@ -21,6 +21,7 @@ Spis Treści
     - [Niestandardowe Instrukcje](#niestandardowe-instrukcje)
     - [Szablony Promptów](#szablony-promptów)
     - [Niestandardowe Tryby Czatu](#niestandardowe-tryby-czatu)
+    - [Niestandardowe Agenty (Custom Agents)](#niestandardowe-agenty-custom-agents)
   - [📚 Dodatkowe Zasoby](#-dodatkowe-zasoby)
   - [🌱 Twórz z nami](#-twórz-z-nami)
   - [📞 Kontakt i Wsparcie](#-kontakt-i-wsparcie)
@@ -104,12 +105,16 @@ GitHub Copilot zapewnia trzy główne sposoby dostosowywania odpowiedzi AI:
 ### Niestandardowe Tryby Czatu
 
 > [!TIP]
-> Użycie:
+> Użycie (w VS Code przed wersją 1.106):
 >
 > - utwórz nowe tryby czatu:
 >   - używając komendy `Chat: Configure Chat Modes...` lub
 >   - z menu ustawień trybu `Agent -> Configure Modes`,
 > - następnie przełącz swój tryb czatu w wejściu Chat z menu ustawień trybu `Agent -> Configure Modes`
+
+> [!WARNING]
+> Z wersją [1.106](https://code.visualstudio.com/updates/v1_106) VS Code, Tryby Czatu zostały przemianowane na **Niestandardowe Agenty** (Custom Agents)
+> Zawierają one sufiks `.agents.md` i powinny być przechowywane w `.github/agents/`
 
 <!-- START_CUSTOM_CHAT_MODES -->
 
@@ -122,6 +127,25 @@ GitHub Copilot zapewnia trzy główne sposoby dostosowywania odpowiedzi AI:
 | [Test plan from expert Senior Quality Assurance Engineer](chatmodes/test-planner.chatmode.md) | This chat mode is designed to assist in creating comprehensive test plans tailored for web applications. | [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect?url=vscode%3Achat-mode%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fchatmodes%2Ftest-planner.chatmode.md) [![Install in VS Code](https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Achat-mode%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fchatmodes%2Ftest-planner.chatmode.md) |
 
 <!-- END_CUSTOM_CHAT_MODES -->
+
+### Niestandardowe Agenty (Custom Agents)
+
+> [!TIP]
+> Użycie (w VS Code od wersji 1.106):
+> - utwórz nowe agenty czatu:
+>   - używając komendy `Chat: Configure Custom Agents...` lub
+>   - z menu ustawień trybu `Agent -> Configure Custom Agents`,
+> - następnie przełącz swój tryb czatu w wejściu Chat z menu ustawień trybu `Agent -> <Your Agent>`
+
+<!-- START_CUSTOM_AGENTS -->
+| Title | Description | Install |
+| ----- | ----------- | ------- |
+| [Accessibility Expert mode](custom-agents/accesibility.agents.md) | A specialized chat mode focused on ensuring all code adheres to WCAG 2.1 accessibility standards. | [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect?url=vscode%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fcustom-agents%2Faccesibility.agents.md) [![Install in VS Code](https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fcustom-agents%2Faccesibility.agents.md) |
+| [Playwright Automation Engineer (TypeScript) mode (detailed)](custom-agents/playwright-expert-detailed.agents.md) | Provide expert guidance, code, and troubleshooting help for end-to-end and component-level test automation using Playwright with TypeScript. Prioritize maintainability, speed, reliability, and business value of the test suite. Very detailed operating manual. | [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect?url=vscode%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fcustom-agents%2Fplaywright-expert-detailed.agents.md) [![Install in VS Code](https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fcustom-agents%2Fplaywright-expert-detailed.agents.md) |
+| [Playwright Automation Engineer (TypeScript) mode](custom-agents/playwright-expert.agents.md) | Provide expert guidance, code, and troubleshooting help for end-to-end and component-level test automation using Playwright with TypeScript. Prioritize maintainability, speed, reliability, and business value of the test suite. | [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect?url=vscode%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fcustom-agents%2Fplaywright-expert.agents.md) [![Install in VS Code](https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fcustom-agents%2Fplaywright-expert.agents.md) |
+| [Test Automation Architect](custom-agents/test-automation-expert.agents.md) | Help engineers craft robust, fast, and maintainable automated tests that deliver actionable feedback and integrate seamlessly into modern SDLC pipelines. | [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect?url=vscode%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fcustom-agents%2Ftest-automation-expert.agents.md) [![Install in VS Code](https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fcustom-agents%2Ftest-automation-expert.agents.md) |
+| [Test plan from expert Senior Quality Assurance Engineer](custom-agents/test-planner.agents.md) | This chat mode is designed to assist in creating comprehensive test plans tailored for web applications. | [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect?url=vscode%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fcustom-agents%2Ftest-planner.agents.md) [![Install in VS Code](https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fcustom-agents%2Ftest-planner.agents.md) |
+<!-- END_CUSTOM_AGENTS -->
 
 ## 📚 Dodatkowe Zasoby
 
