@@ -41,7 +41,8 @@ Table of Contents
 GitHub Copilot provides three main ways to customize AI responses and tailor assistance to your specific workflows, team guidelines, and project requirements:
 
 - **Custom Instructions**: Define how Copilot should behave, what to prioritize, and how to communicate.
-- **Chat Modes**: Create specialized chat modes for different roles or tasks, each with its own set of tools and instructions.
+- **Chat Modes**: Create specialized chat modes for different roles or tasks, each with its own set of tools and instructions. With version [1.106](https://code.visualstudio.com/updates/v1_106) of VS Code, Chat Modes were renamed to **Custom Agents**.
+- **Custom Agents**: Advanced chat modes that can utilize multiple instructions and tools to perform complex tasks.
 - **Prompt Templates**: Predefined templates for common tasks or questions, allowing for quick and consistent responses.
 
 > [!TIP]
@@ -50,6 +51,9 @@ GitHub Copilot provides three main ways to customize AI responses and tailor ass
 > - [VS Code Copilot Customization Documentation](https://code.visualstudio.com/docs/copilot/copilot-customization) - Official Microsoft documentation
 > - [Custom Instructions](https://code.visualstudio.com/docs/copilot/copilot-customization) - Tailor Copilot's behavior
 > - [Custom Chat Modes](https://code.visualstudio.com/docs/copilot/chat/chat-modes) - Advanced chat configuration
+> - [Custom Instructions](https://code.visualstudio.com/docs/copilot/customization/custom-instructions) - Customize Copilot's behavior
+> - [Prompt Files](https://code.visualstudio.com/docs/copilot/customization/prompt-files) - Using prompt templates
+> - [Custom Agents](https://code.visualstudio.com/docs/copilot/customization/custom-agents) - Advanced agent configuration
 
 > [!TIP]
 > Do you want to learn more about effective use of AI and GitHub Copilot for Testers?

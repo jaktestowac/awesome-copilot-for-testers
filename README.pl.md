@@ -41,15 +41,18 @@ Spis Treści
 GitHub Copilot zapewnia trzy główne sposoby dostosowywania odpowiedzi AI:
 
 - **Custom Instructions**: Zdefiniuj, jak Copilot ma się zachowywać, co priorytetować i jak komunikować.
-- **Chat Modes**: Twórz specjalistyczne tryby czatu dla różnych ról lub zadań, każdy z własnym zestawem narzędzi i instrukcji.
+- **Chat Modes**: Twórz specjalistyczne tryby czatu dla różnych ról lub zadań, każdy z własnym zestawem narzędzi i instrukcji. Z wersją [1.106](https://code.visualstudio.com/updates/v1_106) VS Code, Tryby Czatu zostały przemianowane na **Custom Agents**.
+- **Custom Agents**: Zaawansowane tryby czatu, które mogą wykorzystywać wiele instrukcji i narzędzi do wykonywania złożonych zadań.
 - **Prompt Templates**: Wstępnie zdefiniowane szablony dla typowych zadań lub pytań, umożliwiające szybkie i spójne odpowiedzi.
 
 > [!TIP]
 > Więcej możesz dowiedzieć się o tych funkcjach w [oficjalnej dokumentacji](https://code.visualstudio.com/docs/copilot/overview) oraz:
 >
 > - [Dokumentacja Dostosowywania Copilota w VS Code](https://code.visualstudio.com/docs/copilot/copilot-customization) - Oficjalna dokumentacja Microsoft
-> - [Niestandardowe Instrukcje](https://code.visualstudio.com/docs/copilot/copilot-customization) - Dostosuj zachowanie Copilota
 > - [Niestandardowe Tryby Czatu](https://code.visualstudio.com/docs/copilot/chat/chat-modes) - Zaawansowana konfiguracja czatu
+> - [Niestandardowe Instrukcje](https://code.visualstudio.com/docs/copilot/customization/custom-instructions) - Tworzenie własnych instrukcji
+> - [Prompt Files](https://code.visualstudio.com/docs/copilot/customization/prompt-files) - Tworzenie i używanie plików promptów
+> - [Niestandardowe Agenty (Custom Agents)](https://code.visualstudio.com/docs/copilot/customization/custom-agents) - Zaawansowana konfiguracja agentów
 
 > [!TIP]
 > Chcesz dowiedzieć się więcej o efektywnym wykorzystaniu AI i GitHub Copilota dla Testerów?
