@@ -1,6 +1,6 @@
 ---
 title: Generate tests based on test plan
-mode: 'agent'
+agent: agent
 model: GPT-5 (copilot)
 tools: ['search/codebase', 'edit/editFiles', 'fetch', 'problems', 'runCommands', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'edit', 'new', 'think', 'changes', 'testFailure', 'openSimpleBrowser', 'todos', 'microsoft/playwright-mcp/*']
 description: 'Generate tests based on test plan for a website'

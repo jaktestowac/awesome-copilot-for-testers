@@ -1,6 +1,6 @@
 ---
 title: Explore a website and propose test cases
-mode: agent
+agent: agent
 description: 'Website exploration using Playwright MCP'
 tools: ['search/codebase', 'edit/editFiles', 'fetch', 'problems', 'runCommands', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'edit', 'new', 'think', 'changes', 'testFailure', 'openSimpleBrowser', 'todos', 'microsoft/playwright-mcp/*']
 ---

@@ -2,7 +2,7 @@
 title: Generate a comprehensive Test Plan 
 description: Collects environment details and produces a prioritized test plan with web and API scenarios using the `Test Planner Chat Mode`.
 tools: ['edit', 'search', 'new', 'runCommands', 'runTasks', 'think', 'problems', 'changes', 'testFailure', 'openSimpleBrowser', 'fetch', 'todos', 'microsoft/playwright-mcp/*']
-mode: agent
+agent: agent
 ---
 
 # Task

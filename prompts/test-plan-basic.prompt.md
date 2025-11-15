@@ -3,7 +3,7 @@ title: Generate a Basic Test Plan
 tools: ['search/codebase', 'edit/editFiles', 'fetch', 'problems', 'runCommands', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'edit', 'new', 'think', 'changes', 'testFailure', 'openSimpleBrowser', 'todos', 'microsoft/playwright-mcp/*']
 description: 'Generate a basic Test Plan'
 model: GPT-5 (copilot)
-mode: 'agent'
+agent: agent
 ---
 
 # Task
