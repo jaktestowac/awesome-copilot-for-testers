@@ -1,58 +1,65 @@
 #!/usr/bin/env node
 
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
-const FILES_TO_PROCESS = ["README.md", "README.pl.md"];
+const FILES_TO_PROCESS = ['README.md', 'README.pl.md'];
 
 // Configuration for the repository
 const REPO_CONFIG = {
-  owner: "jaktestowac",
-  repo: "awesome-copilot-for-testers",
-  baseUrl:
-    "https://raw.githubusercontent.com/jaktestowac/awesome-copilot-for-testers/main",
+  owner: 'jaktestowac',
+  repo: 'awesome-copilot-for-testers',
+  baseUrl: 'https://raw.githubusercontent.com/jaktestowac/awesome-copilot-for-testers/main',
 };
 
 // Section configurations
 const SECTIONS_CONFIG = {
   instructions: {
-    title: "Custom Instructions",
-    directory: "instructions",
-    fileExtension: ".md",
-    installType: "instructions",
+    title: 'Custom Instructions',
+    directory: 'instructions',
+    fileExtension: '.md',
+    installType: 'instructions',
     regex:
       /(<!-- START_CUSTOM_INSTRUCTIONS -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_INSTRUCTIONS -->)/,
     defaultDescription: (title) => {
-      const topic = title.split(" ").pop().replace(/s$/, "");
+      const topic = title.split(' ').pop().replace(/s$/, '');
       return `${topic} specific coding standards and best practices`;
     },
   },
   prompts: {
-    title: "Custom Prompt Templates",
-    directory: "prompts",
-    fileExtension: ".prompt.md",
-    installType: "prompt",
+    title: 'Custom Prompt Templates',
+    directory: 'prompts',
+    fileExtension: '.prompt.md',
+    installType: 'prompt',
     regex:
       /(<!-- START_CUSTOM_PROMPT_TEMPLATES -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_PROMPT_TEMPLATES -->)/,
-    defaultDescription: () => "",
+    defaultDescription: () => '',
   },
   chatmodes: {
-    title: "Custom Chat Modes",
-    directory: "chatmodes",
-    fileExtension: ".chatmode.md",
-    installType: "mode",
+    title: 'Custom Chat Modes',
+    directory: 'chatmodes',
+    fileExtension: '.chatmode.md',
+    installType: 'mode',
     regex:
       /(<!-- START_CUSTOM_CHAT_MODES -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_CHAT_MODES -->)/,
-    defaultDescription: () => "",
+    defaultDescription: () => '',
   },
   agents: {
-    title: "Custom Agents",
-    directory: "custom-agents",
-    fileExtension: ".agents.md",
-    installType: "agent",
-    regex:
-      /(<!-- START_CUSTOM_AGENTS -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_AGENTS -->)/,
-    defaultDescription: () => "",
+    title: 'Custom Agents',
+    directory: 'custom-agents',
+    fileExtension: '.agents.md',
+    installType: 'agent',
+    regex: /(<!-- START_CUSTOM_AGENTS -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_AGENTS -->)/,
+    defaultDescription: () => '',
+  },
+  sets: {
+    title: 'Custom Sets',
+    directory: 'sets',
+    // fileExtension not used for sets since each set is a folder containing other files
+    fileExtension: '',
+    installType: 'set',
+    regex: /(<!-- START_CUSTOM_SETS -->\s*\n+)([\s\S]*?)(\s*<!-- END_CUSTOM_SETS -->)/,
+    defaultDescription: (title) => `A set of resources for ${title}`,
   },
 };
 
@@ -60,13 +67,13 @@ const SECTIONS_CONFIG = {
 const BADGE_CONFIG = {
   vscode: {
     image:
-      "https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white",
-    baseUrl: "https://vscode.dev/redirect?url=",
+      'https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white',
+    baseUrl: 'https://vscode.dev/redirect?url=',
   },
   vscodeInsiders: {
     image:
-      "https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white",
-    baseUrl: "https://insiders.vscode.dev/redirect?url=",
+      'https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white',
+    baseUrl: 'https://insiders.vscode.dev/redirect?url=',
   },
 };
 
@@ -81,7 +88,7 @@ function safeFileOperation(operation, filePath, defaultValue = null) {
 }
 
 function logConsole(message) {
-  if (typeof message === "object") {
+  if (typeof message === 'object') {
     console.log(JSON.stringify(message, null, 2));
   } else {
     console.log(message);
@@ -95,14 +102,14 @@ function extractFrontmatterField(content, fieldName) {
   if (text && text.charCodeAt(0) === 0xfeff) {
     text = text.slice(1);
   }
-  const lines = text.split("\n");
+  const lines = text.split('\n');
   let inFrontmatter = false;
   const fmLines = [];
 
   for (let i = 0; i < lines.length; i++) {
     const rawLine = lines[i];
     const trimmed = rawLine.trim();
-    if (trimmed === "---") {
+    if (trimmed === '---') {
       if (!inFrontmatter) {
         inFrontmatter = true;
         continue;
@@ -119,54 +126,52 @@ function extractFrontmatterField(content, fieldName) {
   if (fmLines.length === 0) return null;
 
   // Case-insensitive match for the field with optional indentation
-  const fieldLineRegex = new RegExp(`^\\s*${fieldName}\\s*:\\s*(.*)$`, "i");
+  const fieldLineRegex = new RegExp(`^\\s*${fieldName}\\s*:\\s*(.*)$`, 'i');
 
   for (let i = 0; i < fmLines.length; i++) {
     const line = fmLines[i];
     const match = line.match(fieldLineRegex);
     if (!match) continue;
 
-    let valuePart = match[1] !== undefined ? String(match[1]).trim() : "";
+    let valuePart = match[1] !== undefined ? String(match[1]).trim() : '';
 
     // Handle block scalars: | or > (including |-, >- etc.)
     if (
-      valuePart === "|" ||
-      valuePart === ">" ||
-      valuePart === "|-" ||
-      valuePart === ">-" ||
-      valuePart === "|+" ||
-      valuePart === ">+"
+      valuePart === '|' ||
+      valuePart === '>' ||
+      valuePart === '|-' ||
+      valuePart === '>-' ||
+      valuePart === '|+' ||
+      valuePart === '>+'
     ) {
       // Determine base indentation from the next line; default to 2 spaces
-      const nextLine = fmLines[i + 1] || "";
+      const nextLine = fmLines[i + 1] || '';
       const indentMatch = nextLine.match(/^(\s+)/);
       const baseIndent = indentMatch ? indentMatch[1].length : 2;
 
       const block = [];
       for (let j = i + 1; j < fmLines.length; j++) {
         const l = fmLines[j];
-        if (l.trim() === "") {
-          block.push("");
+        if (l.trim() === '') {
+          block.push('');
           continue;
         }
-        const leadingSpaces = (l.match(/^(\s*)/) || ["", ""][1]).length;
+        const leadingSpaces = (l.match(/^(\s*)/) || ['', ''][1]).length;
         if (leadingSpaces < baseIndent) break;
         block.push(l.slice(baseIndent));
       }
-      return block.join(" ").trim();
+      return block.join(' ').trim();
     }
 
     // Single line value handling
-    if (valuePart === "") return "";
+    if (valuePart === '') return '';
 
     // If quoted, extract inside quotes and unescape when needed
     const firstChar = valuePart[0];
     if (firstChar === '"' || firstChar === "'") {
       // Capture until the matching quote; allow trailing inline comments
       const quoteRegex =
-        firstChar === '"'
-          ? /^"([\s\S]*?)"(?:\s+#.*)?$/
-          : /^'([\s\S]*?)'(?:\s+#.*)?$/;
+        firstChar === '"' ? /^"([\s\S]*?)"(?:\s+#.*)?$/ : /^'([\s\S]*?)'(?:\s+#.*)?$/;
       const m = valuePart.match(quoteRegex);
       if (m) {
         let v = m[1];
@@ -177,11 +182,11 @@ function extractFrontmatterField(content, fieldName) {
         return v.trim();
       }
       // Fallback: strip the surrounding quotes if present
-      return valuePart.replace(/^['"]|['"]$/g, "").trim();
+      return valuePart.replace(/^['"]|['"]$/g, '').trim();
     }
 
     // Unquoted: strip inline comments (only when preceded by space to avoid URLs)
-    const hashIdx = valuePart.indexOf(" #");
+    const hashIdx = valuePart.indexOf(' #');
     if (hashIdx !== -1) {
       valuePart = valuePart.slice(0, hashIdx).trim();
     }
@@ -194,63 +199,45 @@ function extractFrontmatterField(content, fieldName) {
 function extractTitle(filePath) {
   return safeFileOperation(
     () => {
-      const content = fs.readFileSync(filePath, "utf8");
-      const lines = content.split("\n");
+      const content = fs.readFileSync(filePath, 'utf8');
+      const lines = content.split('\n');
 
       // Step 1: Look for title in frontmatter for all file types
-      let frontmatterTitle = extractFrontmatterField(content, "title");
-      if (
-        typeof frontmatterTitle === "string" &&
-        frontmatterTitle.trim() !== ""
-      ) {
+      let frontmatterTitle = extractFrontmatterField(content, 'title');
+      if (typeof frontmatterTitle === 'string' && frontmatterTitle.trim() !== '') {
         return frontmatterTitle.trim();
       }
       // Fallback: directly parse the frontmatter block for a title
-      const textNoBom =
-        content && content.charCodeAt(0) === 0xfeff
-          ? content.slice(1)
-          : content;
+      const textNoBom = content && content.charCodeAt(0) === 0xfeff ? content.slice(1) : content;
       const fmMatch = textNoBom.match(/^---\s*[\r\n]+([\s\S]*?)\r?\n---/);
       if (fmMatch) {
         const fmBlock = fmMatch[1];
         const titleLine = fmBlock.match(/^\s*title\s*:\s*(.*)$/im);
-        if (titleLine && typeof titleLine[1] === "string") {
+        if (titleLine && typeof titleLine[1] === 'string') {
           let v = titleLine[1].trim();
           // Handle quoted values
-          if (
-            (v.startsWith('"') && v.endsWith('"')) ||
-            (v.startsWith("'") && v.endsWith("'"))
-          ) {
+          if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
             v = v.slice(1, -1);
           }
           v = v.replace(/''/g, "'");
-          const hashIdx = v.indexOf(" #");
+          const hashIdx = v.indexOf(' #');
           if (hashIdx !== -1) v = v.slice(0, hashIdx).trim();
           if (v) return v;
         }
       }
 
       // Step 2: For specific file types, look for heading after frontmatter
-      const isSpecialFile = [
-        ".prompt.md",
-        ".chatmode.md",
-        ".agents.md",
-        ".instructions.md",
-      ].some((ext) => filePath.includes(ext));
+      const isSpecialFile = ['.prompt.md', '.chatmode.md', '.agents.md', '.instructions.md'].some(
+        (ext) => filePath.includes(ext),
+      );
 
       if (isSpecialFile) {
         let inFrontmatter = false;
         let frontmatterEnded = false;
-        const GENERIC_H1 = new Set([
-          "Role",
-          "Task",
-          "Methodology",
-          "Output format",
-          "Critical",
-        ]);
+        const GENERIC_H1 = new Set(['Role', 'Task', 'Methodology', 'Output format', 'Critical']);
 
         for (const line of lines) {
-          if (line.trim() === "---") {
+          if (line.trim() === '---') {
             if (!inFrontmatter) {
               inFrontmatter = true;
             } else if (inFrontmatter && !frontmatterEnded) {
@@ -259,7 +246,7 @@ function extractTitle(filePath) {
             continue;
           }
 
-          if (frontmatterEnded && line.startsWith("# ")) {
+          if (frontmatterEnded && line.startsWith('# ')) {
             const candidate = line.substring(2).trim();
             if (!GENERIC_H1.has(candidate)) {
               return candidate;
@@ -269,18 +256,18 @@ function extractTitle(filePath) {
         }
 
         // Step 3: Format filename for special files if no heading found
-        let ext = ".md";
-        if (filePath.includes(".prompt.md")) ext = ".prompt.md";
-        else if (filePath.includes(".chatmode.md")) ext = ".chatmode.md";
-        else if (filePath.includes(".agents.md")) ext = ".agents.md";
-        else if (filePath.includes(".instructions.md")) ext = ".instructions.md";
+        let ext = '.md';
+        if (filePath.includes('.prompt.md')) ext = '.prompt.md';
+        else if (filePath.includes('.chatmode.md')) ext = '.chatmode.md';
+        else if (filePath.includes('.agents.md')) ext = '.agents.md';
+        else if (filePath.includes('.instructions.md')) ext = '.instructions.md';
         const basename = path.basename(filePath, ext);
         return formatTitleFromFilename(basename);
       }
 
       // Step 4: Look for the first heading
       for (const line of lines) {
-        if (line.startsWith("# ")) {
+        if (line.startsWith('# ')) {
           return line.substring(2).trim();
         }
       }
@@ -290,25 +277,22 @@ function extractTitle(filePath) {
       return formatTitleFromFilename(basename);
     },
     filePath,
-    formatTitleFromFilename(path.basename(filePath, path.extname(filePath)))
+    formatTitleFromFilename(path.basename(filePath, path.extname(filePath))),
   );
 }
 
 function extractDescription(filePath) {
   return safeFileOperation(
     () => {
-      const content = fs.readFileSync(filePath, "utf8");
-      let desc = extractFrontmatterField(content, "description");
-      if (typeof desc === "string") {
+      const content = fs.readFileSync(filePath, 'utf8');
+      let desc = extractFrontmatterField(content, 'description');
+      if (typeof desc === 'string') {
         const trimmed = desc.trim();
-        if (trimmed && trimmed.toLowerCase() !== "null") return trimmed;
+        if (trimmed && trimmed.toLowerCase() !== 'null') return trimmed;
       }
 
       // Fallback: directly parse frontmatter block for description
-      const textNoBom =
-        content && content.charCodeAt(0) === 0xfeff
-          ? content.slice(1)
-          : content;
+      const textNoBom = content && content.charCodeAt(0) === 0xfeff ? content.slice(1) : content;
       const fmMatch = textNoBom.match(/^---\s*[\r\n]+([\s\S]*?)\r?\n---/);
       if (fmMatch) {
         const fmBlock = fmMatch[1];
@@ -317,30 +301,25 @@ function extractDescription(filePath) {
           const line = lines[i];
           const m = line.match(/^\s*description\s*:\s*(.*)$/i);
           if (!m) continue;
-          let value = (m[1] || "").trim();
+          let value = (m[1] || '').trim();
           // Handle block scalar for description
-          if (
-            value === "|" ||
-            value === ">" ||
-            value === "|-" ||
-            value === ">-"
-          ) {
+          if (value === '|' || value === '>' || value === '|-' || value === '>-') {
             // Determine base indent from next line
-            const next = lines[i + 1] || "";
+            const next = lines[i + 1] || '';
             const indentMatch = next.match(/^(\s+)/);
             const baseIndent = indentMatch ? indentMatch[1].length : 2;
             const block = [];
             for (let j = i + 1; j < lines.length; j++) {
               const l = lines[j];
-              if (l.trim() === "") {
-                block.push("");
+              if (l.trim() === '') {
+                block.push('');
                 continue;
               }
-              const leadingSpaces = (l.match(/^(\s*)/) || ["", ""][1]).length;
+              const leadingSpaces = (l.match(/^(\s*)/) || ['', ''][1]).length;
               if (leadingSpaces < baseIndent) break;
               block.push(l.slice(baseIndent));
             }
-            const out = block.join(" ").trim();
+            const out = block.join(' ').trim();
             if (out) return out;
           }
           // Quoted single/ double
@@ -351,35 +330,31 @@ function extractDescription(filePath) {
             value = value.slice(1, -1);
           }
           value = value.replace(/''/g, "'");
-          const hashIdx = value.indexOf(" #");
+          const hashIdx = value.indexOf(' #');
           if (hashIdx !== -1) value = value.slice(0, hashIdx).trim();
-          if (value && value.toLowerCase() !== "null") return value;
+          if (value && value.toLowerCase() !== 'null') return value;
         }
       }
 
       return null;
     },
     filePath,
-    null
+    null,
   );
 }
 
 function formatTitleFromFilename(basename) {
-  return basename
-    .replace(/[-_]/g, " ")
-    .replace(/\b\w/g, (l) => l.toUpperCase());
+  return basename.replace(/[-_]/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 }
 
 // Badge generation
 function makeBadges(link, type) {
   const vscodeUrl = `${BADGE_CONFIG.vscode.baseUrl}${encodeURIComponent(
-    `vscode:chat-${type}/install?url=${REPO_CONFIG.baseUrl}/${link}`
+    `vscode:chat-${type}/install?url=${REPO_CONFIG.baseUrl}/${link}`,
   )}`;
 
-  const vscodeInsidersUrl = `${
-    BADGE_CONFIG.vscodeInsiders.baseUrl
-  }${encodeURIComponent(
-    `vscode-insiders:chat-${type}/install?url=${REPO_CONFIG.baseUrl}/${link}`
+  const vscodeInsidersUrl = `${BADGE_CONFIG.vscodeInsiders.baseUrl}${encodeURIComponent(
+    `vscode-insiders:chat-${type}/install?url=${REPO_CONFIG.baseUrl}/${link}`,
   )}`;
 
   return `[![Install in VS Code](${BADGE_CONFIG.vscode.image})](${vscodeUrl}) [![Install in VS Code](${BADGE_CONFIG.vscodeInsiders.image})](${vscodeInsidersUrl})`;
@@ -387,12 +362,17 @@ function makeBadges(link, type) {
 
 // Generic section generation
 function generateSection(sectionConfig) {
-  const sectionDir = path.join(__dirname, "..", sectionConfig.directory);
+  const sectionDir = path.join(__dirname, '..', sectionConfig.directory);
 
   // Check if directory exists
   if (!fs.existsSync(sectionDir)) {
     logConsole(`${sectionConfig.title} directory does not exist`);
-    return "";
+    return '';
+  }
+
+  // If this is the special 'sets' directory, use a dedicated generator
+  if (sectionConfig.directory === 'sets') {
+    return generateSetsSection(sectionConfig);
   }
 
   // Get all files matching the extension
@@ -409,8 +389,7 @@ function generateSection(sectionConfig) {
   }
 
   // Create table header
-  let content =
-    "| Title | Description | Install |\n| ----- | ----------- | ------- |\n";
+  let content = '| Title | Description | Install |\n| ----- | ----------- | ------- |\n';
 
   // Generate table rows for each file
   for (const file of files) {
@@ -420,8 +399,8 @@ function generateSection(sectionConfig) {
     const customDescription = extractDescription(filePath);
     const badges = makeBadges(link, sectionConfig.installType);
 
-    let description = "";
-    if (customDescription && customDescription !== "null") {
+    let description = '';
+    if (customDescription && customDescription !== 'null') {
       description = customDescription;
     } else {
       description = sectionConfig.defaultDescription(title);
@@ -432,6 +411,203 @@ function generateSection(sectionConfig) {
 
   // Remove trailing newline to prevent extra newlines in the file
   return content.trimEnd();
+}
+
+function escapeTableCell(text) {
+  if (!text && text !== '') return '';
+  return String(text).replace(/\|/g, '&#124;').replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+// Generate a table for custom sets (each set is a directory under sets)
+function generateSetsSection(sectionConfig) {
+  const setsDir = path.join(__dirname, '..', sectionConfig.directory);
+
+  if (!fs.existsSync(setsDir)) {
+    logConsole(`${sectionConfig.title} directory does not exist`);
+    return '';
+  }
+
+  // Find all subdirectories inside sets
+  const setNames = fs
+    .readdirSync(setsDir)
+    .filter((name) => fs.statSync(path.join(setsDir, name)).isDirectory())
+    .sort();
+
+  logConsole(`> Found ${setNames.length} ${sectionConfig.directory} sets`);
+
+  if (setNames.length === 0) {
+    return `| Title | Description | Install |\n| ----- | ----------- | ------- |\n| No ${sectionConfig.directory} available | | |`;
+  }
+
+  let content = '';
+
+  for (const setName of setNames) {
+    const setPath = path.join(setsDir, setName);
+    const setReadmePath = path.join(setPath, 'README.md');
+    // Title and link: prefer README if exists, else use folder link
+    let title = formatTitleFromFilename(setName);
+    let link = encodeURI(`${sectionConfig.directory}/${setName}/`);
+    if (fs.existsSync(setReadmePath)) {
+      const t = extractTitle(setReadmePath);
+      if (t) title = t;
+      link = encodeURI(`${sectionConfig.directory}/${setName}/README.md`);
+    }
+
+    // Description: prefer README frontmatter/description
+    let description = null;
+    if (fs.existsSync(setReadmePath)) {
+      description = extractDescription(setReadmePath);
+    }
+    if (!description) {
+      // If no README description, try to derive a brief summary by counting items
+      const counts = {
+        prompts: listFilesRecursively(setPath, (f) => f.endsWith('.prompt.md')).length,
+        agents: listFilesRecursively(setPath, (f) => f.endsWith('.agents.md')).length,
+        modes: listFilesRecursively(setPath, (f) => f.endsWith('.chatmode.md')).length,
+        instructions: listFilesRecursively(setPath, (f) => f.endsWith('.instructions.md')).length,
+      };
+      const parts = [];
+      for (const [k, v] of Object.entries(counts)) {
+        if (v > 0) {
+          const singular = k === 'modes' ? 'Chat Mode' : k.slice(0, -1).replace(/s$/, '');
+          parts.push(`${v} ${singular}${v > 1 ? 's' : ''}`);
+        }
+      }
+      if (parts.length) description = `Contains ${parts.join(', ')}`;
+      else description = sectionConfig.defaultDescription(title);
+    }
+
+    // Build a per-set header and a table of resources
+    content += `#### **[${title}](${link})**\n\n`;
+    content += description ? `${description}\n\n` : '';
+
+    // Now build the resources table for this set
+    content += '| Title | Type | Description | Install |\n';
+    content += '| ----- | ---- | ----------- | ------- |\n';
+
+    // Gather all files recursively and add a row for each resource
+    const resources = [];
+    // Prompts
+    const promptFiles = listFilesRecursively(setPath, (f) => f.endsWith('.prompt.md'));
+    for (const rel of promptFiles) {
+      resources.push({ path: rel, type: 'Prompt', installType: 'prompt' });
+    }
+    // Agents
+    const agentFiles = listFilesRecursively(setPath, (f) => f.endsWith('.agents.md'));
+    for (const rel of agentFiles) {
+      resources.push({ path: rel, type: 'Agent', installType: 'agent' });
+    }
+    // Modes
+    const modeFiles = listFilesRecursively(setPath, (f) => f.endsWith('.chatmode.md'));
+    for (const rel of modeFiles) {
+      resources.push({ path: rel, type: 'Chat Mode', installType: 'mode' });
+    }
+    // Instructions
+    const instFiles = listFilesRecursively(setPath, (f) => f.endsWith('.instructions.md'));
+    for (const rel of instFiles) {
+      resources.push({
+        path: rel,
+        type: 'Instructions',
+        installType: 'instructions',
+      });
+    }
+
+    if (resources.length === 0) {
+      content += `| No resources found | | | |\n\n`;
+    } else {
+      for (const res of resources) {
+        const full = path.join(setPath, res.path);
+        const titleRes = escapeTableCell(extractTitle(full) || path.basename(res.path));
+        const descRes = escapeTableCell(extractDescription(full) || '');
+        const linkRes = encodeURI(`${sectionConfig.directory}/${setName}/${res.path}`);
+        const badge = makeBadges(linkRes, res.installType);
+        content += `| [${titleRes}](${linkRes}) | ${res.type} | ${descRes} | ${badge} |\n`;
+      }
+      content += '\n'; // spacing after table
+    }
+  }
+
+  return content.trimEnd();
+}
+
+// Returns list of files with a given extension inside a subfolder under a set directory
+function listFilesInSet(setPath, subdir, ext) {
+  const p = path.join(setPath, subdir);
+  try {
+    if (!fs.existsSync(p)) return [];
+    return fs
+      .readdirSync(p)
+      .filter((f) => f.endsWith(ext))
+      .sort();
+  } catch (e) {
+    return [];
+  }
+}
+
+// Recursively walk set directory and return files that match the given filter function
+function listFilesRecursively(basePath, filterFn) {
+  const out = [];
+  function walk(dir) {
+    const items = fs.readdirSync(dir);
+    for (const it of items) {
+      const full = path.join(dir, it);
+      const stat = fs.statSync(full);
+      if (stat.isDirectory()) walk(full);
+      else if (stat.isFile() && filterFn(full)) {
+        out.push(full);
+      }
+    }
+  }
+  try {
+    if (!fs.existsSync(basePath)) return [];
+    walk(basePath);
+  } catch (e) {
+    return [];
+  }
+  // Convert to relative path from basePath
+  return out.map((full) => path.relative(basePath, full).split(path.sep).join('/'));
+}
+
+// Generate install badges for all known resource types inside a set
+function generateSetBadges(setRelativePath, setFullPath) {
+  const groups = [];
+
+  // Find files recursively and group by type
+  const allPrompts = listFilesRecursively(setFullPath, (f) => f.endsWith('.prompt.md'));
+  const allAgents = listFilesRecursively(setFullPath, (f) => f.endsWith('.agents.md'));
+  const allModes = listFilesRecursively(setFullPath, (f) => f.endsWith('.chatmode.md'));
+  const allInstructions = listFilesRecursively(setFullPath, (f) => f.endsWith('.instructions.md'));
+
+  if (allPrompts.length) {
+    const badges = allPrompts
+      .map((rel) => makeBadges(encodeURI(`${setRelativePath}/${rel}`), 'prompt'))
+      .join(' ');
+    groups.push(`Prompts: ${badges}`);
+  }
+
+  if (allAgents.length) {
+    const badges = allAgents
+      .map((rel) => makeBadges(encodeURI(`${setRelativePath}/${rel}`), 'agent'))
+      .join(' ');
+    groups.push(`Agents: ${badges}`);
+  }
+
+  if (allModes.length) {
+    const badges = allModes
+      .map((rel) => makeBadges(encodeURI(`${setRelativePath}/${rel}`), 'mode'))
+      .join(' ');
+    groups.push(`Chat Modes: ${badges}`);
+  }
+
+  if (allInstructions.length) {
+    const badges = allInstructions
+      .map((rel) => makeBadges(encodeURI(`${setRelativePath}/${rel}`), 'instructions'))
+      .join(' ');
+    groups.push(`Instructions: ${badges}`);
+  }
+
+  if (!groups.length) return 'No content';
+  return groups.join('<br>');
 }
 
 // Section update with error handling
@@ -445,7 +621,7 @@ function updateSection(readmeContent, sectionConfig) {
         (match, header, oldTableContent, endComment) => {
           // Replace the old table content with the new table, keeping header and end comment
           return `${header}${newTable}${endComment}`;
-        }
+        },
       );
       logConsole(`✅ Updated ${sectionConfig.title} section`);
       return updatedContent;
@@ -454,9 +630,7 @@ function updateSection(readmeContent, sectionConfig) {
       return readmeContent;
     }
   } catch (error) {
-    console.error(
-      `❌ Error updating ${sectionConfig.title} section: ${error.message}`
-    );
+    console.error(`❌ Error updating ${sectionConfig.title} section: ${error.message}`);
     logConsole(`⚠️ Skipping ${sectionConfig.title} section due to error`);
     return readmeContent;
   }
@@ -465,7 +639,7 @@ function updateSection(readmeContent, sectionConfig) {
 // Main update function
 function updateReadmeSections(readmePath) {
   // Read the existing README
-  let readmeContent = fs.readFileSync(readmePath, "utf8");
+  let readmeContent = fs.readFileSync(readmePath, 'utf8');
   logConsole(`Read existing ${path.basename(readmePath)}`);
 
   // Store original content for rollback if needed
@@ -476,12 +650,8 @@ function updateReadmeSections(readmePath) {
     try {
       readmeContent = updateSection(readmeContent, sectionConfig);
     } catch (error) {
-      console.error(
-        `❌ Critical error updating ${sectionConfig.title}: ${error.message}`
-      );
-      logConsole(
-        `⚠️ Rolling back changes and keeping original ${sectionConfig.title} section`
-      );
+      console.error(`❌ Critical error updating ${sectionConfig.title}: ${error.message}`);
+      logConsole(`⚠️ Rolling back changes and keeping original ${sectionConfig.title} section`);
       // Continue with next section instead of failing completely
     }
   }
@@ -491,17 +661,17 @@ function updateReadmeSections(readmePath) {
 
 // Main execution with enhanced error handling
 function main() {
-  logConsole("Regenerating README sections for directories...");
+  logConsole('Regenerating README sections for directories...');
 
-  const repoRoot = path.join(__dirname, "..");
+  const repoRoot = path.join(__dirname, '..');
   const readmeFiles = FILES_TO_PROCESS;
 
   if (readmeFiles.length === 0) {
-    console.error("❌ No files specified in FILES_TO_PROCESS.");
+    console.error('❌ No files specified in FILES_TO_PROCESS.');
     process.exit(1);
   }
 
-  logConsole(`Processing README files: ${readmeFiles.join(", ")}`);
+  logConsole(`Processing README files: ${readmeFiles.join(', ')}`);
 
   let hasAnyChanges = false;
 
@@ -520,10 +690,8 @@ function main() {
 
     try {
       // Read original content (keep as in-memory backup)
-      originalContent = fs.readFileSync(readmePath, "utf8");
-      logConsole(
-        `📄 Original content for ${readmeFile} loaded into memory as backup`
-      );
+      originalContent = fs.readFileSync(readmePath, 'utf8');
+      logConsole(`📄 Original content for ${readmeFile} loaded into memory as backup`);
 
       // Generate new content
       newReadmeContent = updateReadmeSections(readmePath);
@@ -535,14 +703,10 @@ function main() {
         // Write new content directly (original content is kept in memory)
         fs.writeFileSync(readmePath, newReadmeContent);
         logConsole(`✅ ${readmeFile} updated successfully!`);
-        logConsole(
-          `💾 Original content preserved in memory for rollback if needed`
-        );
+        logConsole(`💾 Original content preserved in memory for rollback if needed`);
         hasAnyChanges = true;
       } else {
-        logConsole(
-          `💡 ${readmeFile} is already up to date. No changes needed.`
-        );
+        logConsole(`💡 ${readmeFile} is already up to date. No changes needed.`);
       }
     } catch (error) {
       console.error(`❌ Error regenerating ${readmeFile}: ${error.message}`);
@@ -551,16 +715,14 @@ function main() {
       // try to restore the original content from memory
       if (originalContent && fs.existsSync(readmePath)) {
         try {
-          const currentContent = fs.readFileSync(readmePath, "utf8");
+          const currentContent = fs.readFileSync(readmePath, 'utf8');
           if (currentContent !== originalContent) {
             fs.writeFileSync(readmePath, originalContent);
-            logConsole(
-              `🔄 Restored original ${readmeFile} content from memory backup`
-            );
+            logConsole(`🔄 Restored original ${readmeFile} content from memory backup`);
           }
         } catch (restoreError) {
           console.error(
-            `❌ Could not restore original content for ${readmeFile}: ${restoreError.message}`
+            `❌ Could not restore original content for ${readmeFile}: ${restoreError.message}`,
           );
         }
       }
@@ -570,9 +732,9 @@ function main() {
   }
 
   if (hasAnyChanges) {
-    logConsole("🎉 All README files processed. Some were updated.");
+    logConsole('🎉 All README files processed. Some were updated.');
   } else {
-    logConsole("🎉 All README files are up to date.");
+    logConsole('🎉 All README files are up to date.');
   }
 }
 
