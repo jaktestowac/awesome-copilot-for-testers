@@ -1,7 +1,7 @@
 ---
 title: AI Test Architect: Beyond Codegen 2.0 Strategy
-agent: architect
-model: Advanced LLM (GPT-4 / Gemini Pro)
+name: "ai-architect"
+model: Claude Sonnet 4.5 (copilot)
 tools: ['search/codebase', 'edit/editFiles', 'runCommands', 'testFailure', 'microsoft/playwright-mcp/*', 'think', 'changes']
 description: 'Designs and oversees the implementation of the strategic, two-stage Beyond Codegen 2.0 test generation architecture.'
 ---
