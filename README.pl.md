@@ -29,12 +29,10 @@ Spis Treści
   - [🇵🇱 Polskie Zasoby](#-polskie-zasoby)
   - [🇬🇧 Angielskie Zasoby](#-angielskie-zasoby)
 
-
 > [!IMPORTANT]
 > Sprawdź nasze darmowe nagranie na YouTube, aby dowiedzieć się więcej o GitHub Copilot Chat Modes:
 >
 > [![GitHub Copilot - Chat Modes](./assets/github-copilot-chat-modes.jpg)](https://www.youtube.com/watch?v=hHrOJlk6ET8&list=PLfKhn9AcZ-cCqD34AG5YRejujaBqCBgl4)
-
 
 ## 🎯 Funkcje Dostosowywania GitHub Copilota
 
@@ -137,6 +135,7 @@ GitHub Copilot zapewnia trzy główne sposoby dostosowywania odpowiedzi AI:
 
 > [!TIP]
 > Użycie (w VS Code od wersji 1.106):
+>
 > - utwórz nowe agenty czatu:
 >   - używając komendy `Chat: Configure Custom Agents...` lub
 >   - z menu ustawień trybu `Agent -> Configure Custom Agents`,
@@ -153,6 +152,24 @@ GitHub Copilot zapewnia trzy główne sposoby dostosowywania odpowiedzi AI:
 | [Test plan from expert Senior Quality Assurance Engineer](custom-agents/test-planner.agents.md) | This chat mode is designed to assist in creating comprehensive test plans tailored for web applications. | [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect?url=vscode%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fcustom-agents%2Ftest-planner.agents.md) [![Install in VS Code](https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fcustom-agents%2Ftest-planner.agents.md) |
 
 <!-- END_CUSTOM_AGENTS -->
+
+### Niestandardowe Zestawy
+
+Zestawy to kombinacje instrukcji, szablonów podpowiedzi i trybów czatu (lub niestandardowych agentów) zaprojektowane z myślą o konkretnych przypadkach użycia.
+
+> [!TIP]
+> Elementy zestawu współpracują ze sobą, aby zapewnić najlepsze doświadczenie w konkretnych scenariuszach. Możesz je jednak również używać osobno w razie potrzeby.
+
+> [!WARNING]
+> Koncepcja zestawów nie jest natywnie obsługiwana w VS Code Copilot.
+
+<!-- START_CUSTOM_SETS -->
+
+| Title | Description | Install |
+| ----- | ----------- | ------- |
+| No sets available | | |
+
+<!-- END_CUSTOM_SETS -->
 
 ## 📚 Dodatkowe Zasoby
 
