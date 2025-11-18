@@ -22,6 +22,7 @@ Spis Treści
     - [Szablony Promptów](#szablony-promptów)
     - [Niestandardowe Tryby Czatu](#niestandardowe-tryby-czatu)
     - [Niestandardowe Agenty (Custom Agents)](#niestandardowe-agenty-custom-agents)
+    - [Niestandardowe Zestawy (Custom Sets)](#niestandardowe-zestawy-custom-sets)
   - [📚 Dodatkowe Zasoby](#-dodatkowe-zasoby)
   - [🌱 Twórz z nami](#-twórz-z-nami)
   - [📞 Kontakt i Wsparcie](#-kontakt-i-wsparcie)
@@ -153,7 +154,7 @@ GitHub Copilot zapewnia trzy główne sposoby dostosowywania odpowiedzi AI:
 
 <!-- END_CUSTOM_AGENTS -->
 
-### Niestandardowe Zestawy
+### Niestandardowe Zestawy (Custom Sets)
 
 Zestawy to kombinacje instrukcji, szablonów podpowiedzi i trybów czatu (lub niestandardowych agentów) zaprojektowane z myślą o konkretnych przypadkach użycia.
 

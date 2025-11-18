@@ -22,6 +22,7 @@ Table of Contents
     - [Custom Prompt Templates](#custom-prompt-templates)
     - [Custom Chat Modes](#custom-chat-modes)
     - [Custom Agents](#custom-agents)
+    - [Custom Sets](#custom-sets)
   - [📚 Additional Resources](#-additional-resources)
   - [🌱 Contributing](#-contributing)
   - [📞 Contact & Support](#-contact--support)
