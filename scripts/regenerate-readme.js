@@ -65,7 +65,7 @@ const SECTIONS_CONFIG = {
     title: "Agent Skills",
     directory: "skills",
     fileExtension: "SKILL.md",
-    installType: "skill",
+    // installType: "skill", // No direct install type for skills in VS Code
     regex:
       /(<!-- START_CUSTOM_SKILLS -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_SKILLS -->)/,
     // skills live in subfolders (one skill per folder), so enable recursive scanning
@@ -441,7 +441,7 @@ function generateSection(sectionConfig) {
     const relativePathForLink = `${sectionConfig.directory}/${file}`.split(path.sep).join('/');
     const link = encodeURI(relativePathForLink);
     const customDescription = extractDescription(filePath);
-    const badges = makeBadges(link, sectionConfig.installType);
+    const badges = sectionConfig.installType ? makeBadges(link, sectionConfig.installType) : '';
 
     let description = '';
     if (customDescription && customDescription !== 'null') {
@@ -564,7 +564,7 @@ function generateSetsSection(sectionConfig) {
         const titleRes = escapeTableCell(extractTitle(full) || path.basename(res.path));
         const descRes = escapeTableCell(extractDescription(full) || '');
         const linkRes = encodeURI(`${sectionConfig.directory}/${setName}/${res.path}`);
-        const badge = makeBadges(linkRes, res.installType);
+        const badge = res.installType ? makeBadges(linkRes, res.installType) : '';
         content += `| [${titleRes}](${linkRes}) | ${res.type} | ${descRes} | ${badge} |\n`;
       }
       content += '\n'; // spacing after table

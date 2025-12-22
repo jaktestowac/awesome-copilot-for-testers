@@ -197,7 +197,7 @@ Contains 1 prompt, 1 agent
 
 | Title | Description | Install |
 | ----- | ----------- | ------- |
-| [Tech Debt Analysis Skill](skills/tech-debt-analysis/SKILL.md) | Analyze and address technical debt in codebases. | [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect?url=vscode%3Achat-skill%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fskills%2Ftech-debt-analysis%2FSKILL.md) [![Install in VS Code](https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Achat-skill%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fskills%2Ftech-debt-analysis%2FSKILL.md) |
+| [Tech Debt Analysis Skill](skills/tech-debt-analysis/SKILL.md) | Analyze and address technical debt in codebases. |  |
 
 <!-- END_CUSTOM_SKILLS -->
 
