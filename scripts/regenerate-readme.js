@@ -441,7 +441,7 @@ function generateSection(sectionConfig) {
     const relativePathForLink = `${sectionConfig.directory}/${file}`.split(path.sep).join('/');
     const link = encodeURI(relativePathForLink);
     const customDescription = extractDescription(filePath);
-    const badges = sectionConfig.installType ? makeBadges(link, sectionConfig.installType) : '';
+    const badges = sectionConfig.installType ? makeBadges(link, sectionConfig.installType) : 'not supported';
 
     let description = '';
     if (customDescription && customDescription !== 'null') {
@@ -564,7 +564,7 @@ function generateSetsSection(sectionConfig) {
         const titleRes = escapeTableCell(extractTitle(full) || path.basename(res.path));
         const descRes = escapeTableCell(extractDescription(full) || '');
         const linkRes = encodeURI(`${sectionConfig.directory}/${setName}/${res.path}`);
-        const badge = res.installType ? makeBadges(linkRes, res.installType) : '';
+        const badge = res.installType ? makeBadges(linkRes, res.installType) : 'not supported';
         content += `| [${titleRes}](${linkRes}) | ${res.type} | ${descRes} | ${badge} |\n`;
       }
       content += '\n'; // spacing after table

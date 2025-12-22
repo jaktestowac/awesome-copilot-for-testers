@@ -197,7 +197,7 @@ Contains 1 prompt, 1 agent
 
 | Title | Description | Install |
 | ----- | ----------- | ------- |
-| [Tech Debt Analysis Skill](skills/tech-debt-analysis/SKILL.md) | Analyze and address technical debt in codebases. |  |
+| [Tech Debt Analysis Skill](skills/tech-debt-analysis/SKILL.md) | Analyze and address technical debt in codebases. | not supported |
 
 <!-- END_CUSTOM_SKILLS -->
 
