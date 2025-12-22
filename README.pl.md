@@ -23,6 +23,7 @@ Spis Treści
     - [Niestandardowe Tryby Czatu](#niestandardowe-tryby-czatu)
     - [Niestandardowe Agenty (Custom Agents)](#niestandardowe-agenty-custom-agents)
     - [Niestandardowe Zestawy (Custom Sets)](#niestandardowe-zestawy-custom-sets)
+    - [Umiejętności Agentów (Agent Skills)](#umiejętności-agentów-agent-skills)
   - [📚 Dodatkowe Zasoby](#-dodatkowe-zasoby)
   - [🌱 Twórz z nami](#-twórz-z-nami)
   - [📞 Kontakt i Wsparcie](#-kontakt-i-wsparcie)
@@ -52,6 +53,7 @@ GitHub Copilot zapewnia trzy główne sposoby dostosowywania odpowiedzi AI:
 > - [Niestandardowe Instrukcje](https://code.visualstudio.com/docs/copilot/customization/custom-instructions) - Tworzenie własnych instrukcji
 > - [Prompt Files](https://code.visualstudio.com/docs/copilot/customization/prompt-files) - Tworzenie i używanie plików promptów
 > - [Niestandardowe Agenty (Custom Agents)](https://code.visualstudio.com/docs/copilot/customization/custom-agents) - Zaawansowana konfiguracja agentów
+> - [Agent Skills](https://code.visualstudio.com/docs/copilot/customization/agent-skills) - Rozszerzanie możliwości agentów za pomocą różnych umiejętności
 
 > [!TIP]
 > Chcesz dowiedzieć się więcej o efektywnym wykorzystaniu AI i GitHub Copilota dla Testerów?
@@ -176,6 +178,25 @@ Contains 1 prompt, 1 agent
 | [AI Test Architect: Beyond Codegen 2.0 Strategy](sets/Beyond%20Codegen%202.0%20Strategy/custom-agents/ai-architect.agents.md) | Agent | Designs and oversees the implementation of the strategic, two-stage Beyond Codegen 2.0 test generation architecture. | [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect?url=vscode%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fsets%2FBeyond%2520Codegen%25202.0%2520Strategy%2Fcustom-agents%2Fai-architect.agents.md) [![Install in VS Code](https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fsets%2FBeyond%2520Codegen%25202.0%2520Strategy%2Fcustom-agents%2Fai-architect.agents.md) |
 
 <!-- END_CUSTOM_SETS -->
+
+###  Umiejętności Agentów (Agent Skills) 
+
+> [!TIP]
+>  Użycie:
+> - skopiuj pliki umiejętności do folderu `./.github/skills/` lub do `.cloud/skills/` w swoim repozytorium
+>
+> Agenty Copilota automatycznie wykryją i załadują te umiejętności jeśli agent wykryje ich przydatność do bieżącego kontekstu czatu (po nazwie i opisie umiejętności).
+
+> [!WARNING]
+> [Agent Skills](https://code.visualstudio.com/docs/copilot/customization/agent-skills) są obecnie w wersji Preview i mogą wymagać włączenia eksperymentalnych funkcji w ustawieniach VS Code.
+
+<!-- START_CUSTOM_SKILLS -->
+
+| Title | Description | Install |
+| ----- | ----------- | ------- |
+| [Tech Debt Analysis Skill](skills/tech-debt-analysis/SKILL.md) | Analyze and address technical debt in codebases. | [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect?url=vscode%3Achat-skill%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fskills%2Ftech-debt-analysis%2FSKILL.md) [![Install in VS Code](https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Achat-skill%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fskills%2Ftech-debt-analysis%2FSKILL.md) |
+
+<!-- END_CUSTOM_SKILLS -->
 
 ## 📚 Dodatkowe Zasoby
 
