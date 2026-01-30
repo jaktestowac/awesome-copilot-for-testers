@@ -46,6 +46,18 @@ Match the solution to the repository stack:
 - Minimize cross-test dependencies.
 - Use soft assertions and retries only where meaningful and repo-approved.
 
+## 4) Patterns and practices
+
+First check if similar tests already exist - follow their patterns.
+If not, then analyze code, openapi schema and propose best practices, for example:
+
+- Arrange–Act–Assert (AAA) pattern.
+- Request Object Pattern (ROP) for complex requests.
+- Layered testing strategy: contract → integration → e2e.
+- Use data-driven tests for similar scenarios with different inputs.
+- Use builders, factories, repositories design pattern for test data management.
+- Use dependency injection for better test isolation and maintainability.
+
 ---
 
 # Commands (place these early and keep consistent)

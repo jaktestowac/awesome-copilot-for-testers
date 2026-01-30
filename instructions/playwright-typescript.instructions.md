@@ -1,6 +1,6 @@
 ---
-description: "Playwright test generation instructions with best practices and patterns."
-applyTo: "**"
+description: 'Playwright test generation instructions with best practices and patterns.'
+applyTo: '**'
 title: Playwright TypeScript Test Generation Instructions
 name: playwright-typescript-instructions
 ---
@@ -39,9 +39,9 @@ name: playwright-typescript-instructions
 ## Example Test Structure
 
 ```typescript
-import { test, expect } from "@playwright/test";
+import { test, expect } from '@playwright/test';
 
-test.describe("Movie Search Feature", () => {
+test.describe('Movie Search Feature', () => {
   test.beforeAll(async () => {
     // This block runs once before all tests in this describe block
     // You can set up global state or perform one-time actions here
@@ -49,20 +49,20 @@ test.describe("Movie Search Feature", () => {
 
   test.beforeEach(async ({ page }) => {
     // Navigate to the application before each test
-    await page.goto("/"); // Adjust the URL as needed but root should be taken from baseUrl in playwright.config.ts
+    await page.goto('/'); // Adjust the URL as needed but root should be taken from baseUrl in playwright.config.ts
   });
 
-  test("Search for a movie by title", async ({ page }) => {
+  test('Search for a movie by title', async ({ page }) => {
     // Arrange: Set up the initial state
-    const searchInput = page.getByRole("textbox", { name: "Search" });
-    const searchButton = page.getByRole("button", { name: "Search" });
+    const searchInput = page.getByRole('textbox', { name: 'Search' });
+    const searchButton = page.getByRole('button', { name: 'Search' });
 
     // Act: Perform the search action
-    await searchInput.fill("Inception");
+    await searchInput.fill('Inception');
     await searchButton.click();
 
     // Assert: Verify the search results
-    const results = page.getByRole("list", { name: "Search Results" });
+    const results = page.getByRole('list', { name: 'Search Results' });
     await expect(results).toBeVisible();
     await expect(results).toHaveText(/Inception/);
   });
@@ -84,18 +84,18 @@ The fundamental pattern for structuring test cases:
 - **Assert**: Verify the expected outcome and validate results
 
 ```typescript
-test("User can search for products", async ({ page }) => {
+test('User can search for products', async ({ page }) => {
   // Arrange: Set up the initial state
-  const searchInput = page.getByRole("textbox", { name: "Search" });
-  const searchButton = page.getByRole("button", { name: "Search" });
+  const searchInput = page.getByRole('textbox', { name: 'Search' });
+  const searchButton = page.getByRole('button', { name: 'Search' });
 
   // Act: Perform the search action
-  await searchInput.fill("laptop");
+  await searchInput.fill('laptop');
   await searchButton.click();
 
   // Assert: Verify the search results
-  await expect(page.getByText("Search Results")).toBeVisible();
-  await expect(page.getByRole("list")).toContainText("laptop");
+  await expect(page.getByText('Search Results')).toBeVisible();
+  await expect(page.getByRole('list')).toContainText('laptop');
 });
 ```
 
@@ -108,15 +108,15 @@ Aggregate related actions and assertions to improve test readability and maintai
 Try not to create methods for single actions.
 
 ```typescript
-import { Locator, Page } from "@playwright/test";
+import { Locator, Page } from '@playwright/test';
 
 class SearchPage {
   searchInput: Locator;
   searchButton: Locator;
 
   constructor(private page: Page) {
-    this.searchInput = page.getByRole("textbox", { name: "Search" });
-    this.searchButton = page.getByRole("button", { name: "Search" });
+    this.searchInput = page.getByRole('textbox', { name: 'Search' });
+    this.searchButton = page.getByRole('button', { name: 'Search' });
   }
 
   async searchFor(term: string): Promise<void> {
@@ -150,7 +150,7 @@ Create flexible test data with the builder pattern. Use this pattern with DTOs t
 
 ```typescript
 class UserBuilder {
-  private user: UserModel = { name: "", email: "", role: "user" };
+  private user: UserModel = { name: '', email: '', role: 'user' };
 
   withName(name: string): UserBuilder {
     this.user.name = name;
@@ -172,9 +172,9 @@ class UserBuilder {
 
 // Usage
 const testUser = new UserBuilder()
-  .withName("John Doe")
-  .withEmail("john@example.com")
-  .withRole("admin")
+  .withName('John Doe')
+  .withEmail('john@example.com')
+  .withRole('admin')
   .build();
 ```
 
@@ -199,9 +199,9 @@ class UserFactory {
 
 // Usage
 const testUser = UserFactory.createUser({
-  name: "John Doe",
-  email: "john@example.com",
-  role: "admin",
+  name: 'John Doe',
+  email: 'john@example.com',
+  role: 'admin',
 });
 ```
 
@@ -210,19 +210,19 @@ const testUser = UserFactory.createUser({
 Use `test.step()` for better reporting and debugging:
 
 ```typescript
-test("Complete user registration flow", async ({ page }) => {
-  await test.step("Navigate to registration page", async () => {
-    await page.goto("/register");
+test('Complete user registration flow', async ({ page }) => {
+  await test.step('Navigate to registration page', async () => {
+    await page.goto('/register');
   });
 
-  await test.step("Fill registration form", async () => {
-    await page.getByLabel("Name").fill("John Doe");
-    await page.getByLabel("Email").fill("john@example.com");
+  await test.step('Fill registration form', async () => {
+    await page.getByLabel('Name').fill('John Doe');
+    await page.getByLabel('Email').fill('john@example.com');
   });
 
-  await test.step("Submit and verify success", async () => {
-    await page.getByRole("button", { name: "Register" }).click();
-    await expect(page.getByText("Registration successful")).toBeVisible();
+  await test.step('Submit and verify success', async () => {
+    await page.getByRole('button', { name: 'Register' }).click();
+    await expect(page.getByText('Registration successful')).toBeVisible();
   });
 });
 ```
@@ -234,20 +234,20 @@ _Use Page Object Model (POM) to encapsulate page interactions and reduce duplica
 Use Playwright fixtures for consistent test setup:
 
 ```typescript
-import { test as base } from "@playwright/test";
+import { test as base } from '@playwright/test';
 
 export const test = base.extend<{ loggedInUser: Page }>({
   loggedInUser: async ({ page }, use) => {
     // Setup: Login user
-    await page.goto("/login");
-    await page.getByLabel("Email").fill("user@example.com");
-    await page.getByLabel("Password").fill("password");
-    await page.getByRole("button", { name: "Login" }).click();
+    await page.goto('/login');
+    await page.getByLabel('Email').fill('user@example.com');
+    await page.getByLabel('Password').fill('password');
+    await page.getByRole('button', { name: 'Login' }).click();
 
     await use(page);
 
     // Teardown: Logout (if needed)
-    await page.getByRole("button", { name: "Logout" }).click();
+    await page.getByRole('button', { name: 'Logout' }).click();
   },
 });
 ```
@@ -257,9 +257,9 @@ export const test = base.extend<{ loggedInUser: Page }>({
 Use fixtures to initialize page objects for tests:
 
 ```typescript
-import { test as base } from "@playwright/test";
-import { LoginPage } from "../pages/login.page";
-import { RegistrationPage } from "../pages/registration.page";
+import { test as base } from '@playwright/test';
+import { LoginPage } from '../pages/login.page';
+import { RegistrationPage } from '../pages/registration.page';
 
 export const test = base.extend<{
   loginPage: LoginPage;
@@ -277,11 +277,11 @@ export const test = base.extend<{
 Usage in tests:
 
 ```typescript
-test("User can register", async ({ registrationPage }) => {
+test('User can register', async ({ registrationPage }) => {
   await registrationPage.registerUser({
-    name: "John Doe",
-    email: "john@example.com",
-    password: "password123",
+    name: 'John Doe',
+    email: 'john@example.com',
+    password: 'password123',
   });
 
   // Verify registration success
@@ -311,4 +311,7 @@ Before finalizing tests, ensure:
 - [ ] Tests are isolated and do not depend on external state
 - [ ] No hard-coded waits or timeouts are used
 - [ ] Patterns like AAA, POM, and Builder are applied where appropriate
+
+```
+
 ```
