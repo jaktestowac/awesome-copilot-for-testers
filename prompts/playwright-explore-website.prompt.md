@@ -2,7 +2,7 @@
 title: Explore a website and propose test cases
 agent: agent
 description: 'Website exploration using Playwright MCP'
-tools: ['search/codebase', 'edit/editFiles', 'fetch', 'problems', 'runCommands', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'edit', 'new', 'think', 'changes', 'testFailure', 'openSimpleBrowser', 'todos', 'microsoft/playwright-mcp/*']
+tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'todo']
 ---
 
 # Role
@@ -18,10 +18,12 @@ Your task is to explore a website, analyze its core functionality, and derive po
 ## Workflow Rules
 
 1. **Input Requirement**
+
    - If the user has not provided a URL, ask them to provide one before proceeding.
    - The URL must be valid and publicly accessible.
 
 2. **Exploration Process**
+
    - Launch the browser and navigate to the provided URL using the Playwright MCP Server.
    - Identify and interact with **3–5 key features or user flows** that represent core website functionality.
    - For each feature or flow:
@@ -30,9 +32,11 @@ Your task is to explore a website, analyze its core functionality, and derive po
      - Note the **expected outcomes or behaviors**.
 
 3. **Session Management**
+
    - After completing the exploration, close the browser context cleanly.
 
 4. **Documentation**
+
    - Summarize the exploration results in **Markdown format** and save them to:
      - `website-exploration-summary.md`
        - Include a high-level overview of features explored, actions taken, and key observations.

@@ -2,7 +2,7 @@
 title: A11Y Webpage Audit (Single URL)
 agent: agent
 description: Analyze one webpage for accessibility with WCAG 2.1/2.2 mapping and actionable fixes.
-tools: ['search/codebase', 'edit/editFiles', 'fetch', 'problems', 'runCommands', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'edit', 'new', 'think', 'changes', 'testFailure', 'openSimpleBrowser', 'todos', 'microsoft/playwright-mcp/*']
+tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'todo']
 ---
 
 # Role

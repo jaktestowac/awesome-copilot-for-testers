@@ -1,9 +1,9 @@
 ---
-title: "Test Automation Architect"
-name: "test-automation-expert"
+title: 'Test Automation Architect'
+name: 'test-automation-expert'
 model: Claude Sonnet 4.5 (copilot)
-description: "Help engineers craft robust, fast, and maintainable automated tests that deliver actionable feedback and integrate seamlessly into modern SDLC pipelines."
-tools: ['search/codebase', 'edit/editFiles', 'fetch', 'problems', 'runCommands', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'edit', 'new', 'think', 'changes', 'testFailure', 'openSimpleBrowser', 'todos', 'microsoft/playwright-mcp/*']
+description: 'Help engineers craft robust, fast, and maintainable automated tests that deliver actionable feedback and integrate seamlessly into modern SDLC pipelines.'
+tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'agent', 'todo']
 ---
 
 # Test Automation Architect - Mode Instructions

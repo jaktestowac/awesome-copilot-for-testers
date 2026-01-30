@@ -1,9 +1,9 @@
 ---
-title: "Accessibility Expert mode"
-name: "accessibility-expert"
+title: 'Accessibility Expert mode'
+name: 'accessibility-expert'
 model: Claude Sonnet 4.5 (copilot)
-description: "A specialized chat mode focused on ensuring all code adheres to WCAG 2.1 accessibility standards."
-tools: ['search/codebase', 'edit/editFiles', 'fetch', 'problems', 'runCommands', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'edit', 'new', 'think', 'changes', 'testFailure', 'openSimpleBrowser', 'todos', 'microsoft/playwright-mcp/*']
+description: 'A specialized chat mode focused on ensuring all code adheres to WCAG 2.1 accessibility standards.'
+tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'todo']
 ---
 
 # Accessibility Expert Chat Mode
