@@ -62,15 +62,14 @@ const SECTIONS_CONFIG = {
     defaultDescription: (title) => `A set of resources for ${title}`,
   },
   skills: {
-    title: "Agent Skills",
-    directory: "skills",
-    fileExtension: "SKILL.md",
+    title: 'Agent Skills',
+    directory: 'skills',
+    fileExtension: 'SKILL.md',
     // installType: "skill", // No direct install type for skills in VS Code
-    regex:
-      /(<!-- START_CUSTOM_SKILLS -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_SKILLS -->)/,
+    regex: /(<!-- START_CUSTOM_SKILLS -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_SKILLS -->)/,
     // skills live in subfolders (one skill per folder), so enable recursive scanning
     recursive: true,
-    defaultDescription: () => "",
+    defaultDescription: () => '',
   },
 };
 
@@ -238,7 +237,7 @@ function extractTitle(filePath) {
       }
 
       // Step 2: For specific file types, look for heading after frontmatter
-      const isSpecialFile = ['.prompt.md', '.chatmode.md', '.agents.md', '.instructions.md'].some(
+      const isSpecialFile = ['.prompt.md', '.chatmode.md', '.agent.md', '.instructions.md'].some(
         (ext) => filePath.includes(ext),
       );
 
@@ -270,7 +269,7 @@ function extractTitle(filePath) {
         let ext = '.md';
         if (filePath.includes('.prompt.md')) ext = '.prompt.md';
         else if (filePath.includes('.chatmode.md')) ext = '.chatmode.md';
-        else if (filePath.includes('.agents.md')) ext = '.agents.md';
+        else if (filePath.includes('.agent.md')) ext = '.agent.md';
         else if (filePath.includes('.instructions.md')) ext = '.instructions.md';
         const basename = path.basename(filePath, ext);
         return formatTitleFromFilename(basename);
@@ -393,7 +392,7 @@ function collectFiles(sectionDir, fileExtension, recursive = false) {
         // Match by exact filename (e.g., 'SKILL.md') or by extension
         if (
           e.name === fileExtension ||
-          (fileExtension.startsWith(".") && e.name.endsWith(fileExtension))
+          (fileExtension.startsWith('.') && e.name.endsWith(fileExtension))
         ) {
           results.push(rel);
         }
@@ -401,7 +400,7 @@ function collectFiles(sectionDir, fileExtension, recursive = false) {
     }
   }
 
-  walk(sectionDir, "");
+  walk(sectionDir, '');
   return results.sort();
 }
 
@@ -441,7 +440,9 @@ function generateSection(sectionConfig) {
     const relativePathForLink = `${sectionConfig.directory}/${file}`.split(path.sep).join('/');
     const link = encodeURI(relativePathForLink);
     const customDescription = extractDescription(filePath);
-    const badges = sectionConfig.installType ? makeBadges(link, sectionConfig.installType) : 'not supported';
+    const badges = sectionConfig.installType
+      ? makeBadges(link, sectionConfig.installType)
+      : 'not supported';
 
     let description = '';
     if (customDescription && customDescription !== 'null') {
@@ -506,7 +507,7 @@ function generateSetsSection(sectionConfig) {
       // If no README description, try to derive a brief summary by counting items
       const counts = {
         prompts: listFilesRecursively(setPath, (f) => f.endsWith('.prompt.md')).length,
-        agents: listFilesRecursively(setPath, (f) => f.endsWith('.agents.md')).length,
+        agents: listFilesRecursively(setPath, (f) => f.endsWith('.agent.md')).length,
         modes: listFilesRecursively(setPath, (f) => f.endsWith('.chatmode.md')).length,
         instructions: listFilesRecursively(setPath, (f) => f.endsWith('.instructions.md')).length,
       };
@@ -537,7 +538,7 @@ function generateSetsSection(sectionConfig) {
       resources.push({ path: rel, type: 'Prompt', installType: 'prompt' });
     }
     // Agents
-    const agentFiles = listFilesRecursively(setPath, (f) => f.endsWith('.agents.md'));
+    const agentFiles = listFilesRecursively(setPath, (f) => f.endsWith('.agent.md'));
     for (const rel of agentFiles) {
       resources.push({ path: rel, type: 'Agent', installType: 'agent' });
     }
@@ -618,7 +619,7 @@ function generateSetBadges(setRelativePath, setFullPath) {
 
   // Find files recursively and group by type
   const allPrompts = listFilesRecursively(setFullPath, (f) => f.endsWith('.prompt.md'));
-  const allAgents = listFilesRecursively(setFullPath, (f) => f.endsWith('.agents.md'));
+  const allAgents = listFilesRecursively(setFullPath, (f) => f.endsWith('.agent.md'));
   const allModes = listFilesRecursively(setFullPath, (f) => f.endsWith('.chatmode.md'));
   const allInstructions = listFilesRecursively(setFullPath, (f) => f.endsWith('.instructions.md'));
 
