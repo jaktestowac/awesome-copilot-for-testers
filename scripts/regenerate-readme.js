@@ -61,6 +61,17 @@ const SECTIONS_CONFIG = {
     regex: /(<!-- START_CUSTOM_SETS -->\s*\n+)([\s\S]*?)(\s*<!-- END_CUSTOM_SETS -->)/,
     defaultDescription: (title) => `A set of resources for ${title}`,
   },
+  skills: {
+    title: "Agent Skills",
+    directory: "skills",
+    fileExtension: "SKILL.md",
+    // installType: "skill", // No direct install type for skills in VS Code
+    regex:
+      /(<!-- START_CUSTOM_SKILLS -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_SKILLS -->)/,
+    // skills live in subfolders (one skill per folder), so enable recursive scanning
+    recursive: true,
+    defaultDescription: () => "",
+  },
 };
 
 // Badge configuration
@@ -360,6 +371,40 @@ function makeBadges(link, type) {
   return `[![Install in VS Code](${BADGE_CONFIG.vscode.image})](${vscodeUrl}) [![Install in VS Code](${BADGE_CONFIG.vscodeInsiders.image})](${vscodeInsidersUrl})`;
 }
 
+// Collect files for a section. Supports optional recursive scanning for nested directories.
+function collectFiles(sectionDir, fileExtension, recursive = false) {
+  if (!recursive) {
+    return fs
+      .readdirSync(sectionDir)
+      .filter((file) => file.endsWith(fileExtension))
+      .sort();
+  }
+
+  const results = [];
+
+  function walk(currentDir, relPath) {
+    const entries = fs.readdirSync(currentDir, { withFileTypes: true });
+    for (const e of entries) {
+      const full = path.join(currentDir, e.name);
+      const rel = relPath ? path.join(relPath, e.name) : e.name;
+      if (e.isDirectory()) {
+        walk(full, rel);
+      } else if (e.isFile()) {
+        // Match by exact filename (e.g., 'SKILL.md') or by extension
+        if (
+          e.name === fileExtension ||
+          (fileExtension.startsWith(".") && e.name.endsWith(fileExtension))
+        ) {
+          results.push(rel);
+        }
+      }
+    }
+  }
+
+  walk(sectionDir, "");
+  return results.sort();
+}
+
 // Generic section generation
 function generateSection(sectionConfig) {
   const sectionDir = path.join(__dirname, '..', sectionConfig.directory);
@@ -375,11 +420,8 @@ function generateSection(sectionConfig) {
     return generateSetsSection(sectionConfig);
   }
 
-  // Get all files matching the extension
-  const files = fs
-    .readdirSync(sectionDir)
-    .filter((file) => file.endsWith(sectionConfig.fileExtension))
-    .sort();
+  // Get all files matching the extension (supports recursive scan for nested skills)
+  const files = collectFiles(sectionDir, sectionConfig.fileExtension, !!sectionConfig.recursive);
 
   logConsole(`> Found ${files.length} ${sectionConfig.directory} files`);
 
@@ -395,9 +437,11 @@ function generateSection(sectionConfig) {
   for (const file of files) {
     const filePath = path.join(sectionDir, file);
     const title = extractTitle(filePath);
-    const link = encodeURI(`${sectionConfig.directory}/${file}`);
+    // Normalize path separators to forward slashes for URLs (Windows uses backslashes)
+    const relativePathForLink = `${sectionConfig.directory}/${file}`.split(path.sep).join('/');
+    const link = encodeURI(relativePathForLink);
     const customDescription = extractDescription(filePath);
-    const badges = makeBadges(link, sectionConfig.installType);
+    const badges = sectionConfig.installType ? makeBadges(link, sectionConfig.installType) : 'not supported';
 
     let description = '';
     if (customDescription && customDescription !== 'null') {
@@ -520,7 +564,7 @@ function generateSetsSection(sectionConfig) {
         const titleRes = escapeTableCell(extractTitle(full) || path.basename(res.path));
         const descRes = escapeTableCell(extractDescription(full) || '');
         const linkRes = encodeURI(`${sectionConfig.directory}/${setName}/${res.path}`);
-        const badge = makeBadges(linkRes, res.installType);
+        const badge = res.installType ? makeBadges(linkRes, res.installType) : 'not supported';
         content += `| [${titleRes}](${linkRes}) | ${res.type} | ${descRes} | ${badge} |\n`;
       }
       content += '\n'; // spacing after table

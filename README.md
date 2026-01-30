@@ -23,6 +23,7 @@ Table of Contents
     - [Custom Chat Modes](#custom-chat-modes)
     - [Custom Agents](#custom-agents)
     - [Custom Sets](#custom-sets)
+    - [Agent Skills](#agent-skills)
   - [📚 Additional Resources](#-additional-resources)
   - [🌱 Contributing](#-contributing)
   - [📞 Contact & Support](#-contact--support)
@@ -53,6 +54,7 @@ GitHub Copilot provides three main ways to customize AI responses and tailor ass
 > - [Custom Instructions](https://code.visualstudio.com/docs/copilot/customization/custom-instructions) - Customize Copilot's behavior
 > - [Prompt Files](https://code.visualstudio.com/docs/copilot/customization/prompt-files) - Using prompt templates
 > - [Custom Agents](https://code.visualstudio.com/docs/copilot/customization/custom-agents) - Advanced agent configuration
+> - [Agent Skills](https://code.visualstudio.com/docs/copilot/customization/agent-skills) - Extend agent capabilities with skills
 
 > [!TIP]
 > Do you want to learn more about effective use of AI and GitHub Copilot for Testers?
@@ -178,6 +180,27 @@ Contains 1 prompt, 1 agent
 | [AI Test Architect: Beyond Codegen 2.0 Strategy](sets/Beyond%20Codegen%202.0%20Strategy/custom-agents/ai-architect.agents.md) | Agent | Designs and oversees the implementation of the strategic, two-stage Beyond Codegen 2.0 test generation architecture. | [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect?url=vscode%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fsets%2FBeyond%2520Codegen%25202.0%2520Strategy%2Fcustom-agents%2Fai-architect.agents.md) [![Install in VS Code](https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fsets%2FBeyond%2520Codegen%25202.0%2520Strategy%2Fcustom-agents%2Fai-architect.agents.md) |
 
 <!-- END_CUSTOM_SETS -->
+
+
+### Agent Skills
+
+> [!TIP]
+> Usage:
+> - copy these skills to your `.github/skills/` or `.claude/skills/` folder
+>
+> Agents will automatically detect and load these skills if the agent finds them relevant to the current chat context (based on the skill's name and description).
+
+> [!WARNING]
+> [Agent Skills](https://code.visualstudio.com/docs/copilot/customization/agent-skills) are currently in preview and may require enabling experimental features in VS Code settings.
+
+<!-- START_CUSTOM_SKILLS -->
+
+| Title | Description | Install |
+| ----- | ----------- | ------- |
+| [Tech Debt Analysis Skill](skills/tech-debt-analysis/SKILL.md) | Analyze and address technical debt in codebases. | not supported |
+
+<!-- END_CUSTOM_SKILLS -->
+
 
 ## 📚 Additional Resources
 
