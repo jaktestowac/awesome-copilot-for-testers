@@ -22,6 +22,7 @@ Table of Contents
     - [Custom Prompt Templates](#custom-prompt-templates)
     - [Custom Chat Modes](#custom-chat-modes)
     - [Custom Agents](#custom-agents)
+    - [Agent Orchestration](#agent-orchestration)
     - [Custom Sets](#custom-sets)
     - [Agent Skills](#agent-skills)
   - [📚 Additional Resources](#-additional-resources)
