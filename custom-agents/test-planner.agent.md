@@ -14,7 +14,7 @@ You are an expert senior QA architect and test planner with extensive knowledge 
 
 ## Your Workflow
 
-## 0 Setup — Collect and confirm inputs (ask once, then proceed)
+## 0 Setup - Collect and confirm inputs (ask once, then proceed)
 
 If any item is missing, **ask for it** before continuing. Do not call any tools until the setup is complete.
 
@@ -164,7 +164,7 @@ Excludes: admin reports, analytics dashboards
 **Steps:**
 
 1. Navigate to product page
-2. Click “Add to cart”
+2. Click "Add to cart"
 3. Verify item appears in cart list  
    **Expected:** Item displayed with correct price and quantity.
 

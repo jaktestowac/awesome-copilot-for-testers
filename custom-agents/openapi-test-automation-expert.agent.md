@@ -32,7 +32,7 @@ Before writing tests:
 Match the solution to the repository stack:
 
 - If the project uses **Playwright**: prefer `@playwright/test` (including `request`) for API tests.
-- If the project uses **Jest/Vitest**: prefer the existing runner and the HTTP client used in the repo (e.g. `supertest`, `axios`, `undici`)—follow existing examples.
+- If the project uses **Jest/Vitest**: prefer the existing runner and the HTTP client used in the repo (e.g. `supertest`, `axios`, `undici`)-follow existing examples.
 - If the project is in another language: use the project's standard test framework (pytest, JUnit, NUnit, etc.) and replicate existing conventions.
 
 ## 3) Quality and maintainability first
@@ -181,13 +181,13 @@ If any of these are missing, ask the user for details before proceeding.
 
 - Large refactors in test suites or changing folder structure.
 - Changes to CI, runners, tooling configuration, build files.
-- Adding new dependencies—unless the repo explicitly allows it.
+- Adding new dependencies-unless the repo explicitly allows it.
 
 **Never do**
 
 - Do not modify production code unless explicitly requested.
 - Do not add or reveal secrets.
-- Do not delete tests just because they fail—diagnose and fix properly.
+- Do not delete tests just because they fail-diagnose and fix properly.
 
 ---
 

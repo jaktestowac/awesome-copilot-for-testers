@@ -52,6 +52,15 @@ const SECTIONS_CONFIG = {
     regex: /(<!-- START_CUSTOM_AGENTS -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_AGENTS -->)/,
     defaultDescription: () => '',
   },
+  agentOrchestration: {
+    title: 'Agent Orchestration',
+    directory: 'agent-orchestration',
+    fileExtension: '.agent.md',
+    installType: 'agent',
+    regex:
+      /(<!-- START_CUSTOM_AGENT_ORCHESTRATION -->\s*\n+)([\s\S]*?)(\s*<!-- END_CUSTOM_AGENT_ORCHESTRATION -->)/,
+    defaultDescription: (title) => `Agent orchestration pack for ${title}`,
+  },
   sets: {
     title: 'Custom Sets',
     directory: 'sets',
@@ -353,6 +362,67 @@ function extractDescription(filePath) {
   );
 }
 
+function extractName(filePath) {
+  return safeFileOperation(
+    () => {
+      const content = fs.readFileSync(filePath, 'utf8');
+      let name = extractFrontmatterField(content, 'name');
+      if (typeof name === 'string') {
+        const trimmed = name.trim();
+        if (trimmed && trimmed.toLowerCase() !== 'null') return trimmed;
+      }
+
+      // Fallback: directly parse frontmatter block for name
+      const textNoBom = content && content.charCodeAt(0) === 0xfeff ? content.slice(1) : content;
+      const fmMatch = textNoBom.match(/^---\s*[\r\n]+([\s\S]*?)\r?\n---/);
+      if (fmMatch) {
+        const fmBlock = fmMatch[1];
+        const lines = fmBlock.split(/\r?\n/);
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          const m = line.match(/^\s*name\s*:\s*(.*)$/i);
+          if (!m) continue;
+          let value = (m[1] || '').trim();
+          // Handle block scalar for name
+          if (value === '|' || value === '>' || value === '|-' || value === '>-') {
+            const next = lines[i + 1] || '';
+            const indentMatch = next.match(/^(\s+)/);
+            const baseIndent = indentMatch ? indentMatch[1].length : 2;
+            const block = [];
+            for (let j = i + 1; j < lines.length; j++) {
+              const l = lines[j];
+              if (l.trim() === '') {
+                block.push('');
+                continue;
+              }
+              const leadingSpaces = (l.match(/^(\s*)/) || ['', ''][1]).length;
+              if (leadingSpaces < baseIndent) break;
+              block.push(l.slice(baseIndent));
+            }
+            const out = block.join(' ').trim();
+            if (out) return out;
+          }
+          // Quoted single/double
+          if (
+            (value.startsWith('"') && value.endsWith('"')) ||
+            (value.startsWith("'") && value.endsWith("'"))
+          ) {
+            value = value.slice(1, -1);
+          }
+          value = value.replace(/''/g, "'");
+          const hashIdx = value.indexOf(' #');
+          if (hashIdx !== -1) value = value.slice(0, hashIdx).trim();
+          if (value && value.toLowerCase() !== 'null') return value;
+        }
+      }
+
+      return null;
+    },
+    filePath,
+    null,
+  );
+}
+
 function formatTitleFromFilename(basename) {
   return basename.replace(/[-_]/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 }
@@ -417,6 +487,11 @@ function generateSection(sectionConfig) {
   // If this is the special 'sets' directory, use a dedicated generator
   if (sectionConfig.directory === 'sets') {
     return generateSetsSection(sectionConfig);
+  }
+
+  // If this is the agent orchestration directory, use a dedicated generator
+  if (sectionConfig.directory === 'agent-orchestration') {
+    return generateAgentOrchestrationSection(sectionConfig);
   }
 
   // Get all files matching the extension (supports recursive scan for nested skills)
@@ -570,6 +645,89 @@ function generateSetsSection(sectionConfig) {
       }
       content += '\n'; // spacing after table
     }
+  }
+
+  return content.trimEnd();
+}
+
+// Generate a section for agent orchestration packs (each pack is a subdirectory)
+function generateAgentOrchestrationSection(sectionConfig) {
+  const packsDir = path.join(__dirname, '..', sectionConfig.directory);
+
+  if (!fs.existsSync(packsDir)) {
+    logConsole(`${sectionConfig.title} directory does not exist`);
+    return '';
+  }
+
+  const packNames = fs
+    .readdirSync(packsDir)
+    .filter((name) => fs.statSync(path.join(packsDir, name)).isDirectory())
+    .sort();
+
+  logConsole(`> Found ${packNames.length} ${sectionConfig.directory} packs`);
+
+  if (packNames.length === 0) {
+    return `| Title | Description | Install |\n| ----- | ----------- | ------- |\n| No ${sectionConfig.directory} available | | |`;
+  }
+
+  let content = '';
+
+  for (const packName of packNames) {
+    const packPath = path.join(packsDir, packName);
+    const packReadmePath = path.join(packPath, 'README.md');
+
+
+  // skip subdirectories that don't contain any .agent.md files or contin "-temp" in the name (used for temp testing folders)
+    const hasAgentFiles = listFilesRecursively(packPath, (f) => f.endsWith('.agent.md')).length > 0;
+    if (!hasAgentFiles || packName.includes('-temp')) {
+      logConsole(`Skipping ${packName} as it has no agent files or is marked as temp`);
+      continue;
+    }
+
+    let title = formatTitleFromFilename(packName);
+    let link = encodeURI(`${sectionConfig.directory}/${packName}/`);
+    if (fs.existsSync(packReadmePath)) {
+      const t = extractTitle(packReadmePath);
+      if (t) title = t;
+      link = encodeURI(`${sectionConfig.directory}/${packName}/README.md`);
+    }
+
+    let description = null;
+    if (fs.existsSync(packReadmePath)) {
+      description = extractDescription(packReadmePath);
+    }
+
+    const agentFiles = listFilesRecursively(packPath, (f) => f.endsWith('.agent.md')).sort();
+    if (!description) {
+      if (agentFiles.length) {
+        description = `Contains ${agentFiles.length} agent${agentFiles.length > 1 ? 's' : ''}`;
+      } else {
+        description = sectionConfig.defaultDescription(title);
+      }
+    }
+
+    content += `#### **[${title}](${link})**\n\n`;
+    content += description ? `${description}\n\n` : '';
+
+    content += '| Title | Description | Install |\n';
+    content += '| ----- | ----------- | ------- |\n';
+
+    if (agentFiles.length === 0) {
+      content += `| No agents found | | |\n\n`;
+      continue;
+    }
+
+    for (const rel of agentFiles) {
+      const full = path.join(packPath, rel);
+      const titleRes = escapeTableCell(extractTitle(full) || path.basename(rel));
+      const agentName = extractName(full) || path.basename(rel, '.agent.md');
+      const descRes = escapeTableCell(extractDescription(full) || '');
+      const linkRes = encodeURI(`${sectionConfig.directory}/${packName}/${rel}`);
+      const badge = makeBadges(linkRes, sectionConfig.installType);
+      content += `| [${agentName}](${linkRes}) | ${descRes} | ${badge} |\n`;
+    }
+
+    content += '\n';
   }
 
   return content.trimEnd();
