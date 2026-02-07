@@ -1,13 +1,6 @@
 # Minimal Agent Orchestration Example
 
-A lightweight, production-ready example of multi-agent coordination with 1 orchestrator and 3 specialized subagents:
-
-- **Orchestrator**: Drives workflow, delegates tasks, synthesizes findings with explicit user approval gates
-- **Planner**: Breaks goals into phased implementations with test strategies and risk mitigation
-- **Explorer**: Maps codebase structure, discovers patterns, finds entry points and dependencies
-- **Analyst**: Identifies architectural patterns, assesses technical debt, surfaces opportunities and risks
-
-This pattern is designed for complex analysis, planning, and documentation workflows where you need clear delegation, research, and synthesis across multiple specialized agents.
+A lightweight, production-ready example of multi-agent coordination with 1 orchestrator and 3 specialized subagents. This pattern is designed for complex analysis, planning, and documentation workflows.
 
 ## When to Use This Pattern
 

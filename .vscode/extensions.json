@@ -1,6 +1,5 @@
 {
   "recommendations": [
-    "github.copilot",
     "github.copilot-chat",
     "ms-playwright.playwright",
     "jaktestowac-pl.playwright-helpers",

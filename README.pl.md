@@ -207,8 +207,48 @@ Contains 10 agents
 | [Researcher Subagent](agent-orchestration/plan-explore-review-commit/Researcher-subagent.agent.md) | Researcher: extract conventions, key files, patterns, and examples at scale | [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect?url=vscode%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fagent-orchestration%2Fplan-explore-review-commit%2FResearcher-subagent.agent.md) [![Install in VS Code](https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fagent-orchestration%2Fplan-explore-review-commit%2FResearcher-subagent.agent.md) |
 | [Security Auditor Subagent](agent-orchestration/plan-explore-review-commit/Security-Auditor-subagent.agent.md) | Security audit: threat model, risk scan, OWASP mapping, and concrete mitigations | [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect?url=vscode%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fagent-orchestration%2Fplan-explore-review-commit%2FSecurity-Auditor-subagent.agent.md) [![Install in VS Code](https://img.shields.io/badge/VS_Code_Insiders-Install-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Achat-agent%2Finstall%3Furl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fjaktestowac%2Fawesome-copilot-for-testers%2Fmain%2Fagent-orchestration%2Fplan-explore-review-commit%2FSecurity-Auditor-subagent.agent.md) |
 
-
 <!-- END_CUSTOM_AGENT_ORCHESTRATION -->
+
+#### **🎯 Szybki Start: Używanie Orkiestratora z Subagentami**
+
+Po zainstalowaniu agentów, oto kilka przykładowych promptów, aby zacząć:
+
+**Przykład 1: Analiza Funkcji pod kątem Długu Technicznego (Minimal Example)**
+
+```
+@Orchestrator Przeanalizuj to repozytorium pod kątem długu technicznego i problemów z utrzymywalnością.
+```
+
+Orkiestrator będzie:
+1. Przeanalizuje Twój zakres i ograniczenia
+2. Wywoła równocześnie **Explorer** i **Analyst** do badania repozytorium
+3. Przedstawi rekomendacje dotyczące obszarów wysokiego ryzyka, potencjalnych problemów z utrzymaniem i co można poprawić.
+
+**Przykład 2: Planowanie Implementacji (Full Example)**
+
+```
+@Orchestrator Zaplanuj implementację: Dodaj powiadomienia w czasie rzeczywistym do naszego API.
+Ograniczenia: Musi być wstecz kompatybilne, bez zmian schematu bazy danych.
+```
+
+Orkiestrator będzie:
+1. Wywoła **Planner** do utworzenia strategii implementacji fazowej
+2. **Planner** wywoła **Explorer** do mapowania repozytorium i **Architect** do analizy trade-offów
+3. Przedstawi kompletny plan ze strategią testowania i mitygacją ryzyka
+
+**Przykład 3: Ocena Bezpieczeństwa**
+
+```
+@Orchestrator Oceń poziom bezpieczeństwa naszego systemu autentykacji.
+```
+
+Orkiestrator będzie:
+1. Wywoła **Explorer** do znalezienia wszystkich plików związanych z autentykacją
+2. Wywoła **Security-Auditor** do analizy wzorów i identyfikacji podatności
+3. Syntetyzuje ustalenia w aktualne rekomendacje
+
+> [!TIP]
+> Aby uzyskać więcej opcji i dobrych praktyk, zapoznaj się z [README dla Minimal Agent Orchestration Example](agent-orchestration/minimal-example/README.md)
 
 ### Niestandardowe Zestawy (Custom Sets)
 
