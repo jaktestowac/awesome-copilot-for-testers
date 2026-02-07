@@ -55,6 +55,8 @@ GitHub Copilot zapewnia trzy główne sposoby dostosowywania odpowiedzi AI:
 > - [Prompt Files](https://code.visualstudio.com/docs/copilot/customization/prompt-files) - Tworzenie i używanie plików promptów
 > - [Niestandardowe Agenty (Custom Agents)](https://code.visualstudio.com/docs/copilot/customization/custom-agents) - Zaawansowana konfiguracja agentów
 > - [Agent Skills](https://code.visualstudio.com/docs/copilot/customization/agent-skills) - Rozszerzanie możliwości agentów za pomocą różnych umiejętności
+> - [Używanie agentów w Visual Studio Code](https://code.visualstudio.com/docs/copilot/agents/overview) - Przegląd agentów i orkiestracji
+> - [Subagenty w Visual Studio Code](https://code.visualstudio.com/docs/copilot/agents/subagents) - Używanie subagentów do specjalistycznych zadań
 
 > [!TIP]
 > Chcesz dowiedzieć się więcej o efektywnym wykorzystaniu AI i GitHub Copilota dla Testerów?
@@ -260,6 +262,8 @@ Contains 1 prompt, 1 agent
 - [Prompt Files](https://code.visualstudio.com/docs/copilot/customization/prompt-files) - Tworzenie i używanie plików promptów
 - [Niestandardowe Agenty (Custom Agents)](https://code.visualstudio.com/docs/copilot/customization/custom-agents) - Zaawansowana konfiguracja agentów
 - [Ustawienia VS Code](https://code.visualstudio.com/docs/getstarted/settings) - Ogólny przewodnik konfiguracji VS Code
+- [Używanie agentów w Visual Studio Code](https://code.visualstudio.com/docs/copilot/agents/overview) - Przegląd agentów i orkiestracji
+- [Subagenty w Visual Studio Code](https://code.visualstudio.com/docs/copilot/agents/subagents) - Używanie subagentów do specjalistycznych zadań
 
 ## 🌱 Twórz z nami
 
