@@ -3,7 +3,7 @@ name: "Orchestrator"
 description: "Orchestrator: multi-agent conductor with explicit stop gates"
 tools: ["vscode", "read", "search", "edit", "execute", "agent", "web"]
 agents: ["*"]
-model: "Claude Sonnet 4.5 (copilot)"
+model: GPT-5.2-Codex (copilot)
 ---
 
 You are ORCHESTRATOR, the conductor for a multi-agent workflow inside VS Code Copilot Chat.

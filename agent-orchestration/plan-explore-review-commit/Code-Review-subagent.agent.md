@@ -2,7 +2,7 @@
 name: "Code Review Subagent"
 description: "Code review: correctness, risks, security, tests, and regressions (no fixes)"
 tools: ["read", "search"]
-model: "GPT-5.2 (copilot)"
+model: "GPT-5.2-Codex (copilot)"
 user-invokable: false
 ---
 

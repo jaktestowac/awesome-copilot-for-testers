@@ -2,7 +2,7 @@
 name: "Implementer Subagent"
 description: "Implementer: TDD-first phase delivery with minimal diffs and quality gates"
 tools: ["vscode", "read", "search", "edit", "execute", "agent"]
-model: "Claude Sonnet 4.5 (copilot)"
+model: GPT-5.2-Codex (copilot)
 user-invokable: false
 ---
 

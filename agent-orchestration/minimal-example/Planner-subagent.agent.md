@@ -3,7 +3,7 @@ name: "Planner"
 description: "Planner: research-driven phased plan with test strategy and risks"
 argument-hint: "Plan a phased implementation for: <goal>"
 tools: ["read", "search", "web", "agent"]
-model: "Claude Sonnet 4.5 (copilot)"
+model: GPT-5.2-Codex (copilot)
 user-invokable: false
 handoffs:
   - label: "Execute this plan with Orchestrator"

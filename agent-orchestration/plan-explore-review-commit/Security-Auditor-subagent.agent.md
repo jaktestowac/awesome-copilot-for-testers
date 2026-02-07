@@ -3,7 +3,7 @@ name: "Security Auditor Subagent"
 description: "Security audit: threat model, risk scan, OWASP mapping, and concrete mitigations"
 argument-hint: "What to assess (feature, PR, diff summary, component)"
 tools: ["read", "search", "web"]
-model: "GPT-5.2 (copilot)"
+model: "GPT-5.2-Codex (copilot)"
 user-invokable: false
 ---
 

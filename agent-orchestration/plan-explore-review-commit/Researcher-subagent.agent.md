@@ -3,7 +3,7 @@ name: "Researcher Subagent"
 description: "Researcher: extract conventions, key files, patterns, and examples at scale"
 argument-hint: "Research goal or problem statement"
 tools: ["read", "search", "web", "agent"]
-model: "GPT-5.2 (copilot)"
+model: "GPT-5.2-Codex (copilot)"
 user-invokable: false
 ---
 

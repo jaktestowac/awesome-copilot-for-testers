@@ -3,7 +3,7 @@ name: "QA Strategy Subagent"
 description: "QA strategy: test pyramid, coverage goals, quality gates, and flakiness mitigation"
 argument-hint: "Feature or system to design a test strategy for"
 tools: ["read", "search"]
-model: "GPT-5.2 (copilot)"
+model: "GPT-5.2-Codex (copilot)"
 user-invokable: false
 ---
 
