@@ -289,7 +289,9 @@ Contains 1 prompt, 1 agent
 
 | Title | Description | Install |
 | ----- | ----------- | ------- |
-| [Tech Debt Analysis Skill](skills/tech-debt-analysis/SKILL.md) | Analyze and address technical debt in codebases. | not supported |
+| [prd-generator](skills/prd-generator/SKILL.md) | Generate production-ready Product Requirements Documents (PRDs) for software systems and AI-powered features. The skill ensures clear problem framing, measurable outcomes, scoped functionality, testable requirements, technical feasibility, risk awareness, and stakeholder alignment. | not supported |
+| [requirements-test-coverage-mapper](skills/requirements-test-coverage-mapper/SKILL.md) | Map requirements (PRD/user stories/AC) to comprehensive test coverage using a traceability matrix (RTM). Outputs coverage gaps, risks, test levels, prioritization, automation candidates, and change-impact notes. Designed for QA/Test Architect workflows. | not supported |
+| [tech-debt-analysis](skills/tech-debt-analysis/SKILL.md) | Analyze technical debt in codebases and test suites using evidence-based signals. Produces a structured, prioritized Technical Debt Report with risk assessment, test impact analysis, remediation options, and ROI-aware recommendations. | not supported |
 
 <!-- END_CUSTOM_SKILLS -->
 

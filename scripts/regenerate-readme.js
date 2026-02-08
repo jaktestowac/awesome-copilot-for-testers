@@ -510,7 +510,10 @@ function generateSection(sectionConfig) {
   // Generate table rows for each file
   for (const file of files) {
     const filePath = path.join(sectionDir, file);
-    const title = extractTitle(filePath);
+    // For skills, use the 'name' field as title; otherwise use extractTitle
+    let title = sectionConfig.directory === 'skills' 
+      ? extractName(filePath) || extractTitle(filePath)
+      : extractTitle(filePath);
     // Normalize path separators to forward slashes for URLs (Windows uses backslashes)
     const relativePathForLink = `${sectionConfig.directory}/${file}`.split(path.sep).join('/');
     const link = encodeURI(relativePathForLink);
