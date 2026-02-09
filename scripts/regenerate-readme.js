@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { ADDITIONAL_DESCRIPTIONS } = require('./additional-descriptions');
 
 const FILES_TO_PROCESS = ['README.md', 'README.pl.md'];
 
@@ -427,6 +428,34 @@ function formatTitleFromFilename(basename) {
   return basename.replace(/[-_]/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 }
 
+// Map files/dirs to a key used by ADDITIONAL_DESCRIPTIONS
+function getKeyFromFile(file, sectionConfig) {
+  // Normalize separators into forward slashes
+  const normalized = String(file).split(path.sep).join('/');
+  // For recursive sections (skills, nested sets/packs) use top-level folder name
+  if (sectionConfig && sectionConfig.recursive) {
+    const parts = normalized.split('/');
+    return parts[0];
+  }
+
+  // If a known file extension is provided, strip it
+  const ext =
+    sectionConfig && sectionConfig.fileExtension ? sectionConfig.fileExtension : path.extname(file);
+  if (ext && normalized.endsWith(ext)) {
+    return normalized.slice(0, -ext.length);
+  }
+
+  // Fallback: strip last extension
+  return path.basename(normalized, path.extname(normalized));
+}
+
+function attachAdditionalDescription(key, currentDescription) {
+  if (!ADDITIONAL_DESCRIPTIONS) return currentDescription;
+  const extra = ADDITIONAL_DESCRIPTIONS[key];
+  if (!extra) return currentDescription;
+  return currentDescription ? `${currentDescription} ${extra}` : extra;
+}
+
 // Badge generation
 function makeBadges(link, type) {
   const vscodeUrl = `${BADGE_CONFIG.vscode.baseUrl}${encodeURIComponent(
@@ -511,9 +540,10 @@ function generateSection(sectionConfig) {
   for (const file of files) {
     const filePath = path.join(sectionDir, file);
     // For skills, use the 'name' field as title; otherwise use extractTitle
-    let title = sectionConfig.directory === 'skills' 
-      ? extractName(filePath) || extractTitle(filePath)
-      : extractTitle(filePath);
+    let title =
+      sectionConfig.directory === 'skills'
+        ? extractName(filePath) || extractTitle(filePath)
+        : extractTitle(filePath);
     // Normalize path separators to forward slashes for URLs (Windows uses backslashes)
     const relativePathForLink = `${sectionConfig.directory}/${file}`.split(path.sep).join('/');
     const link = encodeURI(relativePathForLink);
@@ -529,7 +559,13 @@ function generateSection(sectionConfig) {
       description = sectionConfig.defaultDescription(title);
     }
 
-    content += `| [${title}](${link}) | ${description} | ${badges} |\n`;
+    // Attach additional description when available for this file/key
+    const extraKey = getKeyFromFile(file, sectionConfig);
+    description = attachAdditionalDescription(extraKey, description);
+
+    const safeDesc = escapeTableCell(description);
+
+    content += `| [${title}](${link}) | ${safeDesc} | ${badges} |\n`;
   }
 
   // Remove trailing newline to prevent extra newlines in the file
@@ -599,6 +635,9 @@ function generateSetsSection(sectionConfig) {
       if (parts.length) description = `Contains ${parts.join(', ')}`;
       else description = sectionConfig.defaultDescription(title);
     }
+
+    // Attach additional description when available for this set
+    description = attachAdditionalDescription(setName, description);
 
     // Build a per-set header and a table of resources
     content += `#### **[${title}](${link})**\n\n`;
@@ -679,8 +718,7 @@ function generateAgentOrchestrationSection(sectionConfig) {
     const packPath = path.join(packsDir, packName);
     const packReadmePath = path.join(packPath, 'README.md');
 
-
-  // skip subdirectories that don't contain any .agent.md files or contin "-temp" in the name (used for temp testing folders)
+    // skip subdirectories that don't contain any .agent.md files or contin "-temp" in the name (used for temp testing folders)
     const hasAgentFiles = listFilesRecursively(packPath, (f) => f.endsWith('.agent.md')).length > 0;
     if (!hasAgentFiles || packName.includes('-temp')) {
       logConsole(`Skipping ${packName} as it has no agent files or is marked as temp`);
@@ -708,6 +746,9 @@ function generateAgentOrchestrationSection(sectionConfig) {
         description = sectionConfig.defaultDescription(title);
       }
     }
+
+    // Attach additional description when available for this pack
+    description = attachAdditionalDescription(packName, description);
 
     content += `#### **[${title}](${link})**\n\n`;
     content += description ? `${description}\n\n` : '';

@@ -88,6 +88,12 @@ Before finishing, verify:
 - No duplicated selectors or logic outside Page Objects.
 - Code style matches existing tests.
 - Update the plan with validation results.
+- Run the tests to confirm they work as intended.
+- Document any test failures, flakiness, or unexpected behavior in the plan.
+- If tests fail due, update the plan with next steps to fix them.
+- Fix tests until they are stable and passing.
+- Rerun tests after each fix to confirm stability.
+- At the end of this process, all tests should be passing and stable.
 
 ### 7. Final check & report
 
