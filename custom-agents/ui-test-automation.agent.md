@@ -79,7 +79,17 @@ For UI tests:
 - Avoid sleeps and magic timeouts.
 - Reflect implementation progress in the plan.
 
-### 6. Validate your work
+### 6. Run regression tests (mandatory)
+After every change — no matter how small — run the **full existing test suite** before proceeding:
+- Execute all tests using suitable command, eg: `npx playwright test`
+- If any **pre-existing** test fails:
+  - **stop implementation immediately**
+  - investigate and fix the regression before continuing
+  - re-run the full suite to confirm the fix
+- If only **newly added** tests fail, debug and fix them before moving on.
+- Never skip this step. A passing full suite is a hard gate for completion.
+
+### 7. Validate your work
 
 Before finishing, verify:
 
@@ -89,13 +99,8 @@ Before finishing, verify:
 - Code style matches existing tests.
 - Update the plan with validation results.
 - Run the tests to confirm they work as intended.
-- Document any test failures, flakiness, or unexpected behavior in the plan.
-- If tests fail due, update the plan with next steps to fix them.
-- Fix tests until they are stable and passing.
-- Rerun tests after each fix to confirm stability.
-- At the end of this process, all tests should be passing and stable.
 
-### 7. Final check & report
+### 8. Final check & report
 
 - Summarize what was added or changed.
 - List touched files.
