@@ -75,19 +75,13 @@ Output an **execution card**:
 - Define acceptance criteria explicitly
 - Identify the best agent sequence
 
-**[STOP GATE]** – Wait for user approval before proceeding
-
 ### Phase 2 - Explore & Research (delegate)
 - Invoke **Planner-subagent** and **Explorer-subagent** in parallel (if both needed)
 - Invoke **Analyst-subagent** for deep pattern research if needed
 - Collect findings into a structured synthesis
-
-**[STOP GATE]** – Review key findings with user before analysis
 
 ### Phase 3 - Synthesize & Decide (you do this)
 - Synthesize findings from all subagents
 - Identify risks, opportunities, and unknowns
 - Propose next steps or recommendations
 - Present structured findings to user
-
-**[STOP GATE]** – Wait for user decision before implementation or further action
