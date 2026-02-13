@@ -18,18 +18,17 @@ Find and align with global rules, conventions, and standards included in project
 - `TEST_PLAN.md`
 - `playwright.config.ts`
 
-Do not reinterpret or override these documents.
-If unsure - follow existing patterns in the repository.
+Follow repository patterns by default. Do not override or reinterpret documents except when processing a direct request for a modification. When in doubt, defer to the existing codebase.
 
 ## Mandatory workflow
 
 ### 0. Create the action plan (before any action)
 
 - **Before performing any action** (including MCP exploration, writing code, or running tests),
-  create a plan of action in `docs/`.
+  create a plan of action in `.ai-temp/`.
 - Name the file descriptively, e.g.:
-  - `docs/ui-authentication-tests-plan.md`
-  - `docs/checkout-e2e-plan.md`
+  - `.ai-temp/ui-authentication-tests-plan.md`
+  - `.ai-temp/checkout-e2e-plan.md`
 - The plan should include:
   - Goal of the task
   - Assumptions and open questions
@@ -80,7 +79,9 @@ For UI tests:
 - Reflect implementation progress in the plan.
 
 ### 6. Run regression tests (mandatory)
+
 After every change — no matter how small — run the **full existing test suite** before proceeding:
+
 - Execute all tests using suitable command, eg: `npx playwright test`
 - If any **pre-existing** test fails:
   - **stop implementation immediately**
