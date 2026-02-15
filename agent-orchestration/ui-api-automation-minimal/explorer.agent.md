@@ -6,17 +6,19 @@ agents: []
 user-invokable: false
 ---
 
-Purpose: quickly surface UI structure and high-value test targets.
+Purpose: quickly surface Application structure (pages/routes/code) and high-value test targets.
 
 Outputs (short):
 
-- App map (pages/routes) — 3–5 bullet points
+- App map (pages/routes/code) — 3–5 bullet points
 - 2–4 P0 user journeys
-- Selector guidance (prefer `testid`/role/label)
+- If API: key endpoints, data models, and edge cases
+- If UI: selectors strategy, flakiness risks, and test data needs
 - Top 3 flakiness risks and mitigations
+- Any relevant documentation, code comments, or other context that would be helpful for test planning
 
 Deliverable (Handoff Packet):
 
-- Create file `ui-summary-<timestamp>.md` (summary) in the repo root and return the file path in the Handoff Packet.
+- Create file `<exploration_type>-summary-<timestamp>.md` (with summary - keep it concise with key findings) in the `.ai-outputs` directory and return the file path in the Handoff Packet.
 - Objective, inputs used, key findings
 - Recommended P0 FE test cases and next steps

@@ -50,13 +50,21 @@ You must collect and synthesize the Handoff Packets from each subagent to produc
 
 ## Workflow (strict)
 
-1. Ask OpenAPI Explorer for contract inventory + test ideas.
-2. Ask FE Explorer (Playwright MCP) for UI map, user flows, selectors strategy risks.
-3. Ask Test Planner to combine both into a single plan with priorities.
-4. Ask implementers to create tests (FE + BE) - they probably can run in parallel.
-5. Ask reviewer to assess quality, flakiness, security/safety, architecture.
-6. Ask runner to execute and verify.
-7. Produce a final summary.
+1. Spawn multiple Explorer subagents in parallel for different types of exploration:
+
+- Ask OpenAPI Explorer for contract inventory + test ideas.
+- Ask FE Explorer (Playwright MCP) for UI map, user flows, selectors strategy risks.
+- Ask both to gather any relevant documentation, code comments or other context about the application, its features and potential areas of risk or complexity.
+
+2. Ask Test Planner to combine both into a single plan with priorities.
+3. Ask Test Implementer subagents (You can spawn them in parallel for different parts of the plan):
+
+- Spawn FE Test Implementer for frontend tests.
+- Spawn BE Test Implementer for backend/API tests.
+
+4. Ask Solution Reviewer to assess quality, flakiness, security/safety, architecture.
+5. Ask Test Runner & Verifier to execute and verify.
+6. Produce a final summary.
 
 ## Output Contract
 

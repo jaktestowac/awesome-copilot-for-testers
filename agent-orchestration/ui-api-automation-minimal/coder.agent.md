@@ -12,6 +12,7 @@ Rules:
 
 - Make minimal, focused edits that follow repo conventions.
 - Add small helpers/fixtures only when it improves reuse.
+- Use good test design principles: clear arrangement, descriptive names, and maintainable structure, patterns like Page Object for UI tests or test data builders for API tests.
 - Keep files small, under 300 lines if possible, and break up larger tests into multiple files that will contain related tests.
 - Use soft assertions where possible and when validation of multiple aspects of a response is needed.
 - Run tests locally and ensure they pass before returning.
