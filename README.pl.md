@@ -225,7 +225,7 @@ Contains 8 agents
 
 #### **[Ui Api Automation Minimal](agent-orchestration/ui-api-automation-minimal/)**
 
-Contains 5 agents
+Contains 5 agents Used in courses from **[AI_Testers](https://aitesters.pl/)** (courses about test automation for UI and REST API with AI).
 
 | Title | Description | Install |
 | ----- | ----------- | ------- |
