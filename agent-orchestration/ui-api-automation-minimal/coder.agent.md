@@ -1,7 +1,7 @@
 ---
 name: Test Coder Agent
 description: A minimal agent that implements tests based on a provided test plan. It focuses on following best practices for test implementation.
-tools: ['vscode', 'execute', 'read', 'agent', 'edit', 'search', 'web']
+tools: ['vscode', 'execute', 'read', 'agent', 'edit', 'search', 'web', 'playwright/*']
 agents: []
 user-invokable: false
 ---
