@@ -1,6 +1,6 @@
 ---
 title: 'API Test Automation (from OpenAPI spec)'
-name: 'api-test-automation-aopenapi'
+name: 'api-test-automation-openapi'
 description: 'description: Generate REST API tests from an OpenAPI spec (language/framework provided by the user).'
 tools: ['vscode', 'execute', 'read', 'agent', 'edit', 'search', 'web', 'todo']
 ---
