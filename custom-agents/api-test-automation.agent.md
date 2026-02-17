@@ -1,6 +1,6 @@
 ---
-title: 'API Test Automation Agent (from OpenAPI spec)'
-name: 'api-test-automation-agent-openapi'
+title: 'API Test Automation (from OpenAPI spec)'
+name: 'api-test-automation-aopenapi'
 description: 'description: Generate REST API tests from an OpenAPI spec (language/framework provided by the user).'
 tools: ['vscode', 'execute', 'read', 'agent', 'edit', 'search', 'web', 'todo']
 ---
@@ -46,6 +46,10 @@ Given an OpenAPI spec (file path or URL) AND a user-provided details generate pr
    - at least 1 happy-path per operation (or per major response)
    - focused negative tests per operation (auth/validation/404 where defined)
    - avoid generating meaningless permutations
+   - use detailed messages in assertions (with body content) for clarity on failures
+   - use helpers/fixtures to minimize duplication and improve maintainability
+   - Use AAA pattern (Arrange-Act-Assert) for test clarity.
+   - Each test should be self-contained and independent, allowing for parallel execution and isolated debugging.
 6. Run generated tests locally to verify they execute and pass (assuming the API is accessible and testable in the current environment). If tests fail due to issues in the generated code, fix them and re-run until they pass.
 7. Make output deterministic and readable:
    - stable test names: "<METHOD> <path> — <scenario>"
