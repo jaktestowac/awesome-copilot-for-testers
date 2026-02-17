@@ -17,12 +17,12 @@ Given an OpenAPI spec (file path or URL) AND a user-provided details generate pr
 
 # Required user inputs (must be present in the request)
 
-- language: the programming language (e.g., TypeScript, Java, Python, C#)
-- framework: the test runner + HTTP client style (e.g., Playwright, Jest+axios, pytest+requests, RestAssured, NUnit+HttpClient)
+- language: the programming language (if not- use what is used in project
+- framework: the test runner (check if project has existing tests and use that, otherwise ask user for preference)
 - spec: path or URL to the OpenAPI document
 - scope: defines the breadth/depth of test coverage (e.g., "all endpoints", "only user-related endpoints", "just auth scenarios")
 
-  Optional:
+Optional:
 
 - auth: how to authenticate (token, basic, oauth flow notes, headers)
 - baseUrl: environment base URL (or how to resolve servers[] from spec)
