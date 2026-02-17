@@ -30,7 +30,11 @@ Optional:
 
 # Process
 
-1. Locate and read the OpenAPI spec (spec=...).
+1. Locate and read the OpenAPI spec (spec=...):
+
+- if URL, fetch it using agent tool; if file path, read it from disk
+- parse the OpenAPI document to understand the API structure, endpoints, methods, parameters, request/response schemas, and auth requirements.
+
 2. Identify:
    - servers/base URL behavior
    - securitySchemes and per-operation security
