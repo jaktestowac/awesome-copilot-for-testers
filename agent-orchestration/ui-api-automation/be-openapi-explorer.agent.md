@@ -22,6 +22,7 @@ Goal: provide an endpoint inventory and a BE test matrix.
 - Any existing tests or test data mentioned in the repo related to the API.
 - Any relevant documentation or comments in the code that provide context on API usage, edge cases, or known issues.
 - Any dependencies between endpoints (e.g. create -> read -> update -> delete flow) that should be considered in testing.
+- Dont write any code snippets in summary. Focus on exploration and data collection.
 
 ## Deliverable
 

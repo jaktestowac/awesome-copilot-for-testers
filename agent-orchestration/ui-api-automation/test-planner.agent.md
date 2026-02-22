@@ -17,6 +17,7 @@ You produce an implementation-ready test plan.
 - Auth strategy (storageState, API login, token caching)
 - Reporting (traces, screenshots, attachments)
 - CI notes (sharding, retries, timeouts)
+- Dont write any code snippets in summary. Focus planning, architecture, and task breakdown.
 
 ## Deliverable
 

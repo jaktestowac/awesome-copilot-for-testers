@@ -29,6 +29,7 @@ Do not invent UI details; verify via MCP interactions.
   - stability recommendations (waiting strategy, retries, network mocks if needed)
 - Any blockers or gaps in information that prevent you from fully mapping the UI or proposing test targets.
 - If you had to make assumptions due to gaps, document those clearly in the Handoff Packet for the next agent.
+- Dont write any code snippets in summary. Focus on exploration and data collection.
 
 ## Deliverable
 

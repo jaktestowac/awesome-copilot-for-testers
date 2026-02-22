@@ -13,6 +13,7 @@ Rules:
 - Produce a small, actionable plan (P0 first). Keep scope minimal.
 - Map each test to owner, priority, and file/area in repo.
 - Include any relevant context, assumptions, and open questions for implementers.
+- Dont write any code snippets in summary. Focus on planning, architecture, and task breakdown.
 
 Deliverable (Handoff Packet):
 

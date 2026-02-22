@@ -741,7 +741,7 @@ function generateAgentOrchestrationSection(sectionConfig) {
     const agentFiles = listFilesRecursively(packPath, (f) => f.endsWith('.agent.md')).sort();
     if (!description) {
       if (agentFiles.length) {
-        description = `Contains ${agentFiles.length} agent${agentFiles.length > 1 ? 's' : ''}`;
+        description = `Contains ${agentFiles.length} agent${agentFiles.length > 1 ? 's.' : '.'}`;
       } else {
         description = sectionConfig.defaultDescription(title);
       }

@@ -183,7 +183,7 @@ GitHub Copilot zapewnia trzy główne sposoby dostosowywania odpowiedzi AI:
 
 #### **[Minimal Agent Orchestration Example](agent-orchestration/minimal-example/README.md)**
 
-Contains 4 agents
+Contains 4 agents.
 
 | Title | Description | Install |
 | ----- | ----------- | ------- |
@@ -194,7 +194,7 @@ Contains 4 agents
 
 #### **[VS Code Copilot Agents Pack (Architect + Test Architect)](agent-orchestration/plan-explore-review-commit/README.md)**
 
-Contains 10 agents
+Contains 10 agents.
 
 | Title | Description | Install |
 | ----- | ----------- | ------- |
@@ -211,7 +211,7 @@ Contains 10 agents
 
 #### **[Ui Api Automation](agent-orchestration/ui-api-automation/)**
 
-Contains 8 agents
+Contains 8 agents.
 
 | Title | Description | Install |
 | ----- | ----------- | ------- |
@@ -226,7 +226,7 @@ Contains 8 agents
 
 #### **[Ui Api Automation Minimal](agent-orchestration/ui-api-automation-minimal/)**
 
-Contains 5 agents Used in courses from **[AI_Testers](https://aitesters.pl/)** (courses about test automation for UI and REST API with AI).
+Contains 5 agents. Used in courses from **[AI_Testers](https://aitesters.pl/)** (courses about test automation for UI and REST API with AI).
 
 | Title | Description | Install |
 | ----- | ----------- | ------- |

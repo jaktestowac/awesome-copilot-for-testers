@@ -16,6 +16,7 @@ Outputs (short):
 - If UI: selectors strategy, flakiness risks, and test data needs
 - Top 3 flakiness risks and mitigations
 - Any relevant documentation, code comments, or other context that would be helpful for test planning
+- Dont write any code snippets in summary. Focus on exploration and data collection.
 
 Deliverable (Handoff Packet):
 
