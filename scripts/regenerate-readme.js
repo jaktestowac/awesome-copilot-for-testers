@@ -47,7 +47,7 @@ const SECTIONS_CONFIG = {
   },
   agents: {
     title: 'Custom Agents',
-    directory: 'custom-agents',
+    directory: 'agents',
     fileExtension: '.agent.md',
     installType: 'agent',
     regex: /(<!-- START_CUSTOM_AGENTS -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_AGENTS -->)/,
@@ -78,6 +78,16 @@ const SECTIONS_CONFIG = {
     // installType: "skill", // No direct install type for skills in VS Code
     regex: /(<!-- START_CUSTOM_SKILLS -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_SKILLS -->)/,
     // skills live in subfolders (one skill per folder), so enable recursive scanning
+    recursive: true,
+    defaultDescription: () => '',
+  },
+  hooks: {
+    title: 'Hooks',
+    directory: 'hooks',
+    fileExtension: 'hooks.json',
+    // installType: "hook", // No direct install type for hooks in VS Code
+    regex: /(<!-- START_HOOKS -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_HOOKS -->)/,
+    // hooks live in subfolders (one hook per folder), so enable recursive scanning
     recursive: true,
     defaultDescription: () => '',
   },
@@ -523,6 +533,11 @@ function generateSection(sectionConfig) {
     return generateAgentOrchestrationSection(sectionConfig);
   }
 
+  // If this is the hooks directory, use a dedicated generator
+  if (sectionConfig.directory === 'hooks') {
+    return generateHooksSection(sectionConfig);
+  }
+
   // Get all files matching the extension (supports recursive scan for nested skills)
   const files = collectFiles(sectionDir, sectionConfig.fileExtension, !!sectionConfig.recursive);
 
@@ -775,6 +790,92 @@ function generateAgentOrchestrationSection(sectionConfig) {
   }
 
   return content.trimEnd();
+}
+
+// Generate a section for hooks (each hook is a subdirectory)
+function generateHooksSection(sectionConfig) {
+  const hooksDir = path.join(__dirname, '..', sectionConfig.directory);
+
+  if (!fs.existsSync(hooksDir)) {
+    logConsole(`${sectionConfig.title} directory does not exist`);
+    return '';
+  }
+
+  // Find all subdirectories inside hooks
+  const hookNames = fs
+    .readdirSync(hooksDir)
+    .filter((name) => fs.statSync(path.join(hooksDir, name)).isDirectory())
+    .sort();
+
+  logConsole(`> Found ${hookNames.length} ${sectionConfig.directory} hooks`);
+
+  if (hookNames.length === 0) {
+    return `| Title | Description | Install |\n| ----- | ----------- | ------- |\n| No ${sectionConfig.directory} available | | |`;
+  }
+
+  let content = '';
+
+  for (const hookName of hookNames) {
+    const hookPath = path.join(hooksDir, hookName);
+    const hookJsonPath = path.join(hookPath, 'hooks.json');
+
+    // Check if the hook has a hooks.json file
+    if (!fs.existsSync(hookJsonPath)) {
+      logConsole(`⚠️ Skipping ${hookName} - no hooks.json found`);
+      continue;
+    }
+
+    let title = formatTitleFromFilename(hookName);
+    let link = encodeURI(`${sectionConfig.directory}/${hookName}/`);
+
+    // Try to extract hook information from hooks.json
+    let hookInfo = {};
+    try {
+      const hookContent = fs.readFileSync(hookJsonPath, 'utf8');
+      hookInfo = JSON.parse(hookContent);
+    } catch (e) {
+      logConsole(`⚠️ Could not parse hooks.json for ${hookName}`);
+    }
+
+    // Try to find a README in the hook directory
+    const hookReadmePath = path.join(hookPath, 'README.md');
+    let description = null;
+
+    if (fs.existsSync(hookReadmePath)) {
+      const readmeTitle = extractTitle(hookReadmePath);
+      if (readmeTitle) title = readmeTitle;
+      description = extractDescription(hookReadmePath);
+      link = encodeURI(`${sectionConfig.directory}/${hookName}/README.md`);
+    }
+
+    // If no description from README, try to create one from hooks.json
+    if (!description && hookInfo.name) {
+      description = hookInfo.description || `A hook for ${hookInfo.name}`;
+    }
+
+    if (!description) {
+      description = sectionConfig.defaultDescription(title);
+    }
+
+    // Attach additional description when available for this hook
+    description = attachAdditionalDescription(hookName, description);
+
+    const safeDesc = escapeTableCell(description);
+
+    // For hooks, we don't support direct install (commented in SECTIONS_CONFIG)
+    const installInfo = 'Manual setup required';
+
+    logConsole(`✓ Added hook: ${title}`);
+    content += `| [${title}](${link}) | ${safeDesc} | ${installInfo} |\n`;
+  }
+
+  if (content === '') {
+    return `| Title | Description | Install |\n| ----- | ----------- | ------- |\n| No hooks available | | |`;
+  }
+
+  // Create table header and add all hook rows
+  const table = '| Title | Description | Install |\n| ----- | ----------- | ------- |\n' + content;
+  return table.trimEnd();
 }
 
 // Returns list of files with a given extension inside a subfolder under a set directory

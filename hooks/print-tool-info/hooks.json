@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "windows": "powershell -File scripts\\print-tool-info.ps1",
+        "cwd": ".github/hooks",
+        "timeoutSec": 10,
+        "comment": "Print tool usage information before executing"
+      }
+    ]
+  }
+}
