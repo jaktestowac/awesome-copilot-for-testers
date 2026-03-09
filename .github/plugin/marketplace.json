@@ -1,0 +1,26 @@
+{
+  "name": "awesome-copilot-for-testers",
+  "metadata": {
+    "description": "A collection of resources for using GitHub Copilot for testing and automation.",
+    "version": "1.0.0",
+    "pluginRoot": "./plugins"
+  },
+  "owner": {
+    "name": "jaktestowac.pl",
+    "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers"
+  },
+  "plugins": [
+    {
+      "name": "tech-debt-analysis",
+      "source": "tech-debt-analysis",
+      "description": "Analyze your codebase for technical debt, identify areas for improvement, and generate actionable insights to enhance code quality and maintainability.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "requirements-test-coverage-mapper",
+      "source": "requirements-test-coverage-mapper",
+      "description": "Analyze your codebase for requirements test coverage, identify gaps, and generate actionable insights to enhance test quality and maintainability.",
+      "version": "1.0.0"
+    }
+  ]
+}

@@ -1,2 +1,4 @@
 node_modules
 temp
+.github/agents/*.agent.md
+*-temp

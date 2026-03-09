@@ -1,6 +1,6 @@
 ---
 title: Generate a Basic Test Plan
-tools: ['search/codebase', 'edit/editFiles', 'fetch', 'problems', 'runCommands', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'edit', 'new', 'think', 'changes', 'testFailure', 'openSimpleBrowser', 'todos', 'microsoft/playwright-mcp/*']
+tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'todo']
 description: 'Generate a basic Test Plan'
 model: GPT-5 (copilot)
 agent: agent
@@ -13,8 +13,11 @@ Your goal is to prepare a test plan for a website based on exploration and analy
 Do the following:
 
 1. Explore websites at ${input:baseUrl} and basic user flows:
-  - Identify key user interactions and workflows.
-  - Focus on key user flows and app functionalities.
+
+- Identify key user interactions and workflows.
+- Focus on key user flows and app functionalities.
+
 2. Prepare a test plan that:
-  - includes basic test cases for the main features of the website
-  - is in markdown format and is saved to `spec/basic-test-plan.md`
+
+- includes basic test cases for the main features of the website
+- is in markdown format and is saved to `spec/basic-test-plan.md`

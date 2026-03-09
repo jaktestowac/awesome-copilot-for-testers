@@ -1,9 +1,9 @@
 ---
-title: "Playwright Automation Engineer (TypeScript) mode (detailed)"
-name: "playwright-automation-engineer-ts-detailed"
+title: 'Playwright Automation Engineer (TypeScript) mode (detailed)'
+name: 'playwright-automation-engineer-ts-detailed'
 model: Claude Sonnet 4.5 (copilot)
-description: "Provide expert guidance, code, and troubleshooting help for end-to-end and component-level test automation using Playwright with TypeScript. Prioritize maintainability, speed, reliability, and business value of the test suite. Very detailed operating manual."
-tools: ['search/codebase', 'edit/editFiles', 'fetch', 'problems', 'runCommands', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'edit', 'new', 'think', 'changes', 'testFailure', 'openSimpleBrowser', 'todos', 'microsoft/playwright-mcp/*']
+description: 'Provide expert guidance, code, and troubleshooting help for end-to-end and component-level test automation using Playwright with TypeScript. Prioritize maintainability, speed, reliability, and business value of the test suite. Very detailed operating manual.'
+tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'agent', 'todo']
 ---
 
 # Playwright Automation Engineer mode – Operating Manual
@@ -101,22 +101,22 @@ Prompt the user with concise, targeted questions instead of guessing.
 The fundamental pattern for structuring test cases:
 
 - **Arrange**: Set up test data, configure initial state, and prepare test environment
-- **Act**: Execute the action or behavior being tested  
+- **Act**: Execute the action or behavior being tested
 - **Assert**: Verify the expected outcome and validate results
 
 ```typescript
-test("User can search for products", async ({ page }) => {
+test('User can search for products', async ({ page }) => {
   // Arrange: Set up the initial state
-  const searchInput = page.getByRole("textbox", { name: "Search" });
-  const searchButton = page.getByRole("button", { name: "Search" });
+  const searchInput = page.getByRole('textbox', { name: 'Search' });
+  const searchButton = page.getByRole('button', { name: 'Search' });
 
   // Act: Perform the search action
-  await searchInput.fill("laptop");
+  await searchInput.fill('laptop');
   await searchButton.click();
 
   // Assert: Verify the search results
-  await expect(page.getByText("Search Results")).toBeVisible();
-  await expect(page.getByRole("list")).toContainText("laptop");
+  await expect(page.getByText('Search Results')).toBeVisible();
+  await expect(page.getByRole('list')).toContainText('laptop');
 });
 ```
 
@@ -125,7 +125,7 @@ test("User can search for products", async ({ page }) => {
 Encapsulate page interactions and locators in reusable classes to reduce duplication and improve maintainability:
 
 ```typescript
-import { Locator, Page } from "@playwright/test";
+import { Locator, Page } from '@playwright/test';
 
 class SearchPage {
   readonly searchInput: Locator;
@@ -133,9 +133,9 @@ class SearchPage {
   readonly resultsList: Locator;
 
   constructor(private readonly page: Page) {
-    this.searchInput = page.getByRole("textbox", { name: "Search" });
-    this.searchButton = page.getByRole("button", { name: "Search" });
-    this.resultsList = page.getByRole("list", { name: "Search Results" });
+    this.searchInput = page.getByRole('textbox', { name: 'Search' });
+    this.searchButton = page.getByRole('button', { name: 'Search' });
+    this.resultsList = page.getByRole('list', { name: 'Search Results' });
   }
 
   async searchFor(term: string): Promise<void> {
@@ -173,7 +173,7 @@ Create flexible test data with the builder pattern for complex object constructi
 
 ```typescript
 class UserBuilder {
-  private user: UserModel = { name: "", email: "", role: "user" };
+  private user: UserModel = { name: '', email: '', role: 'user' };
 
   withName(name: string): this {
     this.user.name = name;
@@ -192,7 +192,7 @@ class UserBuilder {
 
   build(): UserModel {
     if (!this.user.name || !this.user.email) {
-      throw new Error("Name and email are required");
+      throw new Error('Name and email are required');
     }
     return { ...this.user };
   }
@@ -200,9 +200,9 @@ class UserBuilder {
 
 // Usage
 const testUser = new UserBuilder()
-  .withName("John Doe")
-  .withEmail("john@example.com")
-  .withRole("admin")
+  .withName('John Doe')
+  .withEmail('john@example.com')
+  .withRole('admin')
   .build();
 ```
 
@@ -217,13 +217,13 @@ class UserFactory {
     return {
       name: `Default User ${randomId}`,
       email: `default-${randomId}@example.com`,
-      role: "user",
-      ...overrides
+      role: 'user',
+      ...overrides,
     };
   }
 
   static createAdminUser(): UserModel {
-    return this.createUser({ role: "admin" });
+    return this.createUser({ role: 'admin' });
   }
 }
 ```
@@ -233,20 +233,20 @@ class UserFactory {
 Use `test.step()` for better reporting and debugging:
 
 ```typescript
-test("Complete user registration flow", async ({ page }) => {
-  await test.step("Navigate to registration page", async () => {
-    await page.goto("/register");
+test('Complete user registration flow', async ({ page }) => {
+  await test.step('Navigate to registration page', async () => {
+    await page.goto('/register');
   });
 
-  await test.step("Fill registration form", async () => {
-    await page.getByLabel("Name").fill("John Doe");
-    await page.getByLabel("Email").fill("john@example.com");
-    await page.getByLabel("Password").fill("securePass123");
+  await test.step('Fill registration form', async () => {
+    await page.getByLabel('Name').fill('John Doe');
+    await page.getByLabel('Email').fill('john@example.com');
+    await page.getByLabel('Password').fill('securePass123');
   });
 
-  await test.step("Submit and verify success", async () => {
-    await page.getByRole("button", { name: "Register" }).click();
-    await expect(page.getByText("Registration successful")).toBeVisible();
+  await test.step('Submit and verify success', async () => {
+    await page.getByRole('button', { name: 'Register' }).click();
+    await expect(page.getByText('Registration successful')).toBeVisible();
   });
 });
 ```
@@ -256,7 +256,7 @@ test("Complete user registration flow", async ({ page }) => {
 Use Playwright fixtures for consistent test setup and teardown:
 
 ```typescript
-import { test as base } from "@playwright/test";
+import { test as base } from '@playwright/test';
 
 export const test = base.extend<{
   loggedInUser: Page;
@@ -269,16 +269,16 @@ export const test = base.extend<{
 
   loggedInUser: async ({ page, testUser }, use) => {
     // Setup: Login user
-    await page.goto("/login");
-    await page.getByLabel("Email").fill(testUser.email);
-    await page.getByLabel("Password").fill("password");
-    await page.getByRole("button", { name: "Login" }).click();
+    await page.goto('/login');
+    await page.getByLabel('Email').fill(testUser.email);
+    await page.getByLabel('Password').fill('password');
+    await page.getByRole('button', { name: 'Login' }).click();
 
     await use(page);
 
     // Teardown: Logout if needed
     try {
-      await page.getByRole("button", { name: "Logout" }).click();
+      await page.getByRole('button', { name: 'Logout' }).click();
     } catch {
       // Ignore if logout fails
     }
@@ -291,9 +291,9 @@ export const test = base.extend<{
 Use fixtures to initialize page objects for tests:
 
 ```typescript
-import { test as base } from "@playwright/test";
-import { LoginPage } from "../pages/login.page";
-import { RegistrationPage } from "../pages/registration.page";
+import { test as base } from '@playwright/test';
+import { LoginPage } from '../pages/login.page';
+import { RegistrationPage } from '../pages/registration.page';
 
 export const test = base.extend<{
   loginPage: LoginPage;
@@ -308,11 +308,11 @@ export const test = base.extend<{
 });
 
 // Usage in tests
-test("User can register", async ({ registrationPage }) => {
+test('User can register', async ({ registrationPage }) => {
   await registrationPage.registerUser({
-    name: "John Doe",
-    email: "john@example.com",
-    password: "password123",
+    name: 'John Doe',
+    email: 'john@example.com',
+    password: 'password123',
   });
 
   await expect(registrationPage.successMessage).toBeVisible();

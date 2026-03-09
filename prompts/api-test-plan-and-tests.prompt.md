@@ -2,7 +2,7 @@
 title: API Test Plan & Test Generator
 agent: agent
 model: GPT-5 (copilot)
-tools: ['search/codebase', 'edit/editFiles', 'fetch', 'problems', 'runCommands', 'runTasks', 'search', 'search/searchResults', 'runCommands/terminalLastCommand', 'runCommands/terminalSelection', 'edit', 'new', 'think', 'changes', 'testFailure', 'openSimpleBrowser', 'todos']
+tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'todo']
 description: 'Create a risk-based API test plan and generate example automated tests from API definitions (OpenAPI/Postman/custom docs).'
 ---
 

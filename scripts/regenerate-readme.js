@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { ADDITIONAL_DESCRIPTIONS } = require('./additional-descriptions');
 
 const FILES_TO_PROCESS = ['README.md', 'README.pl.md'];
 
@@ -46,11 +47,20 @@ const SECTIONS_CONFIG = {
   },
   agents: {
     title: 'Custom Agents',
-    directory: 'custom-agents',
-    fileExtension: '.agents.md',
+    directory: 'agents',
+    fileExtension: '.agent.md',
     installType: 'agent',
     regex: /(<!-- START_CUSTOM_AGENTS -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_AGENTS -->)/,
     defaultDescription: () => '',
+  },
+  agentOrchestration: {
+    title: 'Agent Orchestration',
+    directory: 'agent-orchestration',
+    fileExtension: '.agent.md',
+    installType: 'agent',
+    regex:
+      /(<!-- START_CUSTOM_AGENT_ORCHESTRATION -->\s*\n+)([\s\S]*?)(\s*<!-- END_CUSTOM_AGENT_ORCHESTRATION -->)/,
+    defaultDescription: (title) => `Agent orchestration pack for ${title}`,
   },
   sets: {
     title: 'Custom Sets',
@@ -60,6 +70,26 @@ const SECTIONS_CONFIG = {
     installType: 'set',
     regex: /(<!-- START_CUSTOM_SETS -->\s*\n+)([\s\S]*?)(\s*<!-- END_CUSTOM_SETS -->)/,
     defaultDescription: (title) => `A set of resources for ${title}`,
+  },
+  skills: {
+    title: 'Agent Skills',
+    directory: 'skills',
+    fileExtension: 'SKILL.md',
+    // installType: "skill", // No direct install type for skills in VS Code
+    regex: /(<!-- START_CUSTOM_SKILLS -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_CUSTOM_SKILLS -->)/,
+    // skills live in subfolders (one skill per folder), so enable recursive scanning
+    recursive: true,
+    defaultDescription: () => '',
+  },
+  hooks: {
+    title: 'Hooks',
+    directory: 'hooks',
+    fileExtension: 'hooks.json',
+    // installType: "hook", // No direct install type for hooks in VS Code
+    regex: /(<!-- START_HOOKS -->\s*\n+)(\| [\s\S]*?)(\s*<!-- END_HOOKS -->)/,
+    // hooks live in subfolders (one hook per folder), so enable recursive scanning
+    recursive: true,
+    defaultDescription: () => '',
   },
 };
 
@@ -227,7 +257,7 @@ function extractTitle(filePath) {
       }
 
       // Step 2: For specific file types, look for heading after frontmatter
-      const isSpecialFile = ['.prompt.md', '.chatmode.md', '.agents.md', '.instructions.md'].some(
+      const isSpecialFile = ['.prompt.md', '.chatmode.md', '.agent.md', '.instructions.md'].some(
         (ext) => filePath.includes(ext),
       );
 
@@ -259,7 +289,7 @@ function extractTitle(filePath) {
         let ext = '.md';
         if (filePath.includes('.prompt.md')) ext = '.prompt.md';
         else if (filePath.includes('.chatmode.md')) ext = '.chatmode.md';
-        else if (filePath.includes('.agents.md')) ext = '.agents.md';
+        else if (filePath.includes('.agent.md')) ext = '.agent.md';
         else if (filePath.includes('.instructions.md')) ext = '.instructions.md';
         const basename = path.basename(filePath, ext);
         return formatTitleFromFilename(basename);
@@ -343,8 +373,97 @@ function extractDescription(filePath) {
   );
 }
 
+function extractName(filePath) {
+  return safeFileOperation(
+    () => {
+      const content = fs.readFileSync(filePath, 'utf8');
+      let name = extractFrontmatterField(content, 'name');
+      if (typeof name === 'string') {
+        const trimmed = name.trim();
+        if (trimmed && trimmed.toLowerCase() !== 'null') return trimmed;
+      }
+
+      // Fallback: directly parse frontmatter block for name
+      const textNoBom = content && content.charCodeAt(0) === 0xfeff ? content.slice(1) : content;
+      const fmMatch = textNoBom.match(/^---\s*[\r\n]+([\s\S]*?)\r?\n---/);
+      if (fmMatch) {
+        const fmBlock = fmMatch[1];
+        const lines = fmBlock.split(/\r?\n/);
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          const m = line.match(/^\s*name\s*:\s*(.*)$/i);
+          if (!m) continue;
+          let value = (m[1] || '').trim();
+          // Handle block scalar for name
+          if (value === '|' || value === '>' || value === '|-' || value === '>-') {
+            const next = lines[i + 1] || '';
+            const indentMatch = next.match(/^(\s+)/);
+            const baseIndent = indentMatch ? indentMatch[1].length : 2;
+            const block = [];
+            for (let j = i + 1; j < lines.length; j++) {
+              const l = lines[j];
+              if (l.trim() === '') {
+                block.push('');
+                continue;
+              }
+              const leadingSpaces = (l.match(/^(\s*)/) || ['', ''][1]).length;
+              if (leadingSpaces < baseIndent) break;
+              block.push(l.slice(baseIndent));
+            }
+            const out = block.join(' ').trim();
+            if (out) return out;
+          }
+          // Quoted single/double
+          if (
+            (value.startsWith('"') && value.endsWith('"')) ||
+            (value.startsWith("'") && value.endsWith("'"))
+          ) {
+            value = value.slice(1, -1);
+          }
+          value = value.replace(/''/g, "'");
+          const hashIdx = value.indexOf(' #');
+          if (hashIdx !== -1) value = value.slice(0, hashIdx).trim();
+          if (value && value.toLowerCase() !== 'null') return value;
+        }
+      }
+
+      return null;
+    },
+    filePath,
+    null,
+  );
+}
+
 function formatTitleFromFilename(basename) {
   return basename.replace(/[-_]/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+}
+
+// Map files/dirs to a key used by ADDITIONAL_DESCRIPTIONS
+function getKeyFromFile(file, sectionConfig) {
+  // Normalize separators into forward slashes
+  const normalized = String(file).split(path.sep).join('/');
+  // For recursive sections (skills, nested sets/packs) use top-level folder name
+  if (sectionConfig && sectionConfig.recursive) {
+    const parts = normalized.split('/');
+    return parts[0];
+  }
+
+  // If a known file extension is provided, strip it
+  const ext =
+    sectionConfig && sectionConfig.fileExtension ? sectionConfig.fileExtension : path.extname(file);
+  if (ext && normalized.endsWith(ext)) {
+    return normalized.slice(0, -ext.length);
+  }
+
+  // Fallback: strip last extension
+  return path.basename(normalized, path.extname(normalized));
+}
+
+function attachAdditionalDescription(key, currentDescription) {
+  if (!ADDITIONAL_DESCRIPTIONS) return currentDescription;
+  const extra = ADDITIONAL_DESCRIPTIONS[key];
+  if (!extra) return currentDescription;
+  return currentDescription ? `${currentDescription} ${extra}` : extra;
 }
 
 // Badge generation
@@ -358,6 +477,40 @@ function makeBadges(link, type) {
   )}`;
 
   return `[![Install in VS Code](${BADGE_CONFIG.vscode.image})](${vscodeUrl}) [![Install in VS Code](${BADGE_CONFIG.vscodeInsiders.image})](${vscodeInsidersUrl})`;
+}
+
+// Collect files for a section. Supports optional recursive scanning for nested directories.
+function collectFiles(sectionDir, fileExtension, recursive = false) {
+  if (!recursive) {
+    return fs
+      .readdirSync(sectionDir)
+      .filter((file) => file.endsWith(fileExtension))
+      .sort();
+  }
+
+  const results = [];
+
+  function walk(currentDir, relPath) {
+    const entries = fs.readdirSync(currentDir, { withFileTypes: true });
+    for (const e of entries) {
+      const full = path.join(currentDir, e.name);
+      const rel = relPath ? path.join(relPath, e.name) : e.name;
+      if (e.isDirectory()) {
+        walk(full, rel);
+      } else if (e.isFile()) {
+        // Match by exact filename (e.g., 'SKILL.md') or by extension
+        if (
+          e.name === fileExtension ||
+          (fileExtension.startsWith('.') && e.name.endsWith(fileExtension))
+        ) {
+          results.push(rel);
+        }
+      }
+    }
+  }
+
+  walk(sectionDir, '');
+  return results.sort();
 }
 
 // Generic section generation
@@ -375,11 +528,18 @@ function generateSection(sectionConfig) {
     return generateSetsSection(sectionConfig);
   }
 
-  // Get all files matching the extension
-  const files = fs
-    .readdirSync(sectionDir)
-    .filter((file) => file.endsWith(sectionConfig.fileExtension))
-    .sort();
+  // If this is the agent orchestration directory, use a dedicated generator
+  if (sectionConfig.directory === 'agent-orchestration') {
+    return generateAgentOrchestrationSection(sectionConfig);
+  }
+
+  // If this is the hooks directory, use a dedicated generator
+  if (sectionConfig.directory === 'hooks') {
+    return generateHooksSection(sectionConfig);
+  }
+
+  // Get all files matching the extension (supports recursive scan for nested skills)
+  const files = collectFiles(sectionDir, sectionConfig.fileExtension, !!sectionConfig.recursive);
 
   logConsole(`> Found ${files.length} ${sectionConfig.directory} files`);
 
@@ -394,10 +554,18 @@ function generateSection(sectionConfig) {
   // Generate table rows for each file
   for (const file of files) {
     const filePath = path.join(sectionDir, file);
-    const title = extractTitle(filePath);
-    const link = encodeURI(`${sectionConfig.directory}/${file}`);
+    // For skills, use the 'name' field as title; otherwise use extractTitle
+    let title =
+      sectionConfig.directory === 'skills'
+        ? extractName(filePath) || extractTitle(filePath)
+        : extractTitle(filePath);
+    // Normalize path separators to forward slashes for URLs (Windows uses backslashes)
+    const relativePathForLink = `${sectionConfig.directory}/${file}`.split(path.sep).join('/');
+    const link = encodeURI(relativePathForLink);
     const customDescription = extractDescription(filePath);
-    const badges = makeBadges(link, sectionConfig.installType);
+    const badges = sectionConfig.installType
+      ? makeBadges(link, sectionConfig.installType)
+      : 'not supported';
 
     let description = '';
     if (customDescription && customDescription !== 'null') {
@@ -406,7 +574,13 @@ function generateSection(sectionConfig) {
       description = sectionConfig.defaultDescription(title);
     }
 
-    content += `| [${title}](${link}) | ${description} | ${badges} |\n`;
+    // Attach additional description when available for this file/key
+    const extraKey = getKeyFromFile(file, sectionConfig);
+    description = attachAdditionalDescription(extraKey, description);
+
+    const safeDesc = escapeTableCell(description);
+
+    content += `| [${title}](${link}) | ${safeDesc} | ${badges} |\n`;
   }
 
   // Remove trailing newline to prevent extra newlines in the file
@@ -462,7 +636,7 @@ function generateSetsSection(sectionConfig) {
       // If no README description, try to derive a brief summary by counting items
       const counts = {
         prompts: listFilesRecursively(setPath, (f) => f.endsWith('.prompt.md')).length,
-        agents: listFilesRecursively(setPath, (f) => f.endsWith('.agents.md')).length,
+        agents: listFilesRecursively(setPath, (f) => f.endsWith('.agent.md')).length,
         modes: listFilesRecursively(setPath, (f) => f.endsWith('.chatmode.md')).length,
         instructions: listFilesRecursively(setPath, (f) => f.endsWith('.instructions.md')).length,
       };
@@ -476,6 +650,9 @@ function generateSetsSection(sectionConfig) {
       if (parts.length) description = `Contains ${parts.join(', ')}`;
       else description = sectionConfig.defaultDescription(title);
     }
+
+    // Attach additional description when available for this set
+    description = attachAdditionalDescription(setName, description);
 
     // Build a per-set header and a table of resources
     content += `#### **[${title}](${link})**\n\n`;
@@ -493,7 +670,7 @@ function generateSetsSection(sectionConfig) {
       resources.push({ path: rel, type: 'Prompt', installType: 'prompt' });
     }
     // Agents
-    const agentFiles = listFilesRecursively(setPath, (f) => f.endsWith('.agents.md'));
+    const agentFiles = listFilesRecursively(setPath, (f) => f.endsWith('.agent.md'));
     for (const rel of agentFiles) {
       resources.push({ path: rel, type: 'Agent', installType: 'agent' });
     }
@@ -520,7 +697,7 @@ function generateSetsSection(sectionConfig) {
         const titleRes = escapeTableCell(extractTitle(full) || path.basename(res.path));
         const descRes = escapeTableCell(extractDescription(full) || '');
         const linkRes = encodeURI(`${sectionConfig.directory}/${setName}/${res.path}`);
-        const badge = makeBadges(linkRes, res.installType);
+        const badge = res.installType ? makeBadges(linkRes, res.installType) : 'not supported';
         content += `| [${titleRes}](${linkRes}) | ${res.type} | ${descRes} | ${badge} |\n`;
       }
       content += '\n'; // spacing after table
@@ -528,6 +705,177 @@ function generateSetsSection(sectionConfig) {
   }
 
   return content.trimEnd();
+}
+
+// Generate a section for agent orchestration packs (each pack is a subdirectory)
+function generateAgentOrchestrationSection(sectionConfig) {
+  const packsDir = path.join(__dirname, '..', sectionConfig.directory);
+
+  if (!fs.existsSync(packsDir)) {
+    logConsole(`${sectionConfig.title} directory does not exist`);
+    return '';
+  }
+
+  const packNames = fs
+    .readdirSync(packsDir)
+    .filter((name) => fs.statSync(path.join(packsDir, name)).isDirectory())
+    .sort();
+
+  logConsole(`> Found ${packNames.length} ${sectionConfig.directory} packs`);
+
+  if (packNames.length === 0) {
+    return `| Title | Description | Install |\n| ----- | ----------- | ------- |\n| No ${sectionConfig.directory} available | | |`;
+  }
+
+  let content = '';
+
+  for (const packName of packNames) {
+    const packPath = path.join(packsDir, packName);
+    const packReadmePath = path.join(packPath, 'README.md');
+
+    // skip subdirectories that don't contain any .agent.md files or contin "-temp" in the name (used for temp testing folders)
+    const hasAgentFiles = listFilesRecursively(packPath, (f) => f.endsWith('.agent.md')).length > 0;
+    if (!hasAgentFiles || packName.includes('-temp')) {
+      logConsole(`Skipping ${packName} as it has no agent files or is marked as temp`);
+      continue;
+    }
+
+    let title = formatTitleFromFilename(packName);
+    let link = encodeURI(`${sectionConfig.directory}/${packName}/`);
+    if (fs.existsSync(packReadmePath)) {
+      const t = extractTitle(packReadmePath);
+      if (t) title = t;
+      link = encodeURI(`${sectionConfig.directory}/${packName}/README.md`);
+    }
+
+    let description = null;
+    if (fs.existsSync(packReadmePath)) {
+      description = extractDescription(packReadmePath);
+    }
+
+    const agentFiles = listFilesRecursively(packPath, (f) => f.endsWith('.agent.md')).sort();
+    if (!description) {
+      if (agentFiles.length) {
+        description = `Contains ${agentFiles.length} agent${agentFiles.length > 1 ? 's.' : '.'}`;
+      } else {
+        description = sectionConfig.defaultDescription(title);
+      }
+    }
+
+    // Attach additional description when available for this pack
+    description = attachAdditionalDescription(packName, description);
+
+    content += `#### **[${title}](${link})**\n\n`;
+    content += description ? `${description}\n\n` : '';
+
+    content += '| Title | Description | Install |\n';
+    content += '| ----- | ----------- | ------- |\n';
+
+    if (agentFiles.length === 0) {
+      content += `| No agents found | | |\n\n`;
+      continue;
+    }
+
+    for (const rel of agentFiles) {
+      const full = path.join(packPath, rel);
+      const titleRes = escapeTableCell(extractTitle(full) || path.basename(rel));
+      const agentName = extractName(full) || path.basename(rel, '.agent.md');
+      const descRes = escapeTableCell(extractDescription(full) || '');
+      const linkRes = encodeURI(`${sectionConfig.directory}/${packName}/${rel}`);
+      const badge = makeBadges(linkRes, sectionConfig.installType);
+      content += `| [${agentName}](${linkRes}) | ${descRes} | ${badge} |\n`;
+    }
+
+    content += '\n';
+  }
+
+  return content.trimEnd();
+}
+
+// Generate a section for hooks (each hook is a subdirectory)
+function generateHooksSection(sectionConfig) {
+  const hooksDir = path.join(__dirname, '..', sectionConfig.directory);
+
+  if (!fs.existsSync(hooksDir)) {
+    logConsole(`${sectionConfig.title} directory does not exist`);
+    return '';
+  }
+
+  // Find all subdirectories inside hooks
+  const hookNames = fs
+    .readdirSync(hooksDir)
+    .filter((name) => fs.statSync(path.join(hooksDir, name)).isDirectory())
+    .sort();
+
+  logConsole(`> Found ${hookNames.length} ${sectionConfig.directory} hooks`);
+
+  if (hookNames.length === 0) {
+    return `| Title | Description | Install |\n| ----- | ----------- | ------- |\n| No ${sectionConfig.directory} available | | |`;
+  }
+
+  let content = '';
+
+  for (const hookName of hookNames) {
+    const hookPath = path.join(hooksDir, hookName);
+    const hookJsonPath = path.join(hookPath, 'hooks.json');
+
+    // Check if the hook has a hooks.json file
+    if (!fs.existsSync(hookJsonPath)) {
+      logConsole(`⚠️ Skipping ${hookName} - no hooks.json found`);
+      continue;
+    }
+
+    let title = formatTitleFromFilename(hookName);
+    let link = encodeURI(`${sectionConfig.directory}/${hookName}/`);
+
+    // Try to extract hook information from hooks.json
+    let hookInfo = {};
+    try {
+      const hookContent = fs.readFileSync(hookJsonPath, 'utf8');
+      hookInfo = JSON.parse(hookContent);
+    } catch (e) {
+      logConsole(`⚠️ Could not parse hooks.json for ${hookName}`);
+    }
+
+    // Try to find a README in the hook directory
+    const hookReadmePath = path.join(hookPath, 'README.md');
+    let description = null;
+
+    if (fs.existsSync(hookReadmePath)) {
+      const readmeTitle = extractTitle(hookReadmePath);
+      if (readmeTitle) title = readmeTitle;
+      description = extractDescription(hookReadmePath);
+      link = encodeURI(`${sectionConfig.directory}/${hookName}/README.md`);
+    }
+
+    // If no description from README, try to create one from hooks.json
+    if (!description && hookInfo.name) {
+      description = hookInfo.description || `A hook for ${hookInfo.name}`;
+    }
+
+    if (!description) {
+      description = sectionConfig.defaultDescription(title);
+    }
+
+    // Attach additional description when available for this hook
+    description = attachAdditionalDescription(hookName, description);
+
+    const safeDesc = escapeTableCell(description);
+
+    // For hooks, we don't support direct install (commented in SECTIONS_CONFIG)
+    const installInfo = 'Manual setup required';
+
+    logConsole(`✓ Added hook: ${title}`);
+    content += `| [${title}](${link}) | ${safeDesc} | ${installInfo} |\n`;
+  }
+
+  if (content === '') {
+    return `| Title | Description | Install |\n| ----- | ----------- | ------- |\n| No hooks available | | |`;
+  }
+
+  // Create table header and add all hook rows
+  const table = '| Title | Description | Install |\n| ----- | ----------- | ------- |\n' + content;
+  return table.trimEnd();
 }
 
 // Returns list of files with a given extension inside a subfolder under a set directory
@@ -574,7 +922,7 @@ function generateSetBadges(setRelativePath, setFullPath) {
 
   // Find files recursively and group by type
   const allPrompts = listFilesRecursively(setFullPath, (f) => f.endsWith('.prompt.md'));
-  const allAgents = listFilesRecursively(setFullPath, (f) => f.endsWith('.agents.md'));
+  const allAgents = listFilesRecursively(setFullPath, (f) => f.endsWith('.agent.md'));
   const allModes = listFilesRecursively(setFullPath, (f) => f.endsWith('.chatmode.md'));
   const allInstructions = listFilesRecursively(setFullPath, (f) => f.endsWith('.instructions.md'));
 

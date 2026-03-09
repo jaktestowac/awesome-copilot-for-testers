@@ -1,0 +1,23 @@
+{
+  "name": "requirements-test-coverage-mapper",
+  "description": "Analyze your codebase for requirements test coverage, identify gaps, and generate actionable insights to enhance test quality and maintainability.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "requirements",
+    "test coverage",
+    "code analysis",
+    "test quality",
+    "maintainability",
+    "test case mapping",
+    "software testing",
+    "test automation",
+    "software engineering",
+    "quality assurance"
+  ],
+  "skills": ["./skills/requirements-test-coverage-mapper"]
+}
