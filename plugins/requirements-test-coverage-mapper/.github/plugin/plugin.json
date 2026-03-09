@@ -19,5 +19,5 @@
     "software engineering",
     "quality assurance"
   ],
-  "skills": ["/skills/requirements-test-coverage-mapper"]
+  "skills": ["./skills/requirements-test-coverage-mapper"]
 }
