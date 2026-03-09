@@ -19,5 +19,5 @@
     "code smells",
     "software engineering"
   ],
-  "skills": ["/skills/tech-debt-analysis"]
+  "skills": ["./skills/tech-debt-analysis"]
 }
