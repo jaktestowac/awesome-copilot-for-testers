@@ -1,8 +1,8 @@
 ---
-title: Explore a website and gather network requests using Playwright MCP
+name: Explore a website and gather network requests using Playwright MCP
 agent: agent
 description: 'Website exploration and network request gathering using Playwright MCP'
-tools: ['vscode', 'execute/testFailure', 'execute/getTerminalOutput', 'execute/runTask', 'execute/getTaskOutput', 'execute/createAndRunTask', 'execute/runInTerminal', 'read/problems', 'read/readFile', 'read/terminalSelection', 'read/terminalLastCommand', 'edit', 'search', 'web', 'playwright/*', 'todo']
+tools: [vscode, execute/testFailure, execute/getTerminalOutput, execute/runTask, execute/createAndRunTask, execute/runInTerminal, read/problems, read/readFile, read/terminalSelection, read/terminalLastCommand, edit, search, web, 'playwright/*', 'playwright/*', todo]
 ---
 
 # Role

@@ -1,8 +1,8 @@
 ---
-title: Generate a Basic Test Plan
+name: Generate a Basic Test Plan
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'todo']
 description: 'Generate a basic Test Plan'
-model: GPT-5 (copilot)
+model: GPT-5.3-Codex (copilot)
 agent: agent
 ---
 

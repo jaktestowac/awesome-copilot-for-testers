@@ -1,7 +1,7 @@
 ---
-title: Generate tests based on test plan
+name: Generate tests based on test plan
 agent: agent
-model: GPT-5 (copilot)
+model: GPT-5.3-Codex (copilot)
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'todo']
 description: 'Generate tests based on test plan for a website'
 ---

@@ -1,7 +1,7 @@
 ---
-title: Fix failing tests
+name: Fix failing tests
 agent: agent
-model: GPT-5 (copilot)
+model: GPT-5.3-Codex (copilot)
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'todo']
 description: 'Fix failing tests in the codebase'
 ---

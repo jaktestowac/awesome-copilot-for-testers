@@ -1,5 +1,5 @@
 ---
-title: QA Strategy — Edge Cases, Security & Attack Scenarios
+name: QA Strategy — Edge Cases, Security & Attack Scenarios
 agent: agent
 description: 'For any feature, user story, or API spec: instantly generate a structured scenario matrix covering edge cases, boundary values, OWASP Top 10 security attacks, and adversarial sequences. Use the qa-strategist agent mode for best results.'
 tools:

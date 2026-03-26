@@ -1,20 +1,9 @@
 ---
-title: Tech Debt Audit — Test Automation Code Review
+name: Tech Debt Audit — Test Automation Code Review
 agent: agent
 description: 'Ruthlessly audit automated test code for anti-patterns: fragile selectors, hardcoded waits, missing assertions, test interdependencies, credential leaks, and more. Produces a severity-ranked debt report with line-level citations and concrete fixes. Use the tech-debt-auditor agent mode for best results.'
 tools:
-  [
-    'think',
-    'search',
-    'search/codebase',
-    'search/readFile',
-    'search/fileSearch',
-    'search/textSearch',
-    'search/listDirectory',
-    'problems',
-    'changes',
-    'todos',
-  ]
+  [read, search, todo]
 ---
 
 # Role

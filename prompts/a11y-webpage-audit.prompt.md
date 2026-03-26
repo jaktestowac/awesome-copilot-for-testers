@@ -1,5 +1,5 @@
 ---
-title: A11Y Webpage Audit (Single URL)
+name: A11Y Webpage Audit (Single URL)
 agent: agent
 description: Analyze one webpage for accessibility with WCAG 2.1/2.2 mapping and actionable fixes.
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'todo']
