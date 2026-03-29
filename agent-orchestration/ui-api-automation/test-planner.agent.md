@@ -3,7 +3,7 @@ name: Test Planner
 description: Combine OpenAPI + FE exploration into a prioritized test plan with architecture and tasks.
 tools: ['read', 'search', 'web']
 agents: []
-user-invokable: false
+user-invocable: false
 ---
 
 You produce an implementation-ready test plan.
@@ -17,7 +17,7 @@ You produce an implementation-ready test plan.
 - Auth strategy (storageState, API login, token caching)
 - Reporting (traces, screenshots, attachments)
 - CI notes (sharding, retries, timeouts)
-- Dont write any code snippets in summary. Focus planning, architecture, and task breakdown.
+- Don't write any code snippets in summary. Focus planning, architecture, and task breakdown.
 
 ## Deliverable
 

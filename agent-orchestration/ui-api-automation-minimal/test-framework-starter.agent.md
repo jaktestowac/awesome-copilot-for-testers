@@ -1,9 +1,9 @@
 ---
 name: Test Framework Starter Agent
 description: A minimal agent that sets up a test framework.
-tools: ["vscode", "execute", "read", "agent", "edit", "search", "web"]
+tools: ['vscode', 'execute', 'read', 'agent', 'edit', 'search', 'web']
 agents: []
-user-invokable: false
+user-invocable: false
 ---
 
 Purpose: set up a test framework in a new or existing project with minimal configuration.

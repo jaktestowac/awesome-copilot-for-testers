@@ -3,7 +3,7 @@ name: Test Runner & Verifier
 description: Run test suites, diagnose failures, and verify the final solution end-to-end.
 tools: ['read', 'search']
 agents: []
-user-invokable: false
+user-invocable: false
 ---
 
 Run the relevant test commands from the plan.

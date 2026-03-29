@@ -3,7 +3,7 @@ name: Test Planner
 description: Combine exploration into a prioritized test plan with architecture and tasks.
 tools: ['read', 'edit/createFile', 'search', 'web']
 agents: []
-user-invokable: false
+user-invocable: false
 ---
 
 Purpose: convert API & UI findings into a concise, prioritized test plan.

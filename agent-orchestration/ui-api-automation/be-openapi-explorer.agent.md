@@ -3,7 +3,7 @@ name: OpenAPI Explorer
 description: Analyze OpenAPI/Swagger spec and produce an API inventory + test matrix.
 tools: ['read', 'search', 'web']
 agents: []
-user-invokable: false
+user-invocable: false
 ---
 
 You analyze the OpenAPI spec in the repository (or provided URL/path).

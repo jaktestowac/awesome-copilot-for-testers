@@ -4,7 +4,7 @@ description: Explore the frontend via Playwright MCP, map flows, suggest robust 
 tools: ['read', 'agent', 'search', 'web', 'playwright/*']
 agents: []
 target: vscode
-user-invokable: false
+user-invocable: false
 mcp-servers:
   playwright:
     type: 'local'
