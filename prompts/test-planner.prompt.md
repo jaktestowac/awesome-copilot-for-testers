@@ -1,5 +1,5 @@
 ---
-title: Generate a comprehensive Test Plan
+name: Generate a comprehensive Test Plan
 description: Collects environment details and produces a prioritized test plan with web and API scenarios using the `Test Planner Chat Mode`.
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'todo']
 agent: agent

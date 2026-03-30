@@ -1,5 +1,5 @@
 ---
-title: Explore a website and propose test cases
+name: Explore a website and propose test cases
 agent: agent
 description: 'Website exploration using Playwright MCP'
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'todo']

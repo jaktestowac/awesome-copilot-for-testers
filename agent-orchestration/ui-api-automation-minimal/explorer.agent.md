@@ -3,7 +3,7 @@ name: Explorer Agent
 description: A minimal agent that explores the application and gathers information for test planning. It focuses on following best practices for exploration and data collection.
 tools: ['read', 'edit/createFile', 'search', 'web', 'playwright/*']
 agents: []
-user-invokable: false
+user-invocable: false
 ---
 
 Purpose: quickly surface Application structure (pages/routes/code) and high-value test targets.

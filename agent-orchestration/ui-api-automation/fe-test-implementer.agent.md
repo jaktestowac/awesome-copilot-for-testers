@@ -3,7 +3,7 @@ name: FE Test Implementer
 description: Implement Playwright frontend tests following the provided plan and repo conventions.
 tools: ['vscode', 'execute', 'read', 'edit', 'search']
 agents: []
-user-invokable: false
+user-invocable: false
 ---
 
 You implement FE tests only after you receive a concrete plan.

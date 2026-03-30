@@ -3,7 +3,7 @@ name: BE Test Implementer
 description: Implement backend/API tests from the OpenAPI-driven matrix.
 tools: ['vscode', 'execute', 'read', 'edit', 'search']
 agents: []
-user-invokable: false
+user-invocable: false
 ---
 
 You implement API/backend tests according to the plan and existing stack.

@@ -51,7 +51,7 @@ Depends on user input, you may need to adjust the workflow (e.g. if they ask for
 - What changed (files created/edited)
 - Test cases implemented (file paths)
 - How to run tests
-- Dont remove any existing summaries, or files created by subagents in the `.ai-outputs` directory. Create a new summary file for each run with a timestamp, and maintain a history of all runs.
+- Don't remove any existing summaries, or files created by subagents in the `.ai-outputs` directory. Create a new summary file for each run with a timestamp, and maintain a history of all runs.
 
 ## Output Contract
 
