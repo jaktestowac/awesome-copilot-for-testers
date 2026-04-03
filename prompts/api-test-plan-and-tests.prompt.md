@@ -1,7 +1,7 @@
 ---
-title: API Test Plan & Test Generator
+name: API Test Plan & Test Generator
 agent: agent
-model: GPT-5 (copilot)
+model: GPT-5.3-Codex (copilot)
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'todo']
 description: 'Create a risk-based API test plan and generate example automated tests from API definitions (OpenAPI/Postman/custom docs).'
 ---

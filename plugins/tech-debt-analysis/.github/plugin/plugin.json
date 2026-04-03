@@ -1,0 +1,23 @@
+{
+  "name": "tech-debt-analysis",
+  "description": "Analyze your codebase for technical debt, identify areas for improvement, and generate actionable insights to enhance code quality and maintainability.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "technical debt",
+    "code analysis",
+    "code quality",
+    "maintainability",
+    "refactoring",
+    "software development",
+    "code review",
+    "code metrics",
+    "code smells",
+    "software engineering"
+  ],
+  "skills": ["./skills/tech-debt-analysis"]
+}

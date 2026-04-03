@@ -1,5 +1,5 @@
 ---
-title: AI Test Architect: Beyond Codegen 2.0 Strategy
+title: "AI Test Architect: Beyond Codegen 2.0 Strategy"
 name: "ai-architect"
 model: Claude Sonnet 4.5 (copilot)
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'agent', 'todo']

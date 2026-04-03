@@ -1,8 +1,8 @@
 ---
-title: Analyze and explain code
+name: Analyze and explain code
 agent: agent
 description: 'Analysis of the code you provide, select, or open'
-model: GPT-5 (copilot)
+model: GPT-5.3-Codex (copilot)
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'todo']
 ---
 

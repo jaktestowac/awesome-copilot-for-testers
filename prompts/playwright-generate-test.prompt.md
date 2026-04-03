@@ -1,5 +1,5 @@
 ---
-title: Generate tests based on a scenario using Playwright MCP
+name: Generate tests based on a scenario using Playwright MCP
 agent: agent
 description: 'Generate a Playwright test based on a scenario using Playwright MCP'
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'todo']
