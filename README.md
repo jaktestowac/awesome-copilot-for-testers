@@ -323,7 +323,20 @@ Agent Skills are folders of instructions, scripts, and resources that GitHub Cop
 >
 > - copy these skills to your `.github/skills/` or `.claude/skills/` folder
 >
-> Agents will automatically detect and load these skills if the agent finds them relevant to the current chat context (based on the skill's name and description).
+> The correct folder structure is:
+> 
+> ```
+> .github/
+> └── skills/
+>     └── <my-skill>/
+>         ├── SKILL.md
+>         └── resources/
+>             └── example.txt
+> ```
+>
+> where `<my-skill>` is the name of your skill. You have to name it according to the task it performs, e.g. `api-playwright-test-developer` or `prd-generator`. The `SKILL.md` file contains the main instructions and logic for the skill, while the `resources/` folder can contain any additional files needed for the skill's operation (e.g. templates, examples, reference materials).
+>
+> Agents will automatically detect and load these skills if the agent finds them relevant to the current chat context (**based on the skill's name and description**).
 
 > [!WARNING]
 > [Agent Skills](https://code.visualstudio.com/docs/copilot/customization/agent-skills) are currently in preview and may require enabling experimental features in VS Code settings.
