@@ -322,7 +322,20 @@ Agent Skills są to foldery zawierające instrukcje, skrypty i zasoby, które Gi
 >
 > - skopiuj pliki umiejętności do folderu `./.github/skills/` lub do `.cloud/skills/` w swoim repozytorium
 >
-> Agenty Copilota automatycznie wykryją i załadują te umiejętności jeśli agent wykryje ich przydatność do bieżącego kontekstu czatu (po nazwie i opisie umiejętności).
+> Poprawna struktura folderów powinna wyglądać następująco:
+> 
+> ```
+> .github/
+> └── skills/
+>     └── <my-skill>/
+>         ├── SKILL.md
+>         └── resources/
+>             └── example.txt
+> ```
+>
+> gdzie `<my-skill>` to nazwa Twojej umiejętności. Musisz nadać jej nazwę zgodnie z zadaniem, które wykonuje, np. `api-playwright-test-developer` lub `prd-generator`. Plik `SKILL.md` zawiera główne instrukcje i logikę umiejętności, podczas gdy folder `resources/` może zawierać dodatkowe pliki potrzebne do działania umiejętności (np. szablony, przykłady, materiały referencyjne).
+>
+> Agenty Copilota automatycznie wykryją i załadują te umiejętności, jeśli agent uzna je za przydatne w bieżącym kontekście czatu (**na podstawie nazwy i opisu umiejętności**).
 
 > [!WARNING]
 > [Agent Skills](https://code.visualstudio.com/docs/copilot/customization/agent-skills) są obecnie w wersji Preview i mogą wymagać włączenia eksperymentalnych funkcji w ustawieniach VS Code.
@@ -331,6 +344,8 @@ Agent Skills są to foldery zawierające instrukcje, skrypty i zasoby, które Gi
 
 | Title | Description | Install |
 | ----- | ----------- | ------- |
+| [api-playwright-test-developer](skills/api-playwright-test-developer/SKILL.md) | Writes and reviews API automation tests with Playwright. Use when creating backend API tests, contract checks, data-driven assertions, or API+UI hybrid workflows in Playwright Test. Focus on robust, maintainable test design with clear setup/teardown, single responsibility per test, and best practices for assertions and data management. | not supported |
+| [code-review](skills/code-review/SKILL.md) | Assists users with code review, providing feedback on code quality, best practices, and potential improvements. Use always when user asks for code review or when there are code changes to review, providing feedback on code quality, structure, readability, maintainability, and adherence to coding standards. This skill provides information on best practices for code review, including how to identify issues, suggest improvements, and communicate feedback effectively. | not supported |
 | [prd-generator](skills/prd-generator/SKILL.md) | Generate production-ready Product Requirements Documents (PRDs) for software systems and AI-powered features. The skill ensures clear problem framing, measurable outcomes, scoped functionality, testable requirements, technical feasibility, risk awareness, and stakeholder alignment. | not supported |
 | [requirements-test-coverage-mapper](skills/requirements-test-coverage-mapper/SKILL.md) | Map requirements (PRD/user stories/AC) to comprehensive test coverage using a traceability matrix (RTM). Outputs coverage gaps, risks, test levels, prioritization, automation candidates, and change-impact notes. Designed for QA/Test Architect workflows. | not supported |
 | [static-code-analysis-typescript](skills/static-code-analysis-typescript/SKILL.md) | Use for create, review, or modernize static code analysis for node.js and typescript repositories. Use when you or the user needs to set up or audit eslint flat config, typescript-eslint, tsconfig, prettier, import sorting, husky, lint-staged, package.json quality scripts, and github actions quality gates. | not supported |
