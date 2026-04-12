@@ -407,6 +407,7 @@ Hooks enable you to execute custom shell commands at key lifecycle points during
 - [VS Code Settings](https://code.visualstudio.com/docs/getstarted/settings) - General VS Code configuration guide
 - [Using agents in Visual Studio Code](https://code.visualstudio.com/docs/copilot/agents/overview) - Overview of agents and orchestration
 - [Subagents in Visual Studio Code](https://code.visualstudio.com/docs/copilot/agents/subagents) - Using subagents for specialized tasks
+- [Agent Skills - open standard](https://github.com/agentskills/agentskills) - Specification and documentation for Agent Skills 
 
 ## 🌱 Contributing
 

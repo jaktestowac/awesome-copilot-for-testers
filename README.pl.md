@@ -403,6 +403,7 @@ Hooks pozwalają na wykonywanie niestandardowych poleceń powłoki w kluczowych 
 - [Ustawienia VS Code](https://code.visualstudio.com/docs/getstarted/settings) - Ogólny przewodnik konfiguracji VS Code
 - [Używanie agentów w Visual Studio Code](https://code.visualstudio.com/docs/copilot/agents/overview) - Przegląd agentów i orkiestracji
 - [Subagenty w Visual Studio Code](https://code.visualstudio.com/docs/copilot/agents/subagents) - Używanie subagentów do specjalistycznych zadań
+- [Agent Skills - open standard](https://github.com/agentskills/agentskills) - Specyfikacja i dokumentacja dla Agent Skills
 
 ## 🌱 Twórz z nami
 
