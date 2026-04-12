@@ -567,7 +567,7 @@ function generateSection(sectionConfig) {
     const customDescription = extractDescription(filePath);
     const badges = sectionConfig.installType
       ? makeBadges(link, sectionConfig.installType)
-      : 'not supported';
+      : 'manual';
 
     let description = '';
     if (customDescription && customDescription !== 'null') {
