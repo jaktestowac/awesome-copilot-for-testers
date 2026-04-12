@@ -628,19 +628,18 @@ function appendSkillResourceNote(description, skillDir) {
 
   const extraDirs = extras.filter((name) => fs.statSync(path.join(skillDir, name)).isDirectory());
   const extraFiles = extras.filter((name) => fs.statSync(path.join(skillDir, name)).isFile());
+  const skillPath = path.relative(path.join(__dirname, '..'), skillDir).split(path.sep).join('/');
+  const skillLink = `[skill folder](./${encodeURI(skillPath)})`;
 
-  let resourceNote =
-    '💡 Includes additional bundled resources in the skill folder that should also be copied/used.';
+  let resourceNote = `💡 Includes additional bundled resources in the skill folder that should also be copied/used. See ${skillLink}.`;
 
   if (extraDirs.length === 1 && extraDirs[0] === 'resources') {
-    resourceNote =
-      '💡 Includes additional bundled resources in `resources` that should also be copied/used.';
+    resourceNote = `💡 Includes additional bundled resources in \`resources\` that should also be copied/used. See ${skillLink}.`;
   } else if (extraDirs.length > 0) {
     const dirsList = extraDirs.map((name) => `./${name}`).join(', ');
-    resourceNote = `💡 Includes additional bundled resources in ${dirsList} that should also be copied/used.`;
+    resourceNote = `💡 Includes additional bundled resources in ${dirsList} that should also be copied/used. See ${skillLink}.`;
   } else if (extraFiles.length > 0) {
-    resourceNote =
-      '💡 Includes additional bundled files in the skill folder that should also be copied/used.';
+    resourceNote = `💡 Includes additional bundled files in the skill folder that should also be copied/used. See ${skillLink}.`;
   }
 
   return description ? `${description} ${resourceNote}` : resourceNote;
