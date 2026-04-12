@@ -1,233 +1,187 @@
 ---
 name: tech-debt-analysis
-description:  Analyze technical debt in codebases and test suites using evidence-based signals. Produces a structured, prioritized Technical Debt Report with risk assessment, test impact analysis, remediation options, and ROI-aware recommendations.
+description: "Analyzes technical debt in codebases, test suites, architecture, dependencies, and delivery workflows using observable signals. Use when auditing repository health, explaining slow delivery or flaky tests, prioritizing refactoring, or building an evidence-based remediation roadmap with risk, effort, and ROI. Use when user asks for technical debt analysis, repository audit, or refactor planning."
+argument-hint: "Repository scope, system type, current pain points, and desired output"
+user-invocable: true
 ---
 
-# 🧱 Technical Debt Analysis Skill
+# Technical Debt Analysis
 
-This skill enables an AI agent to **systematically identify, classify, and
-prioritize technical debt** across code, tests, architecture, dependencies,
-and delivery pipelines.
+Use this skill when a user needs to understand the technical debt in a codebase, test suite, architecture, or delivery process.
+It is designed for evidence-driven analysis that surfaces the real drivers of delivery drag, quality risk, and maintenance cost, rather than relying on intuition or vague impressions. The output is a structured report that prioritizes debt items based on severity, remediation risk, effort, and ROI, with actionable recommendations for next steps. 
 
----
+## When to Use
 
-## 🎯 When to Use
+Use this skill when the user asks for things like:
 
-Use this skill when you need to:
+- "audit this repository for technical debt"
+- "why is delivery slowing down in this codebase?"
+- "identify the biggest quality risks before we refactor"
+- "analyze why our tests are slow, flaky, or hard to maintain"
+- "prepare a technical debt roadmap for the next quarter"
+- "what should we fix now versus consciously defer?"
 
-- Assess the **health and sustainability** of a codebase
-- Identify **quality risks hidden behind “working” systems**
-- Understand **why testing is slow, flaky, or ineffective**
-- Prioritize refactoring work with **clear impact and ROI**
-- Prepare input for **technical roadmap or quality initiatives**
-- Decide **what technical debt to fix vs consciously accept**
+Typical scenarios:
 
----
+- repo-wide health assessment
+- module-specific debt audit
+- test-suite debt analysis
+- pre-migration or pre-upgrade assessment
+- roadmap planning for refactoring and quality work
 
-## 🧭 Operational Workflow
+## Analysis Principles
 
-The agent must follow the phases below **in order**.
-Skipping discovery or evidence collection is not allowed.
+- **Evidence before verdict** - observable signals come first; conclusions come second
+- **Debt is a trade-off, not a moral failure** - explain the cost, not just the flaw
+- **Root cause over symptom** - identify why the debt exists, not only where it hurts
+- **Risk-aware, not risk-averse** - high-risk debt should be surfaced, not politely ignored
+- **Incremental remediation** - prefer staged fixes with safety nets over heroic rewrites
+- **Test debt is first-class debt** - unreliable tests damage delivery as much as bad production code
+- **Explicit uncertainty** - if context is missing, state assumptions rather than bluffing
 
----
+## Analysis Workflow
 
-### Phase 0: Context & Strategy Selection (Mandatory)
+Follow these phases in order.
 
-Before analysis, clarify the context.
+### Phase 0: Frame the analysis
 
-Ask (or infer safely if explicitly stated):
+Before scanning the codebase, clarify:
 
-- System type: Frontend / Backend / API / Test Automation / Platform
-- Current pain points: bugs, regressions, slow CI, flaky tests, low confidence
-- Scope of analysis: whole repo / module / test layer only
-- Constraints: time, legacy code, “no refactors”, compliance
-- Goal: awareness / prioritization / remediation planning
+- scope: whole repository, subsystem, module, or test layer
+- audience: engineering team, tech lead, QA lead, staff engineer, or management
+- goal: awareness, prioritization, roadmap planning, release risk, or refactor planning
+- constraints: legacy boundaries, compliance, time pressure, "no refactor now", or team capacity
+- pain signals: regressions, slow CI, flaky tests, upgrade blockers, onboarding friction, or architecture sprawl
 
-If information is missing, mark as `TBD` and list assumptions explicitly.
+If some information is missing, infer carefully and list assumptions explicitly.
 
----
+### Phase 1: Collect evidence and context
 
-### Phase 1: Debt Signal Collection (Evidence First)
+Never start by assigning debt labels from instinct.
 
-Identify **observable signals**, not conclusions.
+Read the repository context first:
 
-Possible signal sources:
-- Code structure (complexity, duplication, coupling)
-- Test behavior (flakiness, runtime, coverage gaps)
-- CI/CD signals (build time, retry patterns, failure rates)
-- Dependency metadata (age, CVEs, maintenance status)
-- Change history (hotspots, frequent fixes)
-- Documentation gaps (missing ADRs, tribal knowledge)
+- README and architecture or onboarding docs
+- package manifests and dependency files
+- build, test, and lint scripts
+- CI workflows and quality gates
+- directories with concentrated complexity or churn
+- TODO / FIXME / HACK markers and repeated workarounds
 
-> If no signal or evidence exists, do **not** report debt - log it as an assumption or unknown.
+Use `./resources/debt-taxonomy.md` as the primary scanning lens.
 
----
+When the target includes automated tests, also load `./resources/test-debt-catalogue.md`.
 
-### Phase 2: Debt Classification (Use a Fixed Taxonomy)
+Capture evidence such as:
 
-Every debt item must be classified into **one primary category**:
+- duplication, complexity, or coupling signals
+- flaky, slow, or weak tests
+- dependency age, version gaps, or blocked upgrades
+- fragile pipelines and noisy feedback loops
+- missing ownership, docs, or operational knowledge
 
-- **Code Debt** – smells, complexity, duplication
-- **Test Debt** – missing tests, flaky tests, slow feedback, weak assertions
-- **Architecture Debt** – tight coupling, layering violations, unclear boundaries
-- **Dependency Debt** – outdated, risky, abandoned libraries
-- **Process Debt** – slow CI, manual steps, poor feedback loops
-- **Documentation Debt** – missing ADRs, unclear ownership, tribal knowledge
+If no evidence exists, record an assumption or unknown — not a debt item.
 
-Optional secondary category may be added if justified.
+### Phase 2: Turn signals into atomic debt items
 
----
+Each debt item should be specific and scoped.
 
-### Phase 3: Risk & Impact Assessment
+For every candidate item, capture:
 
-Each debt item must be evaluated using **risk-based thinking**:
+- category
+- location
+- symptom
+- observed evidence
+- probable root cause
+- risk of leaving it unfixed
+- risk of fixing it now
+- likely impact on quality, testing, delivery, or maintainability
 
-- **Impact**: What breaks or slows if this remains?
-- **Likelihood**: How often does it cause issues?
-- **Quality Risk**: Bug escape, regression risk, confidence loss
-- **Test Impact**: Does it reduce testability or reliability?
+Avoid vague findings such as "the code is messy" or "tests need improvement."
+Each item should describe a distinct problem with a distinct consequence.
 
-Use simple scales (Low / Medium / High) but justify each rating.
+### Phase 3: Score and prioritize
 
----
+Use `./resources/prioritization-matrix.md` for scoring.
 
-## 🧾 Output Schema (Strict)
+Each meaningful item should be assessed using:
 
-The final output must be a markdown file named: TECHNICAL_DEBT_REPORT.md and follow the structure below.
+- **Severity** - how dangerous or costly the debt is today
+- **Risk** - how risky remediation will be
+- **Effort** - likely change size and coordination cost
+- **ROI** - expected value of addressing it
+- **Time horizon** - tactical, short-term, or strategic
 
----
+Then group items into practical buckets:
 
-### 0️⃣ Document Metadata
+- **Fix Now** - active drag or high-risk exposure
+- **Fix Soon** - important, but needs some preparation
+- **Accept for Now** - consciously deferred with clear rationale
 
-- Version: `0.x`
-- Status: Draft / Review / Approved
-- Scope Analyzed:
-- Owner:
-- Date:
-- Assumptions:
+Do not treat all debt as equally urgent.
 
----
+### Phase 4: Design remediation options
 
-### 1️⃣ Executive Summary
+For the top-priority items, propose the safest realistic path:
 
-- Overall technical debt health: Low / Medium / High
-- Top 5 debt drivers (by risk)
-- Major quality or testing risks identified
-- Recommended next actions (short list)
+- minimal viable fix
+- staged refactor plan
+- containment strategy when full remediation is not viable yet
 
----
+Good remediation advice includes:
 
-### 2️⃣ Debt Inventory (Atomic Records)
+- safety nets required first
+- sequencing and prerequisites
+- rollback or escape hatch
+- how to validate improvement
 
-Each debt item must be listed as an **atomic record**.
+Prefer reversible steps unless the user explicitly asks for a larger redesign.
 
-```
-Debt ID:
-Category:
-Location (files/modules/tests):
-Description:
-Observed Evidence:
-Impact:
-Likelihood:
-Quality/Test Impact:
-Fix Options:
-Estimated Effort (S/M/L):
-Recommendation:
-```
+### Phase 5: Produce the output
 
-Rules:
-- No evidence → no debt item
-- Avoid generic wording (“code is messy”)
-- Be precise and scoped
+Use `./resources/technical-debt-report-template.md` for the default deliverable.
 
----
+Default output modes:
 
-### 3️⃣ Test & Quality Risk Summary
+- **Repository or module audit** → create `TECHNICAL_DEBT_REPORT.md`
+- **Quick advisory audit** → produce a shorter inline summary, but still include top drivers, debt register highlights, and recommended priorities
+- **Test debt focus** → preserve the same structure, with an explicit test-debt section and CI/test-confidence impact
 
-Summarize how technical debt affects:
+If the user asks for an example of the target output, use `./resources/example-technical-debt-report.md`.
 
-- Bug escape probability
-- Regression risk
-- Test coverage effectiveness
-- Test stability and execution time
-- Confidence in releases
+### Phase 6: Self-check before finalizing
 
-Highlight **test debt explicitly**, even if code debt dominates.
+Before delivering the report, verify:
 
----
+- every important debt item has concrete evidence
+- categories are used consistently
+- the biggest risks are near the top
+- test and quality impact are explicit, not implied
+- remediation advice is incremental and believable
+- deferred debt is documented consciously, not forgotten silently
 
-### 4️⃣ Prioritization & Decision Matrix
+## Useful Heuristics
 
-Group debt items into:
+Debt is often hiding when you see patterns like:
 
-- **Fix Now** – high risk, high impact
-- **Fix Soon** – important but not blocking
-- **Accept for Now** – conscious debt with rationale
+- repeated TODOs, FIXMEs, retries, or workaround comments in the same area
+- CI or tests that fail noisily but provide little diagnosis
+- abstractions that reduce duplication while increasing confusion
+- outdated dependencies that block security or platform upgrades
+- a feature that requires touching too many files for a small change
+- onboarding that depends on tribal knowledge rather than documented flows
+- tests that pass often enough to be tolerated, but not enough to be trusted
 
-Explain *why* some debt should **not** be fixed yet.
+## Resource Map
 
----
+- `./resources/debt-taxonomy.md` - analysis lenses, categories, and signal guide
+- `./resources/prioritization-matrix.md` - scoring rubric and decision buckets
+- `./resources/technical-debt-report-template.md` - standard report structure for debt audits
+- `./resources/example-technical-debt-report.md` - example filled report
+- `./resources/test-debt-catalogue.md` - focused anti-pattern catalogue for automated test suites
 
-### 5️⃣ Remediation Roadmap (Incremental)
+## Related Skills
 
-For top-priority items:
-
-- Suggested remediation steps
-- Safer refactoring strategies (test-first if needed)
-- Dependencies or prerequisites
-- Validation strategy (how we know it improved)
-
-Avoid “big bang” rewrites unless explicitly justified.
-
----
-
-### 6️⃣ Change Impact & ROI Notes
-
-For major fixes, describe:
-- What becomes easier to test
-- What risks are reduced
-- What developer or QA friction is removed
-
-This section is critical for stakeholder buy-in.
-
----
-
-## 🧠 AI Safety & Quality Rules
-
-### DO
-- Base findings on observable evidence
-- Explicitly list assumptions
-- Treat test debt as first-class technical debt
-- Prefer incremental, test-safe remediation
-- Acknowledge uncertainty
-
-### DON’T
-- Hallucinate intent or design decisions
-- Recommend refactors without test safety
-- Over-optimize cosmetic issues
-- Treat all debt as equally urgent
-
----
-
-## ✅ AI Self-Review Checklist
-
-Before finalizing:
-
-- [ ] Every debt item has evidence
-- [ ] Debt categories are used consistently
-- [ ] Test impact is explicitly analyzed
-- [ ] Risks are justified, not guessed
-- [ ] “Acceptable debt” is documented
-- [ ] Recommendations are realistic and incremental
-
----
-
-## 🎯 Outcome
-
-When applied correctly, this skill produces a **credible, actionable, and
-architecturally sound technical debt assessment** that:
-
-- improves system quality,
-- strengthens test effectiveness,
-- reduces long-term risk,
-- and supports informed decision-making.
+- `code-review-advanced` - for reviewing a specific change instead of mapping broader debt
+- `static-code-analysis-typescript` - when the main issue is linting, formatting, or TypeScript quality gates
+- `requirements-test-coverage-mapper` - when the problem is coverage traceability rather than debt discovery

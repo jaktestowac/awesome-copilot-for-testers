@@ -580,6 +580,12 @@ function generateSection(sectionConfig) {
     const extraKey = getKeyFromFile(file, sectionConfig);
     description = attachAdditionalDescription(extraKey, description);
 
+    // If this is a skill and it has bundled resources, note it in the description.
+    if (sectionConfig.directory === 'skills') {
+      const skillDir = path.join(sectionDir, path.dirname(file));
+      description = appendSkillResourceNote(description, skillDir);
+    }
+
     const safeDesc = escapeTableCell(description);
 
     content += `| [${title}](${link}) | ${safeDesc} | ${badges} |\n`;
@@ -592,6 +598,52 @@ function generateSection(sectionConfig) {
 function escapeTableCell(text) {
   if (!text && text !== '') return '';
   return String(text).replace(/\|/g, '&#124;').replace(/\r?\n/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function getSkillResourceExtras(skillDir) {
+  const ignoredNames = new Set([
+    'SKILL.md',
+    'README.md',
+    '.gitkeep',
+    '.gitignore',
+    '.DS_Store',
+    'Thumbs.db',
+  ]);
+
+  try {
+    return fs
+      .readdirSync(skillDir, { withFileTypes: true })
+      .filter((entry) => !ignoredNames.has(entry.name))
+      .map((entry) => entry.name);
+  } catch (error) {
+    return [];
+  }
+}
+
+function appendSkillResourceNote(description, skillDir) {
+  const extras = getSkillResourceExtras(skillDir);
+  if (!extras || extras.length === 0) {
+    return description;
+  }
+
+  const extraDirs = extras.filter((name) => fs.statSync(path.join(skillDir, name)).isDirectory());
+  const extraFiles = extras.filter((name) => fs.statSync(path.join(skillDir, name)).isFile());
+
+  let resourceNote =
+    '💡 Includes additional bundled resources in the skill folder that should also be copied/used.';
+
+  if (extraDirs.length === 1 && extraDirs[0] === 'resources') {
+    resourceNote =
+      '💡 Includes additional bundled resources in `resources` that should also be copied/used.';
+  } else if (extraDirs.length > 0) {
+    const dirsList = extraDirs.map((name) => `./${name}`).join(', ');
+    resourceNote = `💡 Includes additional bundled resources in ${dirsList} that should also be copied/used.`;
+  } else if (extraFiles.length > 0) {
+    resourceNote =
+      '💡 Includes additional bundled files in the skill folder that should also be copied/used.';
+  }
+
+  return description ? `${description} ${resourceNote}` : resourceNote;
 }
 
 // Generate a table for custom sets (each set is a directory under sets)
