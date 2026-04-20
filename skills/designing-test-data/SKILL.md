@@ -1,6 +1,6 @@
 ---
 name: designing-test-data
-description: 'Designs realistic, boundary-heavy, and role-aware test data packs for manual and automated testing. Use when a feature needs deliberate inputs and fixtures before execution, when edge-case values keep being improvised, or when automation needs stable example data with setup notes.'
+description: 'Generates boundary values, creates role-based user fixtures, and produces grouped test data catalogs with setup and cleanup scripts. Use when a feature needs deliberate test inputs before execution, when edge-case or mock data is being improvised instead of planned, or when automation requires stable sample data, dummy records, or seed fixtures with environment notes.'
 argument-hint: 'Entities, fields, constraints, roles, state combinations, and whether data is for manual or automated use'
 user-invocable: true
 ---
@@ -12,11 +12,11 @@ It helps turn vague "use some sample data" habits into deliberate datasets that 
 
 ## When to Use
 
-- prepare test data before manual execution starts
-- create stable fixtures for automation work
-- design edge-case inputs from field constraints
-- generate role-aware or state-aware data combinations
-- replace improvised sample values with a reusable data catalog
+- Prepare deliberate test data before manual execution starts
+- Build stable fixtures and seed data for automation suites
+- Derive edge-case inputs from field constraints and business rules
+- Generate role-aware or state-aware data combinations across workflows
+- Replace improvised sample values with a reusable, grouped data catalog
 
 ## Data Design Rules
 
@@ -25,6 +25,7 @@ It helps turn vague "use some sample data" habits into deliberate datasets that 
 - **Synthetic first** - use safe, non-sensitive values unless the user explicitly provides approved test data.
 - **Dependencies must be visible** - if a dataset requires setup, state it clearly.
 - **Time and state matter** - dates, expirations, roles, and lifecycle states often create the real edge cases.
+- **Every set needs a reason** - never dump data tables without explaining why each group exists and what it exercises.
 
 ## Workflow
 
@@ -64,16 +65,41 @@ Generate values across these buckets where relevant:
 - **Temporal data** - past, future, leap day, expiry edge, timezone-sensitive values
 - **Stress or awkward data** - long strings, Unicode, duplicate keys, near-collision values
 
+**Example — User Registration data pack (excerpt):**
+
+| # | Username | Email | Age | Role | Purpose |
+|---|----------|-------|-----|------|---------|
+| 1 | `jane_doe` | `jane@example.com` | 25 | user | Typical valid record |
+| 2 | `ab` | `a@b.co` | 18 | user | Boundary — minimum length and minimum age |
+| 3 | `""` | `not-an-email` | -1 | guest | Invalid — empty name, bad format, negative age |
+| 4 | `admin_root` | `admin@example.com` | 65 | admin | Role escalation + upper-age boundary |
+
 ### Phase 3: Package the dataset
 
-Use `./resources/test-data-catalog-template.md` when possible.
+Use `./resources/test-data-catalog-template.md` for full formatting. Minimal catalog structure:
 
-The output should make clear:
+```markdown
+## Scope
+- Feature / flow: [target]
+- Intended use: manual / automation / both
 
-- what the record is for
-- how to use it
-- any setup dependencies
-- whether it is better suited for manual or automated use
+## Data Sets
+| ID | Entity | Category | Example values | Purpose | Setup |
+|----|--------|----------|---------------|---------|-------|
+| TD-001 | User | valid | standard active user | baseline | seed account |
+| TD-002 | User | boundary | max-length name, empty optional | validation edges | same role |
+
+## Role and State Combinations
+| ID | Role | State | Why it matters |
+|----|------|-------|----------------|
+| RSC-001 | guest | new session | public path coverage |
+
+## Notes
+- Cleanup: [reset steps]
+- Masking: [safe-data reminder]
+```
+
+Each record must make clear what it is for, how to use it, any setup dependencies, and whether it suits manual or automated use.
 
 ### Phase 4: Add handling notes
 
@@ -83,14 +109,6 @@ Before finishing, call out:
 - cleanup expectations
 - masking or privacy concerns
 - values that should never be used outside safe test environments
-
-## Common Failure Modes
-
-- only generating happy-path data
-- ignoring entity relationships or setup dependencies
-- using realistic-looking but sensitive data carelessly
-- forgetting state or role permutations
-- writing data tables with no explanation of why each set exists
 
 ## Resource Map
 

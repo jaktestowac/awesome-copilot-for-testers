@@ -1,6 +1,6 @@
 ---
 name: creating-prompts
-description: "Creates GitHub Copilot prompt files (`.prompt.md`) for VS Code. Use when building reusable workflow starters that route work to the right agent, collect the right inputs, and ship with install-ready templates, examples, and validation guidance."
+description: "Creates GitHub Copilot prompt files (`.prompt.md`) for VS Code. Use when the user asks to create, improve, or templatize a `.prompt.md` file — e.g. building a reusable slash-command, routing a task to a specific agent, standardizing repeated workflows, or fixing a vague prompt. Ships install-ready templates, examples, and validation guidance."
 argument-hint: "Prompt goal, target agent, required inputs, and desired output"
 user-invocable: true
 ---
@@ -16,16 +16,13 @@ Use this skill when the user asks for things like:
 
 - "create a prompt file for this workflow"
 - "turn this repeated request into a `.prompt.md`"
+- "make a slash-command that runs this analysis"
 - "route this task to the right agent with guided input"
 - "fix a prompt that is too vague or too generic"
+- "templatize this workflow so the team can reuse it"
 - "add a reusable prompt example for the team"
 
-Typical scenarios:
-
-- creating a focused slash-command entrypoint
-- standardizing a frequent analysis or generation workflow
-- capturing required inputs and outputs for a specialized task
-- improving prompt usability for a repository or public collection
+Typical scenarios: creating a slash-command entrypoint, standardizing a frequent workflow, capturing required inputs/outputs for a specialized task, or improving prompt discoverability for a repo or public collection.
 
 ## Outcome Standard
 
@@ -63,14 +60,7 @@ Clarify or infer:
 
 ### Phase 2: Draft the frontmatter
 
-Choose the smallest useful set of fields:
-
-- `name` for a readable menu label when needed
-- `agent` to route the workflow intentionally
-- `description` to make the prompt discoverable
-- `model` when a model choice materially matters
-- `argument-hint` when the user needs help providing the right context
-- `tools` only when the prompt truly needs to override defaults
+Choose the smallest useful set of fields: `name` (menu label), `agent` (routing), `description` (discoverability), `model` (only when it materially matters), `argument-hint` (guides user input), and `tools` (only when overriding defaults is required).
 
 ### Phase 3: Write the prompt body
 
@@ -86,6 +76,25 @@ A good prompt body should usually include:
 - a numbered workflow
 - output expectations or completion criteria
 - constraints when the workflow should stay within tight bounds
+
+**Minimal example** of a complete `.prompt.md` file:
+
+```markdown
+---
+name: Summarize PR
+agent: code-review
+description: "Summarize a pull request's changes and flag risks"
+argument-hint: "PR number or URL"
+---
+
+Summarize the pull request provided by the user.
+
+1. List changed files grouped by area (API, UI, tests, config).
+2. Highlight breaking changes or risk areas.
+3. Output a short summary (under 200 words) plus a risk rating (low / medium / high).
+```
+
+See `./resources/prompt.example.prompt.md` for a fuller worked example.
 
 ### Phase 4: Package the reference bundle
 

@@ -1,89 +1,106 @@
 ---
 name: code-review
-description: Assists users with code review, providing feedback on code quality, best practices, and potential improvements. Use always when user asks for code review or when there are code changes to review, providing feedback on code quality, structure, readability, maintainability, and adherence to coding standards. This skill provides information on best practices for code review, including how to identify issues, suggest improvements, and communicate feedback effectively.
+description: "Reviews code changes and pull requests for correctness, security, performance, and maintainability. Use when a PR diff is ready, a user asks for feedback on code quality, or a change needs sign-off before merge."
+argument-hint: "File paths, PR URL, or diff context to review"
+user-invocable: true
 ---
 
-## Overview
+# Code Review
 
-The `code-review` skill helps reviewers apply consistent, high-quality assessments across code changes when reviewing code. It focuses on key principles of code quality:
-
-- Safety (avoid incorrect assumptions; call out uncertain areas)
-- Clarity (structuring comments in positive and actionable form)
-- Coverage (address correctness, tests, security, performance, readability)
+Use this skill when code changes need a structured, consistent review before they land.
+It produces categorized findings with actionable suggestions so the author can iterate quickly.
 
 ## When to Use
 
-1. User asks for code review.
-2. Pull request diff is ready and you must provide code review comments.
-3. You are auditing a code change for architecture, compliance, or release readiness.
-4. You need a checklist for manual or automated review before approving.
+Use this skill when the user asks for things like:
 
-## Skill Behavior
+- "review this pull request"
+- "check these changes before I merge"
+- "audit this diff for security and performance"
+- "give me feedback on code quality"
+- "what could go wrong with this change?"
 
-- Start with a summary: what is changing, why, and whether the implementation is aligned with goals.
-- Categorize findings:
-  - ✅ Strengths / wins
-  - ⚠️ Concerns / risks
-  - 🛠️ Suggestions / improvements
-- Provide `short-term` fix guidance plus `long-term` design thoughts.
-- Flag any missing tests, docs, or standards violations.
-- Respect context: mention the module/file/function names (not generic: "the code").
+Typical scenarios:
 
-## Best-practice Review Checklist
+- reviewing a PR diff before approval
+- auditing a feature branch for release readiness
+- checking a refactor for regressions or missed edge cases
+- validating that tests, docs, and standards are covered
 
-1. **Correctness**
-   - Does the code do what the ticket/PR describes?
-   - Are edge cases handled (null, errors, concurrency, format) ?
-   - Any regression risk from changed behavior?
+## Review Principles
 
-2. **Maintainability**
-   - Is the implementation easy to read and reason about?
-   - Are abstractions and naming appropriate?
-   - Any repeated logic that should be refactored?
+- **Specific over generic** — reference exact file, function, and line; never say "the code."
+- **Actionable over critical** — every concern includes a concrete fix or next step.
+- **Teammate tone** — use "Consider", "Could", "Worth checking" instead of directives.
+- **Context-aware** — weigh findings against the goal of the change (bug fix vs. feature vs. refactor).
 
-3. **Testing**
-   - Are unit and integration tests present and relevant?
-   - Do tests cover both normal and boundary cases?
-   - Are tests deterministic and fast?
+## Workflow
 
-4. **Security & Privacy**
-   - Are user inputs validated/escaped and untrusted data treated carefully?
-   - Any secrets in code, logs, or config?
-   - Does the change introduce new permissions, cross-origin, or auth gaps?
+### Phase 0: Scope the review
 
-5. **Performance**
-   - Any obvious O(N^2) loops or hot-path allocations?
-   - Are caching and batching used when appropriate?
-   - For network I/O, is retry/backoff and timeout handling present?
+Before reading code, establish:
 
-6. **Style/Convention**
-   - Follow team linting rules and style guide (naming, indent, line length).
-   - Approve clean diff with minimal noise in formatting.
+- what the change is meant to accomplish (ticket, PR description, commit messages)
+- which files and modules are affected
+- the project's language, framework, and relevant style conventions
+- any areas the author flagged for extra attention
 
-7. **Documentation**
-   - Public APIs should be documented.
-   - Migration notes, config docs, and README changes included if needed.
+### Phase 1: Systematic review pass
 
-## Prompt Pattern
+Walk through the diff against this checklist, noting findings as you go:
 
-Use this template for your code review request:
+- **Correctness** — does the code match the stated intent? Are edge cases (null, empty, concurrent, malformed input) handled?
+- **Security** — are inputs validated and escaped? Any secrets, new permissions, or auth gaps?
+- **Performance** — obvious quadratic loops, hot-path allocations, missing timeouts or retry/backoff?
+- **Testing** — are unit and integration tests present, deterministic, and covering boundary cases?
+- **Maintainability** — is naming clear, abstraction appropriate, duplication minimal?
+- **Style and docs** — does the diff follow project linting rules? Are public APIs documented and migration notes included?
 
-```
-You are a senior code reviewer.
-Project context: <technology stack and repository>
-Changed files: <list or path prefix>
-Key goals: <bug fix, feature, refactor, perf>
-Specific concerns: <optional>
-Please provide:
-- High-level summary
-- Risk assessment
-- Specific line comments / suggestions
-- Example improvement snippets
-```
+### Phase 2: Categorize and present findings
 
-## Output Style
+Organize findings into three groups:
 
-- Keep each comment concise (1-2 sentences plus the issue).
-- Use bullet points for multiple issues.
-- Use neutral, teammate-first language (`Consider`, `Could`, `Would` instead of `You`).
-- Include a final recommendation state: `approve`, `request changes`, or `comment`.
+- **Strengths** — what works well and should be preserved
+- **Concerns** — issues that should be addressed before merge, with suggested fixes
+- **Suggestions** — optional improvements for readability, performance, or long-term design
+
+For each concern or suggestion, include the file path, a brief explanation, and a concrete fix.
+
+#### Example finding
+
+> **Concern — missing null check in `src/api/users.ts:42`**
+>
+> `getUser` can return `null` when the ID is not found, but the caller dereferences immediately.
+>
+> ```ts
+> // before
+> const user = await getUser(id);
+> return user.email; // throws if user is null
+>
+> // after
+> const user = await getUser(id);
+> if (!user) {
+>   throw new NotFoundError(`User ${id} not found`);
+> }
+> return user.email;
+> ```
+
+### Phase 3: Verdict
+
+Close the review with one of:
+
+- **Approve** — no blocking issues; optional suggestions only
+- **Request changes** — one or more concerns must be resolved before merge
+- **Comment** — informational feedback; no approval or block implied
+
+Include a one-sentence summary of the overall assessment and any short-term vs. long-term recommendations.
+
+## Definition of Done
+
+A review using this skill is complete when:
+
+- every changed file has been examined against the checklist
+- findings are categorized, specific, and actionable
+- at least one strength is called out alongside any concerns
+- a clear verdict is stated with rationale
+- the tone is constructive and teammate-first throughout
