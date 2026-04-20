@@ -1,302 +1,132 @@
 ---
 name: prd-generator
-description:  Generate production-ready Product Requirements Documents (PRDs) for software systems and AI-powered features. The skill ensures clear problem framing, measurable outcomes, scoped functionality, testable requirements, technical feasibility, risk awareness, and stakeholder alignment.
+description: 'Generates production-ready Product Requirements Documents for software systems and AI-powered features. Covers problem framing, measurable outcomes, scoped functionality, testable requirements, technical feasibility, risk awareness, and stakeholder alignment. Use when writing a PRD, defining requirements for a feature, turning a vague idea into a spec, planning an AI/ML product, or aligning stakeholders before development.'
+argument-hint: 'Product idea, feature brief, problem statement, stakeholder context, constraints, and any existing notes or prior PRDs'
+user-invocable: true
 ---
 
-# 📄 Product Requirements Document (PRD) Skill
+# Product Requirements Document (PRD) Generator
 
-This skill enables an AI agent to produce **high-quality, professional PRDs**
-that serve as a **single source of truth** for product, design, engineering,
-QA, and leadership teams.
+Use this skill to produce high-quality, professional PRDs that serve as a single source of truth for product, design, engineering, QA, and leadership teams.
+The PRD balances business goals, user needs, and technical execution for both traditional software and AI-driven products.
 
-The PRD balances **business goals**, **user needs**, and **technical execution**,
-and supports both traditional software systems and AI-driven products.
+## When to Use
 
----
+- write a PRD, define requirements, or plan a feature
+- turn a vague idea into an implementation-ready specification
+- align multiple stakeholders before development begins
+- document requirements for AI/ML-enabled systems
+- create a versioned reference document that evolves with the product
 
-## 🧠 What This Skill Does
+## Operating Principles
 
-When invoked, this skill:
+- **Never generate immediately** - always reduce uncertainty through discovery before drafting.
+- **Measurable over subjective** - replace "fast" with "P95 latency <= 200ms"; replace "easy to use" with a Lighthouse score.
+- **Testable by design** - every requirement states how it will be validated, what can be automated, and what signals failure.
+- **Assumptions stay visible** - unvalidated conditions are listed explicitly, never buried.
+- **Living document** - track versions, incorporate feedback, revisit assumptions as information emerges.
+- **Adapt depth to risk** - MVP, growth, and scale products need different rigor levels.
 
-- Elicits missing context through structured discovery
-- Translates ambiguous ideas into clear, actionable requirements
-- Produces a complete, testable, and measurable PRD
-- Makes assumptions and risks explicit
-- Adapts depth and rigor to product maturity and risk
-- Treats the PRD as a **living, versioned artifact**
+## Workflow
 
----
+### Phase 0: Strategy selection
 
-## 🎯 When to Use
+Classify the PRD before discovery to calibrate structure and rigor:
 
-Use this skill when the user wants to:
+- **Product stage**: MVP / Growth / Scale
+- **Risk level**: Low / Medium / High
+- **AI criticality**: None / Supporting / Core
+- **Primary audience**: Engineering / Product / Exec / External
 
-- "Write a PRD", "define requirements", or "plan a feature"
-- Turn a vague idea into an implementation-ready specification
-- Align multiple stakeholders before development
-- Document requirements for **AI / ML-enabled systems**
-- Create a reference document that evolves with the product
+The classification determines depth, detail, and validation rigor throughout.
 
----
+### Phase 1: Structured discovery
 
-## 🧩 Operational Workflow
+Ask clarifying questions before drafting. Cover at minimum:
 
-A PRD **must never be generated immediately** from a single prompt.
-The agent must first reduce uncertainty and align expectations.
+1. **Problem and context** - what problem, why now
+2. **Users and value** - primary users, desired outcomes
+3. **Success measurement** - KPIs, definition of "good"
+4. **Constraints** - deadlines, budget, tech stack, compliance
+5. **Stakeholders** - who needs alignment or approval
 
----
+Do not proceed until at least three major uncertainties are resolved.
 
-### Phase 0: PRD Strategy Selection
+### Phase 2: Draft the PRD
 
-Before discovery, classify the PRD to adapt structure and rigor:
+Follow the mandatory output structure below. Adapt section depth to the strategy classification from Phase 0.
 
-- **Product Stage**: MVP / Growth / Scale
-- **Risk Level**: Low / Medium / High
-- **AI Criticality**: None / Supporting / Core
-- **Primary Audience**: Engineering / Product / Exec / External
+### Phase 3: Validate and iterate
 
-> The chosen strategy determines depth, level of detail, and validation rigor.
+Run the self-review checklist before finalizing. Incorporate feedback from product, engineering, QA, and stakeholders. Re-check assumptions as new information surfaces.
 
----
+## PRD Structure (Mandatory Output Schema)
 
-### Phase 1: Discovery - Structured Elicitation
+1. **Executive Summary** - problem statement (1-3 sentences), proposed solution (1-3 sentences), 3-5 measurable success KPIs
+2. **Context and Strategic Alignment** - business context, strategic goals supported, relevant constraints or market considerations
+3. **User Experience and Functional Scope** - personas with goals and pain points, user scenarios/flows, user stories with acceptance criteria, explicit non-goals
+4. **Success Metrics and Release Criteria** - business KPIs (adoption, retention, revenue), technical KPIs (latency, throughput, error rates), quality KPIs (availability, reliability), release readiness checklist
+5. **Technical Requirements and Constraints** - high-level architecture overview, component breakdown (services, APIs, data stores), non-functional requirements (performance, security, scalability, compliance), integration points and dependencies
+6. **AI/ML Requirements** (include only when AI is core or supporting) - models/tools/services, input/output specs, evaluation strategy, monitoring and drift detection, fallback behavior, data privacy and safety
+7. **Risks, Assumptions, and Dependencies** - risks with impact, likelihood, and mitigation; unvalidated assumptions; team/system/vendor dependencies
+8. **Roadmap and Phased Delivery** - table with Phase, Goals, Dependencies, and Exit Criteria for each increment (MVP, v1.1, Future)
 
-The agent must ask **clarifying questions** before drafting.
+## Self-Review Checklist
 
-Use a structured approach (Who / What / Why / When / How):
+Before finalizing, verify:
 
-1. **Problem & Context**
-   - What problem are we solving?
-   - Why does it matter now?
-2. **Users & Value**
-   - Who are the primary users?
-   - What outcome do they care about?
-3. **Success & Measurement**
-   - How will success be measured?
-   - What does "good" look like?
-4. **Constraints**
-   - Deadlines, budget, tech stack, compliance?
-5. **Stakeholders**
-   - Who needs alignment or approval?
+- all success metrics are measurable
+- assumptions are explicitly listed
+- non-goals are clearly stated
+- risks include mitigation strategies
+- every major requirement is testable
+- no undefined terms remain
+- AI systems define offline evaluation and runtime monitoring
 
-> Do not proceed until **at least 3 major uncertainties** are resolved.
+## Common Failure Modes
 
----
+- generating a PRD from a single prompt without discovery
+- using subjective language instead of measurable criteria
+- omitting non-goals and letting scope creep in
+- treating AI requirements as an afterthought
+- listing risks without mitigation strategies
+- skipping stakeholder alignment before finalizing
 
-## 🧾 PRD Structure - Mandatory Output Schema
-
-The PRD output **must follow this exact structure and order**.
-
----
-
-### 1️⃣ Executive Summary
-
-**Purpose**: Provide a concise, decision-friendly overview.
-
-- **Problem Statement**  
-  1–3 sentences describing the core pain or opportunity.
-- **Proposed Solution**  
-  1–3 sentences describing the approach (not implementation details).
-- **Success Criteria**  
-  3–5 measurable KPIs (business, technical, or quality).
-
----
-
-### 2️⃣ Context & Strategic Alignment
-
-**Purpose**: Explain why this work matters.
-
-- Business or product context
-- Strategic goals supported by this initiative
-- Relevant constraints or market considerations
-
----
-
-### 3️⃣ User Experience & Functional Scope
-
-**Purpose**: Anchor requirements in user value.
-
-- **User Personas**  
-  Primary personas with goals and pain points.
-- **User Scenarios / Flows**  
-  High-level description of how users interact with the system.
-- **User Stories**  
-  `As a [persona], I want to [action] so that [benefit].`
-- **Acceptance Criteria**  
-  Clear, testable "done" conditions per story.
-- **Out of Scope / Non-Goals**  
-  Explicit exclusions to prevent scope creep.
-
----
-
-### 4️⃣ Success Metrics & Release Criteria
-
-**Purpose**: Define outcomes and readiness.
-
-- **Business KPIs**  
-  Adoption, retention, revenue, efficiency.
-- **Technical KPIs**  
-  Latency, throughput, error rates.
-- **Quality KPIs**  
-  Availability, reliability, correctness.
-- **Release Readiness Checklist**  
-  Conditions required for MVP and subsequent releases.
-
----
-
-### 5️⃣ Technical Requirements & Constraints
-
-**Purpose**: Enable engineering execution.
-
-- **High-Level Architecture Overview**  
-  Text or ASCII-based description of components and data flow.
-- **Component Breakdown**  
-  Services, APIs, data stores, integrations.
-- **Non-Functional Requirements**  
-  Performance, security, scalability, privacy, compliance.
-- **Integration Points & Dependencies**  
-  External systems, internal services, third parties.
-
----
-
-### 6️⃣ AI / ML Requirements (If Applicable)
-
-Include **only if AI is a core or supporting capability**.
-
-- Models, tools, or services used
-- Input and output specifications
-- Evaluation and quality measurement strategy
-- Monitoring, drift detection, and fallback behavior
-- Data privacy and safety considerations
-
----
-
-### 7️⃣ Risks, Assumptions & Dependencies
-
-**Purpose**: Surface uncertainty explicitly.
-
-- **Risks**
-  - Description
-  - Impact
-  - Likelihood
-  - Mitigation strategy
-- **Assumptions**
-  - Unvalidated conditions treated as true
-- **Dependencies**
-  - Teams, systems, vendors, or approvals
-
----
-
-### 8️⃣ Roadmap & Phased Delivery
-
-Break delivery into incremental phases:
-
-| Phase | Goals | Dependencies | Exit Criteria |
-|------|------|-------------|---------------|
-| MVP  | ... | ... | ... |
-| v1.1 | ... | ... | ... |
-| Future | ... | ... | ... |
-
----
-
-## 📌 PRD Quality Standards
-
-### Requirements Must Be Measurable
-
-Avoid subjective language.
-
-**Bad**
-- "Fast"
-- "Easy to use"
-- "High quality"
-
-**Good**
-- "P95 latency ≤ 200ms for 10k records"
-- "100% Lighthouse accessibility score"
-- "≥90% precision on benchmark queries"
-
----
-
-## 🧪 Testability by Design
-
-Every major requirement must indicate:
-
-- How it will be validated
-- What can be automated
-- What signals indicate failure
-
-AI systems must define **offline evaluation** and **runtime monitoring**.
-
----
-
-## 🔁 Iteration & Collaboration Rules
-
-- Treat the PRD as a **living document**
-- Track versions and changes
-- Incorporate feedback from product, engineering, QA, and stakeholders
-- Revisit assumptions as new information emerges
-
----
-
-## 🧠 AI Self-Review Checklist
-
-Before finalizing, the agent must verify:
-
-- [ ] All success metrics are measurable
-- [ ] Assumptions are explicitly listed
-- [ ] Non-goals are clearly stated
-- [ ] Risks include mitigation strategies
-- [ ] Requirements are testable
-- [ ] No undefined terms remain
-
----
-
-## 🧪 Example Snippet (Intelligent Search System)
+## Example Snippet (AI-Powered Code Search)
 
 ```
-### Document Metadata
+Version: 0.1 | Status: Draft | Owner: TBD
 
-- Version: 0.1
-- Status: Draft
-- Last Updated: YYYY-MM-DD
-- Owner: TBD
-
-### Change Log
-
-v0.1 – Initial draft
-
-### 1. Executive Summary
+1. Executive Summary
 Problem: Developers struggle to find code snippets in large repos.
 Solution: AI-enabled code search with natural language interface.
-Success KPIs:
-- ≤200ms P95 query latency
-- ≥90% relevance on benchmark queries
-- 30% increase in daily active users
+KPIs: P95 latency <= 200ms, >= 90% relevance on benchmark, 30% DAU increase.
 
-### 2. User Stories
+2. User Stories
 As a developer, I want to ask plain-English questions so I find code faster.
-Acceptance:
-- Multi-turn refinement
-- Code snippets with citations
+Acceptance: multi-turn refinement, code snippets with citations.
 
-### 4. Technical Specs
-Architecture:
-- NLP Service -> Vector DB -> Search API
-Performance:
-- Search P95 ≤ 200ms under 10k docs
-...
+3. Technical Specs
+Architecture: NLP Service -> Vector DB -> Search API
+Performance: search P95 <= 200ms under 10k docs.
 
-### Risks
-- Model drift
-- Cost of embeddings
-...
-
-### PRD Quality Review (AI Self-Check)
-
-- [ ] All success metrics are measurable
-- [ ] No undefined technical terms
-- [ ] Assumptions explicitly listed
-- [ ] Non-goals clearly stated
-- [ ] Risks have mitigation strategies
-
+4. Risks
+- Model drift: monitor weekly, retrain on threshold breach.
+- Embedding cost: budget cap with fallback to keyword search.
 ```
+
+## Related Skills
+
+- `requirements-test-coverage-mapper` - when the PRD needs traceability to test coverage
+- `designing-functional-tests` - when requirements are ready to expand into test scenarios
+- `verifying-acceptance-criteria` - when checking whether delivered features meet PRD acceptance criteria
+
+## Definition of Done
+
+This skill is complete when:
+
+- discovery resolved at least three major uncertainties
+- the PRD follows the mandatory output structure
+- all success metrics are measurable and testable
+- risks, assumptions, and non-goals are explicit
+- the document is ready for stakeholder review and engineering handoff

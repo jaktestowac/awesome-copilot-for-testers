@@ -1,233 +1,137 @@
 ---
 name: tech-debt-analysis
-description: Analyze technical debt in codebases and test suites using evidence-based signals. Produces a structured, prioritized Technical Debt Report with risk assessment, test impact analysis, remediation options, and ROI-aware recommendations.
+description: "Systematically identify, classify, and prioritize technical debt across code, tests, architecture, dependencies, and pipelines. Use when assessing codebase health, diagnosing slow or flaky tests, preparing refactoring roadmaps, or building ROI-aware remediation plans. Produces a structured Technical Debt Report with risk assessment, test impact analysis, and prioritized recommendations."
+argument-hint: "Path to codebase or module, scope (repo/module/test-layer), and known pain points"
+user-invocable: true
 ---
 
-# 🧱 Technical Debt Analysis Skill
+# Technical Debt Analysis
 
-This skill enables an AI agent to **systematically identify, classify, and
-prioritize technical debt** across code, tests, architecture, dependencies,
-and delivery pipelines.
+Use this skill to produce an evidence-based, prioritized technical debt assessment.
+It covers code, test suites, architecture, dependencies, CI/CD pipelines, and documentation — with explicit emphasis on test debt as a first-class concern.
 
----
+## When to Use
 
-## 🎯 When to Use
+- "assess the health of this codebase"
+- "why are our tests slow, flaky, or unreliable?"
+- "prioritize refactoring work with clear ROI"
+- "identify quality risks hiding behind working systems"
+- "prepare input for a technical roadmap or quality initiative"
 
-Use this skill when you need to:
+## Analysis Workflow
 
-- Assess the **health and sustainability** of a codebase
-- Identify **quality risks hidden behind “working” systems**
-- Understand **why testing is slow, flaky, or ineffective**
-- Prioritize refactoring work with **clear impact and ROI**
-- Prepare input for **technical roadmap or quality initiatives**
-- Decide **what technical debt to fix vs consciously accept**
+Follow the phases in order. Never skip discovery or evidence collection.
 
----
+### Phase 0: Context and scope
 
-## 🧭 Operational Workflow
+Before analysis, establish:
 
-The agent must follow the phases below **in order**.
-Skipping discovery or evidence collection is not allowed.
-
----
-
-### Phase 0: Context & Strategy Selection (Mandatory)
-
-Before analysis, clarify the context.
-
-Ask (or infer safely if explicitly stated):
-
-- System type: Frontend / Backend / API / Test Automation / Platform
-- Current pain points: bugs, regressions, slow CI, flaky tests, low confidence
-- Scope of analysis: whole repo / module / test layer only
-- Constraints: time, legacy code, “no refactors”, compliance
-- Goal: awareness / prioritization / remediation planning
+- **system type**: frontend, backend, API, test automation, or platform
+- **pain points**: bugs, regressions, slow CI, flaky tests, low confidence
+- **scope**: whole repo, specific module, or test layer only
+- **constraints**: time, legacy code, compliance, "no refactors" policy
+- **goal**: awareness, prioritization, or remediation planning
 
 If information is missing, mark as `TBD` and list assumptions explicitly.
 
----
+### Phase 1: Debt signal collection
 
-### Phase 1: Debt Signal Collection (Evidence First)
+Identify observable signals, not conclusions. Sources to check:
 
-Identify **observable signals**, not conclusions.
+- **Code structure** — complexity, duplication, coupling
+- **Test behavior** — flakiness, runtime, coverage gaps, weak assertions
+- **CI/CD signals** — build time, retry patterns, failure rates
+- **Dependencies** — age, CVEs, maintenance status
+- **Change history** — hotspots, frequent fixes
+- **Documentation** — missing ADRs, tribal knowledge
 
-Possible signal sources:
-- Code structure (complexity, duplication, coupling)
-- Test behavior (flakiness, runtime, coverage gaps)
-- CI/CD signals (build time, retry patterns, failure rates)
-- Dependency metadata (age, CVEs, maintenance status)
-- Change history (hotspots, frequent fixes)
-- Documentation gaps (missing ADRs, tribal knowledge)
+If no signal or evidence exists, do not report debt — log it as an assumption or unknown.
 
-> If no signal or evidence exists, do **not** report debt - log it as an assumption or unknown.
+### Phase 2: Debt classification
 
----
+Every debt item must have one primary category from this fixed taxonomy:
 
-### Phase 2: Debt Classification (Use a Fixed Taxonomy)
+- **Code Debt** — smells, complexity, duplication
+- **Test Debt** — missing tests, flaky tests, slow feedback, weak assertions
+- **Architecture Debt** — tight coupling, layering violations, unclear boundaries
+- **Dependency Debt** — outdated, risky, or abandoned libraries
+- **Process Debt** — slow CI, manual steps, poor feedback loops
+- **Documentation Debt** — missing ADRs, unclear ownership, tribal knowledge
 
-Every debt item must be classified into **one primary category**:
+An optional secondary category may be added if justified.
 
-- **Code Debt** – smells, complexity, duplication
-- **Test Debt** – missing tests, flaky tests, slow feedback, weak assertions
-- **Architecture Debt** – tight coupling, layering violations, unclear boundaries
-- **Dependency Debt** – outdated, risky, abandoned libraries
-- **Process Debt** – slow CI, manual steps, poor feedback loops
-- **Documentation Debt** – missing ADRs, unclear ownership, tribal knowledge
+### Phase 3: Risk and impact assessment
 
-Optional secondary category may be added if justified.
+Evaluate each debt item on four dimensions using Low / Medium / High with justification:
 
----
+- **Impact** — what breaks or slows if this remains?
+- **Likelihood** — how often does it cause issues?
+- **Quality risk** — bug escape probability, regression risk, confidence loss
+- **Test impact** — does it reduce testability or reliability?
 
-### Phase 3: Risk & Impact Assessment
+## Output Schema
 
-Each debt item must be evaluated using **risk-based thinking**:
+Produce a markdown file named `TECHNICAL_DEBT_REPORT.md` with these sections.
 
-- **Impact**: What breaks or slows if this remains?
-- **Likelihood**: How often does it cause issues?
-- **Quality Risk**: Bug escape, regression risk, confidence loss
-- **Test Impact**: Does it reduce testability or reliability?
+### Metadata
 
-Use simple scales (Low / Medium / High) but justify each rating.
+Version, status (Draft/Review/Approved), scope analyzed, owner, date, and assumptions.
 
----
+### Executive Summary
 
-## 🧾 Output Schema (Strict)
+Overall debt health (Low/Medium/High), top 5 debt drivers by risk, major quality or testing risks, and recommended next actions.
 
-The final output must be a markdown file named: TECHNICAL_DEBT_REPORT.md and follow the structure below.
+### Debt Inventory
 
----
-
-### 0️⃣ Document Metadata
-
-- Version: `0.x`
-- Status: Draft / Review / Approved
-- Scope Analyzed:
-- Owner:
-- Date:
-- Assumptions:
-
----
-
-### 1️⃣ Executive Summary
-
-- Overall technical debt health: Low / Medium / High
-- Top 5 debt drivers (by risk)
-- Major quality or testing risks identified
-- Recommended next actions (short list)
-
----
-
-### 2️⃣ Debt Inventory (Atomic Records)
-
-Each debt item must be listed as an **atomic record**.
+Each debt item as an atomic record:
 
 ```
-Debt ID:
-Category:
-Location (files/modules/tests):
-Description:
-Observed Evidence:
-Impact:
-Likelihood:
-Quality/Test Impact:
-Fix Options:
-Estimated Effort (S/M/L):
-Recommendation:
+Debt ID: TD-042
+Category: Test Debt
+Location: tests/integration/payments/
+Description: Payment integration tests use hardcoded sleep waits instead of polling
+Observed Evidence: 14 instances of sleep(5000) in 8 test files; CI retry rate 23%
+Impact: High — flaky failures block releases, erode trust in test suite
+Likelihood: High — triggers on every CI run under load
+Quality/Test Impact: High — masks real regressions behind noise
+Fix Options: Replace sleeps with explicit wait conditions; extract shared polling utility
+Estimated Effort: M
+Recommendation: Fix Soon — highest ROI flakiness reduction
 ```
 
-Rules:
-- No evidence → no debt item
-- Avoid generic wording (“code is messy”)
-- Be precise and scoped
+Rules: no evidence means no debt item; avoid vague wording ("code is messy"); be precise and scoped.
 
----
+### Test and Quality Risk Summary
 
-### 3️⃣ Test & Quality Risk Summary
+Summarize how debt affects bug escape probability, regression risk, coverage effectiveness, test stability, execution time, and release confidence. Highlight test debt explicitly even when code debt dominates.
 
-Summarize how technical debt affects:
+### Prioritization Matrix
 
-- Bug escape probability
-- Regression risk
-- Test coverage effectiveness
-- Test stability and execution time
-- Confidence in releases
+Group items into three tiers:
 
-Highlight **test debt explicitly**, even if code debt dominates.
+- **Fix Now** — high risk, high impact, blocking quality
+- **Fix Soon** — important but not currently blocking
+- **Accept for Now** — conscious debt with documented rationale
 
----
+Explain why some debt should not be fixed yet.
 
-### 4️⃣ Prioritization & Decision Matrix
+### Remediation Roadmap
 
-Group debt items into:
+For top-priority items: suggested steps, safer refactoring strategies (test-first when possible), dependencies or prerequisites, and validation strategy (how you confirm improvement). Avoid big-bang rewrites unless explicitly justified.
 
-- **Fix Now** – high risk, high impact
-- **Fix Soon** – important but not blocking
-- **Accept for Now** – conscious debt with rationale
+### Change Impact and ROI
 
-Explain *why* some debt should **not** be fixed yet.
+For major fixes: what becomes easier to test, what risks are reduced, what developer or QA friction is removed. This section supports stakeholder buy-in.
 
----
+## Quality Rules
 
-### 5️⃣ Remediation Roadmap (Incremental)
+- **Evidence required** — base every finding on observable signals; list assumptions explicitly
+- **Test debt is first-class** — always analyze test impact even when code debt dominates
+- **Incremental remediation** — prefer test-safe, incremental fixes over rewrites
+- **Acknowledge uncertainty** — say when context is missing rather than guessing
+- **No hallucinated intent** — do not invent design decisions or project history
+- **Proportionate severity** — do not treat all debt as equally urgent; cosmetic issues are not blockers
 
-For top-priority items:
+## Self-Check
 
-- Suggested remediation steps
-- Safer refactoring strategies (test-first if needed)
-- Dependencies or prerequisites
-- Validation strategy (how we know it improved)
-
-Avoid “big bang” rewrites unless explicitly justified.
-
----
-
-### 6️⃣ Change Impact & ROI Notes
-
-For major fixes, describe:
-- What becomes easier to test
-- What risks are reduced
-- What developer or QA friction is removed
-
-This section is critical for stakeholder buy-in.
-
----
-
-## 🧠 AI Safety & Quality Rules
-
-### DO
-- Base findings on observable evidence
-- Explicitly list assumptions
-- Treat test debt as first-class technical debt
-- Prefer incremental, test-safe remediation
-- Acknowledge uncertainty
-
-### DON’T
-- Hallucinate intent or design decisions
-- Recommend refactors without test safety
-- Over-optimize cosmetic issues
-- Treat all debt as equally urgent
-
----
-
-## ✅ AI Self-Review Checklist
-
-Before finalizing:
-
-- [ ] Every debt item has evidence
-- [ ] Debt categories are used consistently
-- [ ] Test impact is explicitly analyzed
-- [ ] Risks are justified, not guessed
-- [ ] “Acceptable debt” is documented
-- [ ] Recommendations are realistic and incremental
-
----
-
-## 🎯 Outcome
-
-When applied correctly, this skill produces a **credible, actionable, and
-architecturally sound technical debt assessment** that:
-
-- improves system quality,
-- strengthens test effectiveness,
-- reduces long-term risk,
-- and supports informed decision-making.
+Before finalizing, verify: every debt item has evidence, categories are consistent, test impact is explicitly analyzed, risk ratings are justified, acceptable debt is documented, and recommendations are realistic and incremental.
