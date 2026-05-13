@@ -45,9 +45,9 @@ See `./resources/field-mapping-guide.md` for the full field-by-field reference.
 |---|---|---|
 | `title` | Human-friendly display name | Not used — drop it |
 | `name` | Kebab-case identifier | Same — keep as-is |
-| `model` | Copilot model ID (e.g. `Claude Sonnet 4.5 (copilot)`) | Omit to inherit, or use a clean Claude model ID |
+| `model` | Copilot model ID (e.g. `Claude Sonnet 4.5 (copilot)`) | To be converted according to the rules decribed in Phase 1 |
 | `description` | Usage summary | Agent-selection trigger — rewrite for routing clarity |
-| `tools` | Copilot tool names array | Not in frontmatter — translate to Claude equivalents in body |
+| `tools` | Copilot tool names array | Apply the rules described in Phase 1|
 | `argument-hint` | Optional user-facing hint | Not standard — drop |
 | `agents` | Orchestration allowlist | Not applicable — drop |
 | Body | Rich role + workflow + constraints | Focused system prompt |
@@ -66,8 +66,41 @@ Apply the field mappings from `./resources/field-mapping-guide.md`:
 
 - **name** — keep unchanged.
 - **description** — rewrite: Claude uses this to decide when to spawn the agent. Lead with what the agent does, follow with "Use when...". The Copilot description is a starting point, not the final value.
-- **model** — omit to inherit the caller's model unless the user requests a specific one. Use the model table in `./resources/field-mapping-guide.md` to translate Copilot model strings to clean Claude model IDs.
-- **title**, **tools**, **argument-hint**, **agents** — drop entirely.
+- **model** — Use the following table table in to translate Copilot model strings to clean Claude model IDs.
+| Copilot Model String | Claude Code Model ID |
+|---|---|
+| `Claude Sonnet 4.5 (copilot)` | `claude-sonnet-4-5` |
+| `Claude Sonnet 4.6 (copilot)` | `claude-sonnet-4-6` |
+| `Claude Opus 4 (copilot)` | `claude-opus-4` |
+| `Claude Haiku 3.5 (copilot)` | `claude-haiku-3-5` |
+| `Claude Haiku 4.5 (copilot)` | `claude-haiku-4-5` |
+| `GPT-4o (copilot)` | Not applicable — omit `model` or choose a Claude model |
+| `o3 (copilot)` | Not applicable — omit `model` or choose a Claude model |
+| `o4-mini (copilot)` | Not applicable — omit `model` or choose a Claude model |
+
+When in doubt, omit `model` and let the agent inherit the caller's model. This is the most portable option.
+- **tools** - Copilot tool names do not exist in Claude Code. Map them as follows:
+
+| Copilot Tool | Claude Code Equivalent |
+|---|---|
+| `read` | `Read`, `Glob`, `Grep` |
+| `edit` | `Edit`, `Write` |
+| `execute` | `Bash` |
+| `search` | `Grep`, `Glob`, `WebSearch` |
+| `web` | `WebFetch`, `WebSearch` |
+| `vscode` | No equivalent — remove IDE-specific references |
+| `agent` | `Agent` (sub-agent spawning via the Agent tool) |
+| `todo` | `TodoWrite` |
+| `playwright/*` | MCP Playwright tools (require an MCP server configured in settings) |
+| `github` | `Bash` with `gh` CLI, or GitHub MCP tools |
+| `think` | No tool needed — Claude reasons natively |
+
+
+- **title**, **argument-hint**, **agents** — drop entirely.
+
+- **memory** — always set to project
+
+- **maxTurns** — always set to 20
 
 ### Phase 2: Adapt the body
 
