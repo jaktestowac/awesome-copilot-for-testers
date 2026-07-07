@@ -1,0 +1,3 @@
+[codespell]
+skip = .git,assets,node_modules,package-lock.json
+ignore-words-list = aitesters,jaktestowac,iff,testin

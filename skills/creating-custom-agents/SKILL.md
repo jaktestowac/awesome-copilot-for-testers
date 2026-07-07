@@ -8,7 +8,7 @@ user-invocable: true
 # Creating Custom Agents
 
 Use this skill when a reusable role needs its own identity instead of hiding inside a prompt or a skill.
-It helps create custom agents that are focused, tool-aware, and easy to extend without turning into tiny chaotic governments.
+It helps create custom agents that are focused, tool-aware, and easy to extend without scope creep.
 
 ## When to Use
 

@@ -3,7 +3,7 @@ name: 'Architect Subagent'
 description: 'Architect: ADR-ready trade-offs, NFR impacts, threat models, and test implications'
 argument-hint: 'Architecture question or decision to make'
 tools: ['read', 'search', 'web']
-model: 'GPT-5.2-Codex (copilot)'
+model: 'GPT-5.2-Codex'
 user-invocable: false
 ---
 

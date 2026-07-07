@@ -1,8 +1,6 @@
 ---
 description: 'Playwright test generation instructions with best practices and patterns.'
-applyTo: '**'
-title: Playwright TypeScript Test Generation Instructions
-name: playwright-typescript-instructions
+applyTo: 'tests/**/*.ts'
 ---
 
 ## Test Writing Guidelines
@@ -11,7 +9,7 @@ name: playwright-typescript-instructions
 
 - **Locators**: Prioritize user-facing, role-based locators (`getByRole`, `getByLabel`, `getByText`, etc.) for resilience and accessibility.
 - **Test Steps**: Use `test.step()` to group interactions and improve test readability and reporting.
-- **Assertions**: Use auto-retrying web-first assertions. These assertions start with the `await` keyword (e.g., `await expect(locator).toHaveText()`). Avoid `expect(locator).toBeVisible()` unless specifically testing for visibility changes.
+- **Assertions**: Use auto-retrying web-first assertions. These assertions start with the `await` keyword (e.g., `await expect(locator).toHaveText()`). Prefer asserting on meaningful content or state (`toHaveText`, `toHaveCount`, `toHaveURL`) over bare visibility; use `toBeVisible()` when visibility itself is the expected outcome of the action.
 - **Timeouts**: Rely on Playwright's built-in auto-waiting mechanisms. Avoid hard-coded waits or increased default timeouts.
 - **Clarity**: Use descriptive test and step titles that clearly state the intent. Add comments only to explain complex logic or non-obvious interactions.
 - **Error Handling**: Use `try-catch` blocks only when necessary. Playwright's built-in error handling is usually sufficient.
@@ -25,7 +23,7 @@ name: playwright-typescript-instructions
 
 ### File Organization
 
-- **Location**: Store all test files in the `tests/` directory.
+- **Location**: Store test files under `tests/`, split by type: `tests/e2e/` for UI tests and `tests/api/` for API tests.
 - **Naming**: Use the convention `<feature-or-page>.spec.ts` (e.g., `login.spec.ts`, `search.spec.ts`).
 - **Scope**: Aim for one test file per major application feature or page.
 
@@ -42,11 +40,6 @@ name: playwright-typescript-instructions
 import { test, expect } from '@playwright/test';
 
 test.describe('Movie Search Feature', () => {
-  test.beforeAll(async () => {
-    // This block runs once before all tests in this describe block
-    // You can set up global state or perform one-time actions here
-  });
-
   test.beforeEach(async ({ page }) => {
     // Navigate to the application before each test
     await page.goto('/'); // Adjust the URL as needed but root should be taken from baseUrl in playwright.config.ts
@@ -63,7 +56,6 @@ test.describe('Movie Search Feature', () => {
 
     // Assert: Verify the search results
     const results = page.getByRole('list', { name: 'Search Results' });
-    await expect(results).toBeVisible();
     await expect(results).toHaveText(/Inception/);
   });
 });
@@ -111,8 +103,8 @@ Try not to create methods for single actions.
 import { Locator, Page } from '@playwright/test';
 
 class SearchPage {
-  searchInput: Locator;
-  searchButton: Locator;
+  private readonly searchInput: Locator;
+  private readonly searchButton: Locator;
 
   constructor(private page: Page) {
     this.searchInput = page.getByRole('textbox', { name: 'Search' });
@@ -125,6 +117,8 @@ class SearchPage {
   }
 }
 ```
+
+Keep locators `private readonly` and expose behavior through public methods (see the Page Objects instructions for the full conventions).
 
 ### DTO (Data Transfer Object) Pattern
 
@@ -184,7 +178,7 @@ Create reusable test data factories to generate consistent test data:
 
 ```typescript
 class UserFactory {
-  static createUser(overrides?: Partial<UserModel> = {}) {
+  static createUser(overrides: Partial<UserModel> = {}) {
     const randomId = Date.now();
 
     const user: UserModel = {
@@ -226,8 +220,6 @@ test('Complete user registration flow', async ({ page }) => {
   });
 });
 ```
-
-_Use Page Object Model (POM) to encapsulate page interactions and reduce duplication._
 
 ### 🎪 Fixture Pattern for Setup/Teardown
 
@@ -311,7 +303,3 @@ Before finalizing tests, ensure:
 - [ ] Tests are isolated and do not depend on external state
 - [ ] No hard-coded waits or timeouts are used
 - [ ] Patterns like AAA, POM, and Builder are applied where appropriate
-
-```
-
-```

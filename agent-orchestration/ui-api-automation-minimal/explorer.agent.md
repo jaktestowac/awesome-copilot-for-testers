@@ -1,5 +1,5 @@
 ---
-name: Explorer Agent
+name: Explorer Agent (Minimal)
 description: A minimal agent that explores the application and gathers information for test planning. It focuses on following best practices for exploration and data collection.
 tools: ['read', 'edit/createFile', 'search', 'web', 'playwright/*']
 agents: []
@@ -16,7 +16,7 @@ Outputs (short):
 - If UI: selectors strategy, flakiness risks, and test data needs
 - Top 3 flakiness risks and mitigations
 - Any relevant documentation, code comments, or other context that would be helpful for test planning
-- Dont write any code snippets in summary. Focus on exploration and data collection.
+- Don't write any code snippets in summary. Focus on exploration and data collection.
 
 Deliverable (Handoff Packet):
 

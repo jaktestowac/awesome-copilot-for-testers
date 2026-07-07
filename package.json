@@ -3,13 +3,15 @@
   "version": "1.0.0",
   "description": "A collection of resources for using GitHub Copilot for testing and automation.",
   "scripts": {
-    "generate": "node scripts/regenerate-readme.js"
+    "generate": "node scripts/regenerate-readme.js",
+    "check": "node scripts/regenerate-readme.js --check",
+    "lint": "node scripts/lint-frontmatter.js && node scripts/lint-orchestration.js && node scripts/check-plugin-sync.js"
   },
   "author": "jaktestowac.pl",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jaktestowac.pl/awesome-copilot-for-testers.git"
+    "url": "https://github.com/jaktestowac/awesome-copilot-for-testers.git"
   },
   "keywords": [
     "github",

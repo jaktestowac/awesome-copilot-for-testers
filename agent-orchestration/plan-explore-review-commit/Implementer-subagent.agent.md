@@ -2,7 +2,7 @@
 name: 'Implementer Subagent'
 description: 'Implementer: TDD-first phase delivery with minimal diffs and quality gates'
 tools: ['vscode', 'read', 'search', 'edit', 'execute', 'agent']
-model: GPT-5.2-Codex (copilot)
+model: GPT-5.2-Codex
 user-invocable: false
 ---
 

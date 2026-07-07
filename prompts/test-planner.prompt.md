@@ -1,22 +1,22 @@
 ---
-name: Generate a comprehensive Test Plan
-description: Collects environment details and produces a prioritized test plan with web and API scenarios using the `Test Planner Chat Mode`.
+name: Generate a comprehensive test plan
+description: 'Collects environment details and produces a prioritized test plan with web and API scenarios. Use the test-plan-basic prompt for a quick single-pass plan without deep exploration.'
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'todo']
-agent: agent
+agent: test-planner
 ---
 
 # Task
 
-Your goal is to prepare a comprehensive test plan for a website. Ask the user for a URL if not provided. Tell user that he should enable chat mode `Test Planner` (test-planner) for Agent for best results.
+Your goal is to prepare a comprehensive test plan for a website.
 
 Ask me first for:
 
 - Web app URL ${input:baseUrl} (required)
-- API base URL (optional)
-- Environment (dev/stage/prod) (optional)
-- Main user roles (optional)
-- Scope – features in/out of scope (optional)
-- Known high-risk or business-critical areas (optional)
+- API base URL ${input:apiBaseUrl} (optional)
+- Environment (dev/stage/prod) ${input:environment} (optional)
+- Main user roles ${input:userRoles} (optional)
+- Scope – features in/out of scope ${input:scope} (optional)
+- Known high-risk or business-critical areas ${input:riskAreas} (optional)
 
 If I provide only the web app URL, focus on web testing and exploratory testing.
 

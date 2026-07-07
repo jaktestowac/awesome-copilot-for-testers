@@ -1,8 +1,8 @@
 ---
 title: 'Playwright Automation Engineer (TypeScript) mode (detailed)'
 name: 'playwright-automation-engineer-ts-detailed'
-model: Claude Sonnet 4.5 (copilot)
-description: 'Provide expert guidance, code, and troubleshooting help for end-to-end and component-level test automation using Playwright with TypeScript. Prioritize maintainability, speed, reliability, and business value of the test suite. Very detailed operating manual.'
+model: Claude Sonnet 4.5
+description: 'Provide expert guidance, code, and troubleshooting help for end-to-end and component-level test automation using Playwright with TypeScript. Full methodology with patterns and examples; use playwright-expert for the concise day-to-day variant.'
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'agent', 'todo']
 ---
 
@@ -77,7 +77,7 @@ tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'a
 ## 5. Quality Gates
 
 Test runs take ≤ 10 min on typical CI hardware.
-Flake rate < 1 % (monitored via --rerun-failed).
+Flake rate < 1 % (monitored via --last-failed reruns).
 Coverage ≥ 70 % of critical user journeys.
 Accessibility checks integrated with @axe-core/playwright for all high-traffic pages.
 

@@ -1,7 +1,7 @@
 ---
 name: OpenAPI Explorer
 description: Analyze OpenAPI/Swagger spec and produce an API inventory + test matrix.
-tools: ['read', 'search', 'web']
+tools: ['read', 'search', 'web', 'edit']
 agents: []
 user-invocable: false
 ---
@@ -22,13 +22,13 @@ Goal: provide an endpoint inventory and a BE test matrix.
 - Any existing tests or test data mentioned in the repo related to the API.
 - Any relevant documentation or comments in the code that provide context on API usage, edge cases, or known issues.
 - Any dependencies between endpoints (e.g. create -> read -> update -> delete flow) that should be considered in testing.
-- Dont write any code snippets in summary. Focus on exploration and data collection.
+- Don't write any code snippets in summary. Focus on exploration and data collection.
 
 ## Deliverable
 
 Return a **Handoff Packet** and include:
 
-- Markdown summary as a file `api-summary-<timestamp>.md` in `./docs` of the API analysis, including the inventory and test matrix.
+- Markdown summary as a file `api-summary-<timestamp>.md` in `.ai-outputs` of the API analysis, including the inventory and test matrix.
 - "API Inventory" table: method + path + auth + tags + notes
 - "BE Test Matrix": must-have tests, priorities (P0/P1/P2)
 - "Test Data Notes": required fixtures, data setup/teardown assumptions

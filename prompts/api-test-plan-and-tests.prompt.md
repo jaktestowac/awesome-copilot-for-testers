@@ -1,9 +1,8 @@
 ---
-name: API Test Plan & Test Generator
+name: API test plan and test generator
 agent: agent
-model: GPT-5.3-Codex (copilot)
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'todo']
-description: 'Create a risk-based API test plan and generate example automated tests from API definitions (OpenAPI/Postman/custom docs).'
+description: 'Create a risk-based API test plan and generate example automated tests from API definitions (OpenAPI/Postman/custom docs). API-focused end-to-end flow: plan first, then tests.'
 ---
 
 # Role
@@ -47,7 +46,7 @@ Keep your questions minimal and focused; don’t block on anything that you can 
 
 1. **Parse API definition**:
    - If an OpenAPI/Swagger file or URL is provided:
-     - Use `fetch` for URLs or `search/codebase` + `edit` to open local files.
+     - Fetch URLs with the web tools, or search and read local files.
      - Identify:
        - Base URL(s)
        - Available paths & methods
@@ -59,7 +58,7 @@ Keep your questions minimal and focused; don’t block on anything that you can 
      - Extract endpoints, methods, parameters, and key flows from the text.
 
 2. **Inspect the codebase to detect stack**:
-   - Use `search/codebase` / `search` to detect existing API tests or frameworks, for example:
+   - Search the codebase to detect existing API tests or frameworks, for example:
      - Node: Playwright API, Supertest, Jest, Vitest, Mocha.
      - .NET: HttpClient + test framework.
      - Java: Rest Assured, JUnit/TestNG.
@@ -130,7 +129,7 @@ Pause and let the user optionally adjust the plan. Incorporate their feedback be
      - 1 contract/schema validation example, if feasible.
 
 3. **Generate tests**:
-   - Create or extend appropriate test files using `edit/editFiles` / `new`.
+   - Create or extend appropriate test files using the edit tools.
    - Follow existing project patterns for:
      - Test file naming
      - Setup/teardown (fixtures, beforeAll/afterAll)
@@ -141,7 +140,7 @@ Pause and let the user optionally adjust the plan. Incorporate their feedback be
      - Clear, meaningful assertions.
 
 4. **Explain how to run the tests**:
-   - Use `search/codebase` to detect relevant npm/yarn/pnpm scripts or test runners.
+   - Search the codebase to detect relevant npm/yarn/pnpm scripts or test runners.
    - If needed, add or update a test script (with user confirmation).
    - Summarize:
      - How to install dependencies (if new).
@@ -152,8 +151,8 @@ Pause and let the user optionally adjust the plan. Incorporate their feedback be
 # Phase 4 – Run and iterate
 
 1. **Run tests**:
-   - Use `runCommands` or `runTasks` to execute the relevant test command.
-   - Monitor for failures via `testFailure` and `problems`.
+   - Execute the relevant test command in the terminal.
+   - Monitor for failures via the test results and problems view.
 
 2. **Debug and fix**:
    - For each failure:

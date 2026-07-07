@@ -1,6 +1,6 @@
 ---
 name: Verify acceptance criteria
-agent: agent
+agent: test-planner
 description: 'Compare implementation evidence against acceptance criteria and show what is met, partial, missing, or still untestable.'
 tools: ['vscode', 'read', 'search', 'web', 'playwright/*', 'todo']
 ---
@@ -8,7 +8,6 @@ tools: ['vscode', 'read', 'search', 'web', 'playwright/*', 'todo']
 # Task
 
 If the `verifying-acceptance-criteria` skill is installed, load it before starting.
-Tell the user that the `test-planner` agent mode is a good fit for this workflow when UI or end-to-end behavior must be checked in detail.
 
 Your goal is to verify whether the implementation satisfies its stated contract.
 

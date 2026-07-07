@@ -1,6 +1,6 @@
 ---
 name: Generate test data
-agent: agent
+agent: test-planner
 description: 'Design realistic and edge-covering test data packs from requirements, constraints, or existing test plans for manual and automated testing.'
 tools: ['vscode', 'read', 'search', 'web', 'todo']
 ---
@@ -8,7 +8,6 @@ tools: ['vscode', 'read', 'search', 'web', 'todo']
 # Task
 
 If the `designing-test-data` skill is installed, load it before starting.
-Tell the user that the `test-planner` agent mode is useful when the data pack should be tied directly to broader manual test coverage.
 
 Your goal is to build a reusable test data catalog rather than a random list of sample values.
 

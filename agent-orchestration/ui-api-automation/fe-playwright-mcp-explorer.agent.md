@@ -1,7 +1,7 @@
 ---
 name: FE Explorer (Playwright MCP)
 description: Explore the frontend via Playwright MCP, map flows, suggest robust locator strategy and test targets.
-tools: ['read', 'agent', 'search', 'web', 'playwright/*']
+tools: ['read', 'agent', 'search', 'web', 'playwright/*', 'edit']
 agents: []
 target: vscode
 user-invocable: false
@@ -29,13 +29,13 @@ Do not invent UI details; verify via MCP interactions.
   - stability recommendations (waiting strategy, retries, network mocks if needed)
 - Any blockers or gaps in information that prevent you from fully mapping the UI or proposing test targets.
 - If you had to make assumptions due to gaps, document those clearly in the Handoff Packet for the next agent.
-- Dont write any code snippets in summary. Focus on exploration and data collection.
+- Don't write any code snippets in summary. Focus on exploration and data collection.
 
 ## Deliverable
 
 Return a **Handoff Packet** including:
 
-- Markdown summary as a file `ui-summary-<timestamp>.md` in `./docs` of the UI analysis, including the flow map and test matrix.
+- Markdown summary as a file `ui-summary-<timestamp>.md` in `.ai-outputs` of the UI analysis, including the flow map and test matrix.
 - "UI Flow Map" (bullets)
 - "Proposed FE Test Cases" (P0/P1/P2)
 - "Selector Risks & Fixes"

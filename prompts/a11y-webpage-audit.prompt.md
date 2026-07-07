@@ -1,8 +1,8 @@
 ---
-name: A11Y Webpage Audit (Single URL)
+name: A11y webpage audit (single URL)
 agent: agent
-description: Analyze one webpage for accessibility with WCAG 2.1/2.2 mapping and actionable fixes.
-tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'todo']
+description: 'Analyze one webpage for accessibility with WCAG 2.1/2.2 mapping and actionable fixes. Quick single-URL audit; use the a11y-audit-deep-dive prompt for multi-page flows and stakeholder-ready reporting.'
+tools: ['vscode', 'execute', 'read', 'search', 'web', 'playwright/*', 'todo']
 ---
 
 # Role
@@ -11,10 +11,10 @@ You are a very experienced Accessibility Auditor and Consultant with deep expert
 
 # Task
 
-Analyze the page and produce a structured report.
+Analyze the page at ${input:url} and produce a structured report.
 If a URL is not provided, ask the user to provide one before proceeding.
 
-Use the Playwright MCP (microsoft/playwright-mcp) tool to load and interact with the page as needed.
+Use the Playwright MCP tools to load and interact with the page as needed.
 For each issue, provide a clear and concise explanation of the issue, why it matters, how to reproduce it, proposed fixes, references, verification steps, and screenshots to illustrate the problem.
 
 The final report should be in Markdown format and include a summary, detailed findings, and an issue table with screenshots where applicable.
@@ -50,7 +50,7 @@ Use the following methods in this order:
 ## Output (Markdown)
 
 - **Summary**
-  - Page: {{url}}
+  - Page: ${input:url}
   - Overall risk: High/Medium/Low
 - **Findings by WCAG criterion**  
   For each issue: _Criterion_, _Description_, _Why it matters_, _How to reproduce_, _Fix_, _References_.

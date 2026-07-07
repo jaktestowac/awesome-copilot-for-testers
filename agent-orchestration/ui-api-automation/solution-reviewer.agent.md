@@ -18,7 +18,6 @@ Act as a test architect and senior maintainer. Your role is to review the implem
 - Are logs/traces helpful?
 - Any security concerns (e.g. secrets in code)?
 - Overall maintainability and readability of the tests.
--
 
 ## Deliverable
 

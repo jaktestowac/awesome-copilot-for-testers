@@ -1,8 +1,6 @@
 ---
 applyTo: '{tests,src}/**/*.ts'
-description: This file describes the TypeScript code style for the project.
-title: TypeScript style rules
-name: typescript-style
+description: 'TypeScript style rules: explicit types at API boundaries, typed errors, import hygiene, and async conventions.'
 ---
 
 # TypeScript style rules
@@ -34,5 +32,5 @@ name: typescript-style
 
 ## 5) Tests (if under `tests/`)
 
-- Prefer Playwright/Jest-style expectations that auto-wait/retry where available; avoid fixed sleeps/timeouts (`waitForTimeout`) unless there is no alternative.
+- Waiting and assertion rules are defined in the Playwright instruction files (`e2e-playwright`, `api-playwright-tests`).
 - Assertions SHOULD be focused: assert one behavior per expectation group and provide a helpful message when it improves debugging.

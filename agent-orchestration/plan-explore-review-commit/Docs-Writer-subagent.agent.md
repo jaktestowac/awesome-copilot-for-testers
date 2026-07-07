@@ -3,7 +3,7 @@ name: 'Docs Writer Subagent'
 description: 'Docs: README updates, usage examples, API docs, and release notes – copy-paste ready'
 argument-hint: 'What to document (feature, module, API)'
 tools: ['read', 'search', 'edit']
-model: 'GPT-5.2-Codex (copilot)'
+model: 'GPT-5.2-Codex'
 user-invocable: false
 ---
 

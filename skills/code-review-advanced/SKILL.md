@@ -1,6 +1,6 @@
 ---
 name: code-review-advanced
-description: "Performs evidence-driven code review for pull requests, legacy modules, and quality-critical changes. Use when reviewing code, test automation changes, architectural refactors, or hot paths that need analysis of correctness, maintainability, security, performance, test quality, and operability risks. Provides structured feedback with severity-ranked findings, actionable recommendations, and clear rationale."
+description: "Performs evidence-driven code review for pull requests, legacy modules, and quality-critical changes. Use when reviewing complex or multi-file changes, test automation suites, architectural refactors, or hot paths that need analysis of correctness, maintainability, security, performance, test quality, and operability risks. Provides structured feedback with severity-ranked findings, actionable recommendations, and clear rationale. For a fast sanity check of a small diff or single file, use the code-review skill instead."
 argument-hint: "Repository context, changed files, review goal, and known risk areas"
 user-invocable: true
 ---
@@ -178,4 +178,20 @@ If the user asks for an example of the expected result, use `./resources/example
 - `./resources/review-report-template.md` - reusable review output structure
 - `./resources/example-review.md` - example filled review with severity-ranked findings
 - `./resources/test-automation-review-lens.md` - extra review criteria for test suites and automation code
+
+## Related Skills
+
+- `code-review` - quick, lightweight review for small diffs and single files
+- `tech-debt-analysis` - when review findings should feed a broader debt assessment
+- `analyzing-regression-scope` - when the review should be paired with a retest scope analysis
+
+## Definition of Done
+
+This skill is complete when:
+
+- the review scope, goal, and change type are framed explicitly
+- every non-trivial finding has severity, evidence, risk, and a recommended direction
+- the highest-risk findings lead the report and strengths worth preserving are acknowledged
+- missing tests, docs, or operational safeguards are called out
+- a final recommendation (`approve`, `comment`, or `request changes`) is given
 

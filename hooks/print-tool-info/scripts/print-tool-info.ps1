@@ -1,13 +1,13 @@
 # Pre-tool use hook that prints tool information to console and chat
 
-# Read JSON input from stdin
-$input = [Console]::In.ReadToEnd() | ConvertFrom-Json
+# Read JSON input from stdin ($input is a reserved automatic variable in PowerShell)
+$hookInput = [Console]::In.ReadToEnd() | ConvertFrom-Json
 
 # Extract fields from the JSON input
-$timestamp = $input.timestamp
-$cwd = $input.cwd
-$toolName = $input.toolName
-$toolArgs = $input.toolArgs
+$timestamp = $hookInput.timestamp
+$cwd = $hookInput.cwd
+$toolName = $hookInput.toolName
+$toolArgs = $hookInput.toolArgs
 
 # Convert Unix timestamp (milliseconds) to readable format
 $readableTime = [System.DateTimeOffset]::FromUnixTimeMilliseconds($timestamp).DateTime.ToString("yyyy-MM-dd HH:mm:ss")

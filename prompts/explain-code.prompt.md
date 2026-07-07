@@ -1,8 +1,7 @@
 ---
 name: Analyze and explain code
 agent: agent
-description: 'Analysis of the code you provide, select, or open'
-model: GPT-5.3-Codex (copilot)
+description: 'Analyze and explain the selected code, the active file, or a provided snippet: purpose, structure, patterns, and improvement suggestions'
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'todo']
 ---
 
@@ -14,9 +13,13 @@ You are skilled at understanding complex codebases and explaining them clearly a
 
 # Task
 
-Analyze the code that I’ve provided, selected, or have open. 
+Analyze the code to explain. Priority order for the target:
 
-If I haven’t provided any code or selection, **pause and ask me to pick one target**: specific file, selection, PR, diff, folder, or paste a snippet. Then continue.
+1. The current selection: ${selection}
+2. The active file: ${file}
+3. Code pasted or referenced in the request.
+
+If none of these yields a target, **pause and ask me to pick one**: specific file, selection, PR, diff, folder, or paste a snippet. Then continue.
 
 # Methodology
 

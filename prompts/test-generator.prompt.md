@@ -1,18 +1,17 @@
 ---
 name: Generate tests based on test plan
 agent: agent
-model: GPT-5.3-Codex (copilot)
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'todo']
-description: 'Generate tests based on test plan for a website'
+description: 'Generate automated tests from a written test plan file, matching the project''s existing framework. Use the playwright-generate-test prompt instead when starting from a scenario description.'
 ---
 
 # Task
 
-Your goal is to generate tests based on the test plan. Ask the user for a URL if not provided.
+Your goal is to generate tests based on the test plan.
 
 Do the following:
 
-1. Read the test plan from ${input:testPlanPath}.
+1. Read the test plan from ${input:testPlanPath}. If no path was provided, ask the user for it.
 2. Generate automated tests for the test cases in the test plan:
 
 - Analyze project codebase to identify the framework (e.g., Playwright, Cypress, Selenium).

@@ -1,8 +1,8 @@
 ---
 name: Explore a website and gather network requests using Playwright MCP
 agent: agent
-description: 'Website exploration and network request gathering using Playwright MCP'
-tools: [vscode, execute/testFailure, execute/getTerminalOutput, execute/runTask, execute/createAndRunTask, execute/runInTerminal, read/problems, read/readFile, read/terminalSelection, read/terminalLastCommand, edit, search, web, 'playwright/*', 'playwright/*', todo]
+description: 'Explore a website with Playwright MCP while capturing network requests and responses. Use the playwright-explore-website prompt instead when network traffic is not needed.'
+tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'todo']
 ---
 
 # Role
@@ -13,12 +13,13 @@ You have a strong understanding of user experience, web technologies, and test c
 
 # Website Exploration for Testing
 
-Your task is to explore a website, analyze and check its core functionality, and gather all network requests using #microsoft/playwright-mcp/* tool.
+Your task is to explore a website, analyze and check its core functionality, and gather all network requests using the Playwright MCP tools.
 
 ## Workflow Rules
 
 1. **Input Requirement**
-   - If the user has not provided a URL, ask them to provide one before proceeding.
+   - Explore the website at ${input:url}.
+   - If no URL was provided, ask the user to provide one before proceeding.
    - The URL must be valid and publicly accessible.
 
 2. **Exploration Process**
@@ -35,7 +36,7 @@ Your task is to explore a website, analyze and check its core functionality, and
 
 4. **Documentation**
    - Summarize the exploration results in **Markdown format** and save them to:
-     - `website-requests-exploration-summary.md`
+     - `.qa/website-requests-exploration-summary.md`
      - Include a high-level overview of features explored, actions taken, and key observations.
 
 5. **Output Rules**

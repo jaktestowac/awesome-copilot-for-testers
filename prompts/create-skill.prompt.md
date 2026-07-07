@@ -1,6 +1,8 @@
 ---
+name: Create a new skill
 agent: agent
 description: "Create a new skill (SKILL.md) for VS Code Copilot. Analyzes existing skills for patterns, guides through design decisions, creates the skill file with supporting resources, and validates against best practices."
+tools: ['read', 'search', 'edit']
 ---
 
 Create a new skill for VS Code Copilot. This prompt guides the creation of reusable, domain-specific knowledge for test automation, end-to-end testing, and quality assurance workflows. The user's message following this prompt may contain specific skill requirements or a description of the desired skill.
@@ -13,7 +15,7 @@ If the user did not provide specific requirements, ask clarifying questions to d
    - Naming conventions and folder structure
    - Frontmatter fields and description format
    - Body structure (progressive disclosure: principles, workflows, templates, references)
-   - How skills reference supporting files (scripts/, references/, assets/)
+   - How skills reference supporting files (this repo's convention is a `resources/` folder; `scripts/` and `assets/` are allowed extras)
    - Testing domain specificity — how existing skills approach test strategies
 
 2. **Clarify requirements**: Determine the skill's design parameters with the user:
@@ -28,7 +30,7 @@ If the user did not provide specific requirements, ask clarifying questions to d
    - **Folder structure** and file organization (SKILL.md, supporting templates/references/examples)
    - **Progressive disclosure tiers**: discovery (~100 tokens), activation (< 500 lines), resources (as needed)
    - **Domain focus** — how this skill fits within the testing ecosystem and relates to other skills
-   - **Max body size** — keep SKILL.md under 500 lines; move detailed content to separate files in references/ or scripts/
+   - **Max body size** — keep SKILL.md under 500 lines; move detailed content to separate files in resources/
 
 4. **Create the skill files**: Build the skill directory and SKILL.md following established conventions:
    - Create folder: `skills/<skill-name>/`

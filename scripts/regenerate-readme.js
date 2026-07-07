@@ -91,6 +91,14 @@ const SECTIONS_CONFIG = {
     recursive: true,
     defaultDescription: () => '',
   },
+  plugins: {
+    title: 'Plugins',
+    directory: 'plugins',
+    fileExtension: '',
+    // No direct install badge for plugins; installed via `copilot plugin install`
+    regex: /(<!-- START_PLUGINS -->\s*\n+)([\s\S]*?)(\s*<!-- END_PLUGINS -->)/,
+    defaultDescription: (title) => `A Copilot plugin: ${title}`,
+  },
 };
 
 // Badge configuration
@@ -264,7 +272,15 @@ function extractTitle(filePath) {
       if (isSpecialFile) {
         let inFrontmatter = false;
         let frontmatterEnded = false;
-        const GENERIC_H1 = new Set(['Role', 'Task', 'Methodology', 'Output format', 'Critical']);
+        const GENERIC_H1 = new Set([
+          'Role',
+          'Task',
+          'Methodology',
+          'Output format',
+          'Critical',
+          'Agent mission',
+          'Mission',
+        ]);
 
         for (const line of lines) {
           if (line.trim() === '---') {
@@ -538,6 +554,11 @@ function generateSection(sectionConfig) {
     return generateHooksSection(sectionConfig);
   }
 
+  // If this is the plugins directory, use a dedicated generator
+  if (sectionConfig.directory === 'plugins') {
+    return generatePluginsSection(sectionConfig);
+  }
+
   // Get all files matching the extension (supports recursive scan for nested skills)
   const files = collectFiles(sectionDir, sectionConfig.fileExtension, !!sectionConfig.recursive);
 
@@ -558,6 +579,16 @@ function generateSection(sectionConfig) {
     let title;
     if (sectionConfig.directory === 'skills' || sectionConfig.directory === 'prompts') {
       title = extractName(filePath) || extractTitle(filePath);
+    } else if (sectionConfig.directory === 'agents' || sectionConfig.directory === 'chatmodes') {
+      // Prefer explicit frontmatter title, then a Title-Cased frontmatter name, then heading/filename
+      const fileContent = fs.readFileSync(filePath, 'utf8');
+      const fmTitle = extractFrontmatterField(fileContent, 'title');
+      if (fmTitle && fmTitle.trim()) {
+        title = fmTitle.trim();
+      } else {
+        const fmName = extractName(filePath);
+        title = fmName ? formatTitleFromFilename(fmName) : extractTitle(filePath);
+      }
     } else {
       title = extractTitle(filePath);
     }
@@ -931,18 +962,63 @@ function generateHooksSection(sectionConfig) {
   return table.trimEnd();
 }
 
-// Returns list of files with a given extension inside a subfolder under a set directory
-function listFilesInSet(setPath, subdir, ext) {
-  const p = path.join(setPath, subdir);
-  try {
-    if (!fs.existsSync(p)) return [];
-    return fs
-      .readdirSync(p)
-      .filter((f) => f.endsWith(ext))
-      .sort();
-  } catch (e) {
-    return [];
+// Generate a table for Copilot plugins (each plugin is a subdirectory with .github/plugin/plugin.json)
+function generatePluginsSection(sectionConfig) {
+  const pluginsDir = path.join(__dirname, '..', sectionConfig.directory);
+
+  if (!fs.existsSync(pluginsDir)) {
+    logConsole(`${sectionConfig.title} directory does not exist`);
+    return '';
   }
+
+  const pluginNames = fs
+    .readdirSync(pluginsDir)
+    .filter((name) => fs.statSync(path.join(pluginsDir, name)).isDirectory())
+    .sort();
+
+  logConsole(`> Found ${pluginNames.length} ${sectionConfig.directory} plugins`);
+
+  if (pluginNames.length === 0) {
+    return `| Title | Description | Install |\n| ----- | ----------- | ------- |\n| No ${sectionConfig.directory} available | | |`;
+  }
+
+  let content = '| Title | Description | Install |\n| ----- | ----------- | ------- |\n';
+
+  for (const pluginName of pluginNames) {
+    const pluginPath = path.join(pluginsDir, pluginName);
+    const manifestPath = path.join(pluginPath, '.github', 'plugin', 'plugin.json');
+    const readmePath = path.join(pluginPath, 'README.md');
+
+    let title = formatTitleFromFilename(pluginName);
+    let description = null;
+    let installName = pluginName;
+
+    if (fs.existsSync(manifestPath)) {
+      try {
+        const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+        if (manifest.name) installName = manifest.name;
+        if (manifest.description) description = manifest.description;
+      } catch (e) {
+        logConsole(`⚠️ Could not parse plugin.json for ${pluginName}`);
+      }
+    }
+
+    if (fs.existsSync(readmePath)) {
+      const readmeDesc = extractDescription(readmePath);
+      if (readmeDesc) description = readmeDesc;
+      const readmeTitle = extractTitle(readmePath);
+      if (readmeTitle) title = readmeTitle;
+    }
+
+    if (!description) description = sectionConfig.defaultDescription(title);
+    description = attachAdditionalDescription(pluginName, description);
+
+    const link = encodeURI(`${sectionConfig.directory}/${pluginName}/`);
+    const install = `\`copilot plugin install ${installName}\``;
+    content += `| [${escapeTableCell(title)}](${link}) | ${escapeTableCell(description)} | ${install} |\n`;
+  }
+
+  return content.trimEnd();
 }
 
 // Recursively walk set directory and return files that match the given filter function
@@ -967,48 +1043,6 @@ function listFilesRecursively(basePath, filterFn) {
   }
   // Convert to relative path from basePath
   return out.map((full) => path.relative(basePath, full).split(path.sep).join('/'));
-}
-
-// Generate install badges for all known resource types inside a set
-function generateSetBadges(setRelativePath, setFullPath) {
-  const groups = [];
-
-  // Find files recursively and group by type
-  const allPrompts = listFilesRecursively(setFullPath, (f) => f.endsWith('.prompt.md'));
-  const allAgents = listFilesRecursively(setFullPath, (f) => f.endsWith('.agent.md'));
-  const allModes = listFilesRecursively(setFullPath, (f) => f.endsWith('.chatmode.md'));
-  const allInstructions = listFilesRecursively(setFullPath, (f) => f.endsWith('.instructions.md'));
-
-  if (allPrompts.length) {
-    const badges = allPrompts
-      .map((rel) => makeBadges(encodeURI(`${setRelativePath}/${rel}`), 'prompt'))
-      .join(' ');
-    groups.push(`Prompts: ${badges}`);
-  }
-
-  if (allAgents.length) {
-    const badges = allAgents
-      .map((rel) => makeBadges(encodeURI(`${setRelativePath}/${rel}`), 'agent'))
-      .join(' ');
-    groups.push(`Agents: ${badges}`);
-  }
-
-  if (allModes.length) {
-    const badges = allModes
-      .map((rel) => makeBadges(encodeURI(`${setRelativePath}/${rel}`), 'mode'))
-      .join(' ');
-    groups.push(`Chat Modes: ${badges}`);
-  }
-
-  if (allInstructions.length) {
-    const badges = allInstructions
-      .map((rel) => makeBadges(encodeURI(`${setRelativePath}/${rel}`), 'instructions'))
-      .join(' ');
-    groups.push(`Instructions: ${badges}`);
-  }
-
-  if (!groups.length) return 'No content';
-  return groups.join('<br>');
 }
 
 // Section update with error handling
@@ -1062,7 +1096,13 @@ function updateReadmeSections(readmePath) {
 
 // Main execution with enhanced error handling
 function main() {
-  logConsole('Regenerating README sections for directories...');
+  const checkMode = process.argv.includes('--check');
+
+  logConsole(
+    checkMode
+      ? 'Checking README sections are up to date (--check mode, no files will be written)...'
+      : 'Regenerating README sections for directories...',
+  );
 
   const repoRoot = path.join(__dirname, '..');
   const readmeFiles = FILES_TO_PROCESS;
@@ -1075,6 +1115,7 @@ function main() {
   logConsole(`Processing README files: ${readmeFiles.join(', ')}`);
 
   let hasAnyChanges = false;
+  const staleFiles = [];
 
   for (const readmeFile of readmeFiles) {
     const readmePath = path.join(repoRoot, readmeFile);
@@ -1092,7 +1133,6 @@ function main() {
     try {
       // Read original content (keep as in-memory backup)
       originalContent = fs.readFileSync(readmePath, 'utf8');
-      logConsole(`📄 Original content for ${readmeFile} loaded into memory as backup`);
 
       // Generate new content
       newReadmeContent = updateReadmeSections(readmePath);
@@ -1101,10 +1141,27 @@ function main() {
       const hasChanges = originalContent !== newReadmeContent;
 
       if (hasChanges) {
-        // Write new content directly (original content is kept in memory)
-        fs.writeFileSync(readmePath, newReadmeContent);
-        logConsole(`✅ ${readmeFile} updated successfully!`);
-        logConsole(`💾 Original content preserved in memory for rollback if needed`);
+        if (checkMode) {
+          staleFiles.push(readmeFile);
+          // Print a compact summary of differing lines to aid debugging in CI
+          const oldLines = originalContent.split('\n');
+          const newLines = newReadmeContent.split('\n');
+          const maxLines = Math.max(oldLines.length, newLines.length);
+          let shown = 0;
+          for (let i = 0; i < maxLines && shown < 10; i++) {
+            if (oldLines[i] !== newLines[i]) {
+              console.error(`  ${readmeFile}:${i + 1}`);
+              console.error(`    - ${(oldLines[i] || '').slice(0, 120)}`);
+              console.error(`    + ${(newLines[i] || '').slice(0, 120)}`);
+              shown++;
+            }
+          }
+          console.error(`❌ ${readmeFile} is out of date.`);
+        } else {
+          // Write new content directly (original content is kept in memory)
+          fs.writeFileSync(readmePath, newReadmeContent);
+          logConsole(`✅ ${readmeFile} updated successfully!`);
+        }
         hasAnyChanges = true;
       } else {
         logConsole(`💡 ${readmeFile} is already up to date. No changes needed.`);
@@ -1113,8 +1170,8 @@ function main() {
       console.error(`❌ Error regenerating ${readmeFile}: ${error.message}`);
 
       // If we have original content and something went wrong after reading it,
-      // try to restore the original content from memory
-      if (originalContent && fs.existsSync(readmePath)) {
+      // try to restore the original content from memory (never in check mode)
+      if (!checkMode && originalContent && fs.existsSync(readmePath)) {
         try {
           const currentContent = fs.readFileSync(readmePath, 'utf8');
           if (currentContent !== originalContent) {
@@ -1130,6 +1187,17 @@ function main() {
 
       // Continue with next file instead of exiting
     }
+  }
+
+  if (checkMode) {
+    if (staleFiles.length > 0) {
+      console.error(
+        `\n❌ README check failed: ${staleFiles.join(', ')} out of date. Run \`npm run generate\` and commit the result.`,
+      );
+      process.exit(1);
+    }
+    logConsole('🎉 All README files are up to date.');
+    return;
   }
 
   if (hasAnyChanges) {

@@ -2,11 +2,11 @@
 name: "Planner Agent"
 description: "Planner: research-driven phased plan with tests and NFRs"
 argument-hint: "Plan a phased implementation for: <goal>"
-tools: ["read","search","agent","web"]
-model: GPT-5.2-Codex (copilot)
+tools: ["read","search","agent","web","edit"]
+model: GPT-5.2-Codex
 handoffs:
   - label: "Start execution with Orchestrator"
-    agent: "Orchestrator"
+    agent: "Orchestrator Agent"
     prompt: "Execute the plan you just wrote, phase by phase, using subagents and commit gates."
 ---
 

@@ -1,8 +1,6 @@
 ---
 applyTo: 'tests/api/**/*.spec.ts'
-description: This file describes the API test rules for Playwright + TypeScript tests.
-title: API test rules (Playwright + TypeScript)
-name: api-playwright-tests
+description: 'API test rules for Playwright + TypeScript: HTTP semantics, contract assertions, typed clients, data isolation, and flakiness prevention.'
 ---
 
 # API test rules (Playwright + TypeScript)

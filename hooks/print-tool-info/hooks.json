@@ -4,7 +4,8 @@
     "preToolUse": [
       {
         "type": "command",
-        "windows": "powershell -File scripts\\print-tool-info.ps1",
+        "command": "bash scripts/print-tool-info.sh",
+        "windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts\\print-tool-info.ps1",
         "cwd": ".github/hooks",
         "timeoutSec": 10,
         "comment": "Print tool usage information before executing"

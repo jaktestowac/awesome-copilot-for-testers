@@ -127,8 +127,8 @@ For small changes or bug fixes, produce:
 
 Before finishing, decide what should happen next:
 
-- send risky edge cases into the `qa-strategy` workflow for adversarial expansion
-- send stable, repeatable scenarios into `test-generator` or `playwright-generate-test`
+- send risky edge cases into the `/qa-strategy` prompt for adversarial expansion
+- send stable, repeatable scenarios into the `/test-generator` or `/playwright-generate-test` prompts
 - send requirements-heavy work into `requirements-test-coverage-mapper` when traceability matters more than step-by-step execution
 
 ## Output Standards

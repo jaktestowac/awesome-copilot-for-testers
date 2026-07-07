@@ -8,7 +8,7 @@ user-invocable: true
 # Creating Copilot Hooks
 
 Use this skill when the right answer is not more advice, but deterministic behavior at a specific lifecycle point.
-It helps design hooks that are safe, documented, and understandable instead of mysterious little shell goblins.
+It helps design hooks that are safe, documented, and understandable.
 
 ## When to Use
 

@@ -3,7 +3,7 @@ name: 'Explorer'
 description: 'Explorer: fast read-only codebase mapping and pattern discovery'
 argument-hint: 'Explore and map: <goal>'
 tools: ['read', 'search', 'execute']
-model: GPT-5.2-Codex (copilot)
+model: GPT-5.2-Codex
 user-invocable: false
 ---
 

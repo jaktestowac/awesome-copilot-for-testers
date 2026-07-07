@@ -1,0 +1,54 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  readme:
+    name: README up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check generated README sections
+        run: node scripts/regenerate-readme.js --check
+
+  frontmatter:
+    name: Frontmatter lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Lint frontmatter
+        run: node scripts/lint-frontmatter.js
+
+  orchestration:
+    name: Orchestration lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Lint orchestration packs
+        run: node scripts/lint-orchestration.js
+
+  plugin-sync:
+    name: Plugin skills in sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check plugin skill copies match skills/
+        run: node scripts/check-plugin-sync.js

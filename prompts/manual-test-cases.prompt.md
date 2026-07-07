@@ -1,6 +1,6 @@
 ---
 name: Generate manual test cases
-agent: agent
+agent: test-planner
 description: 'Turn a feature description, acceptance criteria, exploratory notes, or a test plan into detailed manual test cases with risk tags, expected results, and automation hints.'
 tools: ['vscode', 'read', 'search', 'web', 'playwright/*', 'todo']
 ---
@@ -8,7 +8,6 @@ tools: ['vscode', 'read', 'search', 'web', 'playwright/*', 'todo']
 # Task
 
 If the `designing-functional-tests` skill is installed, load it before starting.
-Tell the user that the `test-planner` agent mode gives the strongest results for this workflow.
 
 Your goal is to create manual test cases that a tester can execute immediately.
 

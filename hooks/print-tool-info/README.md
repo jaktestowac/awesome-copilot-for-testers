@@ -1,13 +1,31 @@
+---
+description: 'Example hook that prints tool name, arguments, timestamp, and working directory before each tool call.'
+---
+
 # Print Tool Info Hook
 
 This hook prints information about each tool execution before it runs. It displays the tool name, arguments, timestamp, and working directory in both the console and chat interface.
+
+## Installation
+
+Copy the contents of this folder into your workspace's `.github/hooks/` directory:
+
+```
+.github/hooks/
+├── hooks.json
+└── scripts/
+    ├── print-tool-info.sh
+    └── print-tool-info.ps1
+```
+
+The `hooks.json` sets `"cwd": ".github/hooks"`, so the scripts must live in `.github/hooks/scripts/`.
 
 ## Configuration
 
 The hook is configured in `hooks.json` with:
 
-- **Bash script**: `print-tool-info.sh` (Linux/macOS)
-- **PowerShell script**: `print-tool-info.ps1` (Windows)
+- **Default command**: `bash scripts/print-tool-info.sh` (Linux/macOS)
+- **Windows override**: `powershell -NoProfile -ExecutionPolicy Bypass -File scripts\print-tool-info.ps1`
 - **Timeout**: 10 seconds
 
 ## Usage
@@ -52,5 +70,5 @@ fi
 
 ## Requirements
 
-- **Bash**: `jq` must be installed (for JSON parsing)
+- **Bash**: `jq` must be installed (for JSON parsing); the script skips gracefully with a notice if it's missing
 - **PowerShell**: Built-in, no additional requirements

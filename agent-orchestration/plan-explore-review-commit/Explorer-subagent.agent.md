@@ -3,7 +3,7 @@ name: 'Explorer Subagent'
 description: 'Explorer: fast read-only map of files, usages, patterns, and entry points'
 argument-hint: 'Find files, usages, and patterns related to: <goal>'
 tools: ['execute', 'read', 'search']
-model: 'GPT-5.2-Codex (copilot)'
+model: 'GPT-5.2-Codex'
 user-invocable: false
 ---
 

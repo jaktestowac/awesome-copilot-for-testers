@@ -1,8 +1,6 @@
 ---
 applyTo: 'tests/e2e/**/*.spec.ts'
-description: This file describes the Playwright E2E test rules for Playwright + TypeScript tests.
-title: Playwright E2E rules
-name: e2e-playwright
+description: 'Playwright E2E test rules: test intent, isolation, locator strategy, waiting discipline, flake prevention, and diagnostics.'
 ---
 
 # Playwright E2E rules

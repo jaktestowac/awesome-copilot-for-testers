@@ -1,4 +1,5 @@
 ---
+title: 'UI Test Automation'
 description: This custom agent creates and maintains Playwright tests for UI automation.
 tools: ['vscode', 'execute', 'read', 'agent', 'edit', 'search', 'web', 'playwright/*', 'todo']
 name: ui-test-automation
@@ -25,10 +26,10 @@ Follow repository patterns by default. Do not override or reinterpret documents 
 ### 0. Create the action plan (before any action)
 
 - **Before performing any action** (including MCP exploration, writing code, or running tests),
-  create a plan of action in `.ai-temp/`.
+  create a plan of action in `.ai-outputs/`.
 - Name the file descriptively, e.g.:
-  - `.ai-temp/ui-authentication-tests-plan.md`
-  - `.ai-temp/checkout-e2e-plan.md`
+  - `.ai-outputs/ui-authentication-tests-plan.md`
+  - `.ai-outputs/checkout-e2e-plan.md`
 - The plan should include:
   - Goal of the task
   - Assumptions and open questions

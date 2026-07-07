@@ -1,6 +1,6 @@
 ---
 name: Create a bug report
-agent: agent
+agent: test-planner
 description: 'Turn rough tester notes, screenshots, logs, or observed behavior into a professional bug report with severity, reproducibility, and evidence guidance.'
 tools: ['vscode', 'read', 'search', 'web', 'todo']
 ---
@@ -8,7 +8,7 @@ tools: ['vscode', 'read', 'search', 'web', 'todo']
 # Task
 
 If the `reporting-bugs` skill is installed, load it before starting.
-Tell the user that the `test-planner` agent mode works well for product defects, while `accessibility-expert` is the better fit for issues that are purely accessibility-related.
+For issues that are purely accessibility-related, prefer the `a11y-webpage-audit` or `a11y-audit-deep-dive` prompts.
 
 Your goal is to turn partial notes into a clean, developer-ready bug report.
 

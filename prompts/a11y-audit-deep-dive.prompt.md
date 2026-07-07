@@ -1,14 +1,13 @@
 ---
 name: Accessibility audit — deep dive
-agent: agent
-description: 'Run a deeper accessibility audit for a page, sampled set of pages, or user flow with WCAG 2.2 mapping, manual verification guidance, and technical or stakeholder-ready output.'
+agent: accessibility-expert
+description: 'Run a deeper accessibility audit for a page, sampled set of pages, or user flow with WCAG 2.2 mapping, manual verification guidance, and technical or stakeholder-ready output. For a quick single-URL check, use the a11y-webpage-audit prompt instead.'
 tools: ['vscode', 'execute', 'read', 'search', 'web', 'playwright/*', 'todo']
 ---
 
 # Task
 
 If the `auditing-accessibility` skill is installed, load it before starting.
-Tell the user to enable the `accessibility-expert` agent mode for the strongest results.
 
 Your goal is to perform a structured accessibility audit that goes beyond a quick scanner pass.
 

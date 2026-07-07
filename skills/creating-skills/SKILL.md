@@ -7,7 +7,7 @@ user-invocable: true
 
 # Creating Copilot Skills
 
-Use this skill when reusable know-how deserves a home of its own instead of living in prompts, chat history, or somebody's heroic memory.
+Use this skill when reusable know-how deserves a home of its own instead of living in prompts or chat history.
 It helps create skills that are discoverable, concise, and bundled with the right supporting assets.
 
 ## When to Use

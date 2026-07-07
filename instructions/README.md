@@ -1,305 +1,39 @@
-# 🤖 Copilot Instructions – Best Practices Guide
+# 🤖 Custom Instructions for Testers
 
-This directory uses **GitHub Copilot custom instructions** to improve AI-generated code quality, consistency, and architectural alignment.
+This directory contains reusable instruction files for GitHub Copilot, focused on test automation with Playwright and TypeScript.
 
-This document explains how instructions are structured and how to maintain them properly.
+## What instruction files are
 
+Instruction files (`*.instructions.md`) define coding standards that Copilot applies automatically to every request touching files matched by their `applyTo` glob. Each file has frontmatter:
+
+```yaml
 ---
-
-# 📌 Philosophy
-
-Copilot instructions should be:
-
-- ✅ Clear and opinionated
-- ✅ Modular and scoped
-- ✅ Non-contradictory
-- ✅ Focused on quality and standards
-- ❌ Not overly long or redundant
-- ❌ Not duplicated across files
-
-We follow a **"Base + Modules" architecture**.
-
+description: 'One-line intent of the rules'
+applyTo: 'tests/**/*.spec.ts'
 ---
-
-# 👷‍♂️ Instruction Architecture
-
-We use two levels of instructions:
-
-## 1️⃣ Global Instructions (Repository-Wide)
-
-**File:**
-
-```
-.github/copilot-instructions.md
 ```
 
-Purpose:
+## How to use
 
-- Define global coding standards
-- Define architecture rules
-- Define quality expectations
-- Provide shared terminology
-- Explain project philosophy
+- Copy the files you want into your workspace's `.github/instructions/` folder, or
+- Add general guidance to `.github/copilot-instructions.md` (applies to everything), or
+- Use the `Chat: Attach Instructions` command from the command palette to apply one in the current chat.
 
-This file should remain:
+Docs: [VS Code custom instructions](https://code.visualstudio.com/docs/copilot/customization/custom-instructions)
 
-- Short (1–2 screens max)
-- High-level
-- Stable
+## Files in this directory
 
-It acts as the **AI contract for the whole repository**.
+| File | Scope (`applyTo`) | Purpose |
+| ---- | ----------------- | ------- |
+| [playwright-typescript.instructions.md](playwright-typescript.instructions.md) | `tests/**/*.ts` | Playwright test generation: locators, assertions, structure, and testing patterns (AAA, POM, DTO, Builder, Factory, fixtures) |
+| [e2e-playwright.instructions.md](e2e-playwright.instructions.md) | `tests/e2e/**/*.spec.ts` | E2E-specific rules: test intent, isolation, locator strategy, waiting discipline, flake prevention, diagnostics |
+| [api-playwright-tests.instructions.md](api-playwright-tests.instructions.md) | `tests/api/**/*.spec.ts` | API test rules: HTTP semantics, contract assertions, typed clients, data isolation |
+| [page-objects.instructions.md](page-objects.instructions.md) | `**/pages/**/*.ts` | Page Object Model conventions: structure, private locators, intent-level methods, navigation waits |
+| [typescript-style.instructions.md](typescript-style.instructions.md) | `{tests,src}/**/*.ts` | TypeScript style: explicit types at boundaries, typed errors, import hygiene, async conventions |
 
----
+## Writing good instruction files
 
-## 2️⃣ Scoped / Modular Instructions
-
-**Directory:**
-
-```
-.github/instructions/
-```
-
-Purpose:
-
-- Provide domain-specific guidance
-- Apply rules to specific paths or file types
-- Keep concerns separated
-
-Each file should focus on a single responsibility.
-
-Example structure:
-
-```
-.github/
-│
-├── copilot-instructions.md
-│
-└── instructions/
-    ├── testing.instructions.md
-    ├── api.instructions.md
-    ├── frontend.instructions.md
-    ├── ci.instructions.md
-    └── security.instructions.md
-```
-
----
-
-# 🧠 How Scoped Instructions Work
-
-Scoped instruction files may include YAML frontmatter to limit where they apply (using `applyTo` patterns).
-
-Example:
-
-```md
----
-applyTo: '**/*.spec.ts'
----
-
-# Testing Guidelines
-
-- Use Playwright test fixtures
-- Avoid hardcoded waits
-- Prefer role-based selectors
-```
-
-Another example:
-
-```md
----
-applyTo: 'apps/web/**'
----
-
-# Frontend Guidelines
-
-- Use functional components
-- Follow accessibility standards
-- Prefer semantic HTML
-```
-
-This ensures instructions:
-
-- Apply only where relevant (files matching the pattern in `applyTo`)
-- Do not conflict with other modules
-- Stay maintainable in large repos
-
----
-
-# 📐 Recommended Directory Structure (ASCII)
-
-```
-repo-root/
-│
-├── .github/
-│   │
-│   ├── copilot-instructions.md      # Global AI contract
-│   │
-│   └── instructions/                # Scoped instruction modules
-│       ├── testing.instructions.md
-│       ├── api.instructions.md
-│       ├── frontend.instructions.md
-│       ├── ci.instructions.md
-│       └── security.instructions.md
-│
-├── apps/
-│   ├── web/
-│   └── api/
-│
-├── packages/
-│   ├── shared/
-│   └── utils/
-│
-└── README.md
-```
-
----
-
-# 🛠 Best Practices
-
-## ✅ 1. Keep the Global File Clean
-
-Do not put:
-
-- Detailed test strategy
-- API examples
-- Framework-specific implementation details
-
-Keep it conceptual and architectural.
-
----
-
-## ✅ 2. One Responsibility per Module
-
-Each `.instructions.md` file should:
-
-- Cover one domain
-- Avoid referencing unrelated concerns
-- Avoid duplicating content from other files
-
-Good:
-
-```
-testing.instructions.md → testing only
-api.instructions.md → API only
-```
-
-Bad:
-
-```
-frontend.instructions.md → frontend + API + CI + security mixed
-```
-
----
-
-## ✅ 3. Avoid Contradictions
-
-Do not define conflicting rules across files.
-
-Example of what to avoid:
-
-- `frontend.instructions.md`: "Always use Axios"
-- `api.instructions.md`: "Never use Axios"
-
----
-
-## ✅ 4. Include Execution Commands
-
-If using Copilot coding agents, include:
-
-- How to run tests
-- How to build
-- How to lint
-- How to start the project
-
-Example:
-
-```md
-## Commands
-
-- Install: npm install
-- Test: npm run test
-- Lint: npm run lint
-- Build: npm run build
-```
-
-Agents can use this information directly.
-
----
-
-## ✅ 5. Optimize for Signal, Not Volume
-
-Long instruction files reduce effectiveness.
-
-Instead of:
-
-❌ 800 lines of explanation
-
-Prefer:
-
-✅ Clear bullet points
-✅ Explicit rules
-✅ Examples
-✅ Constraints
-
----
-
-## ❗ What NOT to Do
-
-- Do not create dozens of tiny instruction files.
-- Do not duplicate README content.
-- Do not include irrelevant business descriptions.
-- Do not rely on cross-file "imports" (there is no guaranteed include system).
-
----
-
-# 🧩 Example Strategy for Growing Projects
-
-Small project:
-
-```
-copilot-instructions.md only
-```
-
-Medium project:
-
-```
-copilot-instructions.md
-+ testing.instructions.md
-+ api.instructions.md
-```
-
-Large monorepo:
-
-```
-copilot-instructions.md
-+ domain-specific instructions
-+ path-scoped applyTo rules
-+ CI and security modules
-```
-
----
-
-# 🎯 Goal
-
-The purpose of these instructions is to ensure:
-
-- Consistent code generation
-- Stable architecture
-- Reduced hallucinations
-- High-quality automated testing
-- Better AI-assisted development
-
-Copilot should behave like a **senior engineer aligned with this repository**, not a generic code generator.
-
----
-
-# 🚀 Final Recommendation
-
-If unsure:
-
-Start simple.
-
-1. Create a strong global `copilot-instructions.md`.
-2. Add scoped modules only when real complexity appears.
-3. Refactor instructions as the project grows.
-
-Clarity beats complexity.
+- Keep rules **specific and testable** — "Use `getByRole` before CSS selectors", not "write good locators".
+- Scope `applyTo` as narrowly as the content allows; only truly universal rules belong in broad globs.
+- Don't duplicate rules across files — each rule should have one home, and other files can cross-reference it.
+- Keep files short; every matching request pays the token cost of the whole file.

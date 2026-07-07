@@ -2,8 +2,8 @@
 name: 'Planner'
 description: 'Planner: research-driven phased plan with test strategy and risks'
 argument-hint: 'Plan a phased implementation for: <goal>'
-tools: ['read', 'search', 'web', 'agent']
-model: GPT-5.2-Codex (copilot)
+tools: ['read', 'search', 'web', 'agent', 'edit']
+model: GPT-5.2-Codex
 user-invocable: false
 handoffs:
   - label: 'Execute this plan with Orchestrator'

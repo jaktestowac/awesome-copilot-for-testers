@@ -1,7 +1,7 @@
 ---
 name: Test Planner
 description: Combine OpenAPI + FE exploration into a prioritized test plan with architecture and tasks.
-tools: ['read', 'search', 'web']
+tools: ['read', 'search', 'web', 'edit']
 agents: []
 user-invocable: false
 ---

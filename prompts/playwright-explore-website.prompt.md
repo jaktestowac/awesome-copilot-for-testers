@@ -1,7 +1,7 @@
 ---
 name: Explore a website and propose test cases
 agent: agent
-description: 'Website exploration using Playwright MCP'
+description: 'Explore a website with Playwright MCP and propose test cases. Use the playwright-explore-website-requests prompt instead when network traffic should also be captured.'
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'todo']
 ---
 
@@ -19,7 +19,8 @@ Your task is to explore a website, analyze its core functionality, and derive po
 
 1. **Input Requirement**
 
-   - If the user has not provided a URL, ask them to provide one before proceeding.
+   - Explore the website at ${input:url}.
+   - If no URL was provided, ask the user to provide one before proceeding.
    - The URL must be valid and publicly accessible.
 
 2. **Exploration Process**
@@ -38,10 +39,10 @@ Your task is to explore a website, analyze its core functionality, and derive po
 4. **Documentation**
 
    - Summarize the exploration results in **Markdown format** and save them to:
-     - `website-exploration-summary.md`
+     - `.qa/website-exploration-summary.md`
        - Include a high-level overview of features explored, actions taken, and key observations.
    - Based on your findings, **propose and generate test cases** for each identified feature.
-     - Save the proposed test cases in Markdown format to `proposed-test-cases.md`.
+     - Save the proposed test cases in Markdown format to `.qa/proposed-test-cases.md`.
 
 5. **Output Rules**
    - All outputs must be structured, concise, and actionable.

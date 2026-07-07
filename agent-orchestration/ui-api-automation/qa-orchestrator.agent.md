@@ -1,7 +1,7 @@
 ---
 name: QA Orchestrator
 description: Orchestrate subagents to design, implement, review and verify FE/BE tests (OpenAPI + Playwright MCP).
-tools: ['read', 'agent', 'search', 'web']
+tools: ['read', 'agent', 'search', 'web', 'edit']
 agents:
   - OpenAPI Explorer
   - FE Explorer (Playwright MCP)

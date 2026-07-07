@@ -1,11 +1,13 @@
 ---
 name: code-review
-description: Assists users with code review, providing feedback on code quality, best practices, and potential improvements. Use always when user asks for code review or when there are code changes to review, providing feedback on code quality, structure, readability, maintainability, and adherence to coding standards. This skill provides information on best practices for code review, including how to identify issues, suggest improvements, and communicate feedback effectively.
+description: 'Performs a quick, lightweight review of a small diff or single file, giving concise feedback on correctness, readability, tests, and obvious risks. Use when the user asks for a fast sanity-check review of a small change. For test-automation suites, architectural refactors, security-sensitive paths, or multi-file reviews, use the code-review-advanced skill instead.'
+argument-hint: 'The diff, file, or snippet to review, plus the goal of the change'
+user-invocable: true
 ---
 
-## Overview
+# Quick Code Review
 
-The `code-review` skill helps reviewers apply consistent, high-quality assessments across code changes when reviewing code. It focuses on key principles of code quality:
+This skill applies a consistent, lightweight assessment to a small code change. It focuses on key principles of code quality:
 
 - Safety (avoid incorrect assumptions; call out uncertain areas)
 - Clarity (structuring comments in positive and actionable form)
@@ -13,10 +15,11 @@ The `code-review` skill helps reviewers apply consistent, high-quality assessmen
 
 ## When to Use
 
-1. User asks for code review.
-2. Pull request diff is ready and you must provide code review comments.
-3. You are auditing a code change for architecture, compliance, or release readiness.
-4. You need a checklist for manual or automated review before approving.
+1. The user asks for a quick review of a small diff, single file, or snippet.
+2. A change needs a fast sanity check before a fuller review.
+3. You need a compact checklist for a routine, low-risk change.
+
+For large or multi-file pull requests, legacy audits, test-automation suites, or high-risk paths (auth, payments, data flows), use `code-review-advanced` instead.
 
 ## Skill Behavior
 
@@ -29,11 +32,11 @@ The `code-review` skill helps reviewers apply consistent, high-quality assessmen
 - Flag any missing tests, docs, or standards violations.
 - Respect context: mention the module/file/function names (not generic: "the code").
 
-## Best-practice Review Checklist
+## Quick Review Checklist
 
 1. **Correctness**
    - Does the code do what the ticket/PR describes?
-   - Are edge cases handled (null, errors, concurrency, format) ?
+   - Are edge cases handled (null, errors, concurrency, format)?
    - Any regression risk from changed behavior?
 
 2. **Maintainability**
@@ -64,26 +67,23 @@ The `code-review` skill helps reviewers apply consistent, high-quality assessmen
    - Public APIs should be documented.
    - Migration notes, config docs, and README changes included if needed.
 
-## Prompt Pattern
-
-Use this template for your code review request:
-
-```
-You are a senior code reviewer.
-Project context: <technology stack and repository>
-Changed files: <list or path prefix>
-Key goals: <bug fix, feature, refactor, perf>
-Specific concerns: <optional>
-Please provide:
-- High-level summary
-- Risk assessment
-- Specific line comments / suggestions
-- Example improvement snippets
-```
-
 ## Output Style
 
 - Keep each comment concise (1-2 sentences plus the issue).
 - Use bullet points for multiple issues.
 - Use neutral, teammate-first language (`Consider`, `Could`, `Would` instead of `You`).
 - Include a final recommendation state: `approve`, `request changes`, or `comment`.
+
+## Related Skills
+
+- `code-review-advanced` - evidence-driven, severity-ranked review for complex, risky, or multi-file changes
+- `tech-debt-analysis` - when recurring review findings suggest a broader debt assessment
+
+## Definition of Done
+
+This skill is complete when:
+
+- the change is summarized with intent and alignment stated
+- findings are categorized (strengths, concerns, suggestions) with concrete file/function references
+- missing tests or docs are flagged
+- a final recommendation (`approve`, `request changes`, or `comment`) is given

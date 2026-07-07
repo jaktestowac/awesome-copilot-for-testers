@@ -1,8 +1,6 @@
 ---
-applyTo: 'src/pages/**/*.ts'
-description: This file describes the Page Object / App Action rules for Playwright + TypeScript tests.
-title: Page Objects / App Actions rules (Playwright + TS)
-name: page-objects
+applyTo: '**/pages/**/*.ts'
+description: 'Page Object Model conventions for Playwright + TypeScript: structure, locators, actions, waits, and composition rules.'
 ---
 
 # Page Objects / App Actions rules (Playwright + TS)
@@ -41,8 +39,9 @@ Create stable, readable, and reusable automation primitives:
 - NEVER use `page.waitForTimeout()` as synchronization.
 - Use Playwright’s auto-wait + explicit `expect(...)` waits for readiness/visibility.
 - Any method that triggers navigation must wait for completion:
-  - prefer `await Promise.all([ page.waitForURL(...), locator.click() ])`
+  - prefer sequential `await locator.click(); await page.waitForURL(...);` — `waitForURL` accounts for navigations that already started, so no `Promise.all` race is needed
   - or assert the new page’s stable element.
+  - (the legacy `Promise.all([...])` idiom is only needed for `waitForEvent('popup')`-style races.)
 - Prefer assertions that validate user-visible outcomes (URL, heading, toast, table row).
 
 ## Assertions: where they live
@@ -52,7 +51,7 @@ Create stable, readable, and reusable automation primitives:
 
 ## Naming conventions
 
-- Locators end with `Locator` suffix (e.g. `submitButtonLocator`).
+- Locators are `private readonly`, named in camelCase after the element they target (e.g. `submitButton`); no mandatory suffix.
 - Intent methods are verbs: `open()`, `loginAs()`, `save()`, `deleteProject()`.
 - Keep methods small and composable; avoid `doEverything()`.
 
@@ -68,7 +67,7 @@ Create stable, readable, and reusable automation primitives:
 
 Example style:
 
-- `private readonly signInButtonLocator = this.page.getByRole('button', { name: 'Sign in' });`
+- `private readonly signInButton = this.page.getByRole('button', { name: 'Sign in' });`
 - `async open(): Promise<this> { await this.page.goto('/login'); await this.assertLoaded(); return this; }`
 - `async loginAs(user): Promise<DashboardPage> { ...; await expect(dashboardHeading).toBeVisible(); return new DashboardPage(this.page); }`
 

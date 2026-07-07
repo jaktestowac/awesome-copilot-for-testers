@@ -1,6 +1,6 @@
 ---
 name: Analyze regression scope
-agent: agent
+agent: qa-strategist
 description: 'Turn a diff, PR summary, changed files, or hotfix description into a prioritized regression scope with a minimal confidence suite and retest guidance.'
 tools: ['vscode', 'read', 'search', 'todo']
 ---
@@ -8,7 +8,6 @@ tools: ['vscode', 'read', 'search', 'todo']
 # Task
 
 If the `analyzing-regression-scope` skill is installed, load it before starting.
-Tell the user that the `qa-strategist` agent mode is useful when the change also needs adversarial or security-driven expansion.
 
 Your goal is to determine what must be retested after a change and what can safely stay out of the first-pass regression pack.
 

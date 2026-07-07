@@ -1,7 +1,7 @@
 ---
 title: Edge Case Scenario Generator (BDD)
 agent: ai-architect
-model: Claude Sonnet 4.5 (copilot)
+model: Claude Sonnet 4.5
 tools: ['read', 'search']
 description: 'Generates a complete, risk-based set of BDD test scenarios, focusing on edge cases, state validation, and boundary conditions.'
 ---

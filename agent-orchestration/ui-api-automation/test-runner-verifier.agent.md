@@ -1,7 +1,7 @@
 ---
 name: Test Runner & Verifier
 description: Run test suites, diagnose failures, and verify the final solution end-to-end.
-tools: ['read', 'search']
+tools: ['read', 'search', 'execute']
 agents: []
 user-invocable: false
 ---

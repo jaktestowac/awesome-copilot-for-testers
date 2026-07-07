@@ -1,8 +1,7 @@
 ---
-name: Performance & Reliability Test Planner
+name: Performance and reliability test planner
 agent: agent
-model: GPT-5.3-Codex (copilot)
-tools: [vscode, execute/testFailure, execute/getTerminalOutput, execute/runTask, execute/createAndRunTask, execute/runInTerminal, read/problems, read/readFile, read/terminalSelection, read/terminalLastCommand, edit, search, web, todo]
+tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'todo']
 description: 'Design a performance and reliability test strategy and propose concrete load/soak tests for critical user flows.'
 ---
 

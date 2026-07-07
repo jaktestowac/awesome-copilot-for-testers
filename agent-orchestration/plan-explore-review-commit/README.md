@@ -39,7 +39,7 @@ This pack defines a multi-agent workflow for **VS Code GitHub Copilot Chat custo
 ## Installation options
 
 ### Option A - User-level agents (quickest, per machine)
-Copy `agents/*.agent.md` into your VS Code prompts directory:
+Copy the `*.agent.md` files from this folder into your VS Code prompts directory:
 - **Windows:** `%APPDATA%\Code\User\prompts\` (or `Code - Insiders`)
 - **macOS:** `~/Library/Application Support/Code/User/prompts/` (or `Code - Insiders`)
 - **Linux:** `~/.config/Code/User/prompts/` (or `Code - Insiders`)
@@ -49,14 +49,9 @@ Reload VS Code.
 ### Option B - Repo-level agents (share with team)
 Place files under: `.github/agents/`
 
-## Recommended VS Code settings
+## VS Code settings
 
-```json
-{
-  "chat.agent.enabled": true,
-  "chat.customAgentInSubagent.enabled": true
-}
-```
+Agent mode is generally available in current VS Code. If your version still gates custom agents or subagents behind settings, check the current [VS Code Copilot documentation](https://code.visualstudio.com/docs/copilot/customization/custom-agents) for the relevant flags.
 
 ## How to use (typical workflow)
 
@@ -95,7 +90,7 @@ Place files under: `.github/agents/`
 - Avoid manual testing unless explicitly requested.
 - Stop at commit gates and wait for user approval.
 
-## Design principles (from template-temp)
+## Design principles
 - Context conservation: delegate heavy reading, summarize findings.
 - Parallelism: run independent subagent tasks together.
 - Structured outputs: each agent returns consistent, strict formats.

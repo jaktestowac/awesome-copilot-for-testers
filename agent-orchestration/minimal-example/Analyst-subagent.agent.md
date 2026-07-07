@@ -2,8 +2,8 @@
 name: 'Analyst'
 description: 'Analyst: pattern analysis, risk assessment, and insight generation'
 argument-hint: 'Analyze and document: <goal>'
-tools: ['read', 'search', 'web']
-model: GPT-5.2-Codex (copilot)
+tools: ['read', 'search', 'web', 'edit']
+model: GPT-5.2-Codex
 user-invocable: false
 handoffs:
   - label: 'Return to Orchestrator'

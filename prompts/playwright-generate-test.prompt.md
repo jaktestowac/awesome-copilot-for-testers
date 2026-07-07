@@ -1,7 +1,7 @@
 ---
 name: Generate tests based on a scenario using Playwright MCP
 agent: agent
-description: 'Generate a Playwright test based on a scenario using Playwright MCP'
+description: 'Generate a Playwright test from a scenario description by first executing it live via Playwright MCP. Use the test-generator prompt instead when generating from a written test plan file.'
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'playwright/*', 'todo']
 ---
 
@@ -16,11 +16,12 @@ Your task is to generate a **Playwright TypeScript test** using `@playwright/tes
 ## Workflow Rules
 
 1. **Scenario Requirement**
-   - If the user has not provided a scenario, ask them to supply one before proceeding.
+   - The scenario to automate: ${input:scenario}
+   - If no scenario was provided, ask the user to supply one before proceeding.
    - The scenario must clearly describe the behavior or feature to be tested.
 
 2. **Step-by-Step Execution**
-   - Use the Playwright MCP tools to complete each prescribed step in order.
+   - Break the scenario down into concrete user steps, then use the Playwright MCP tools to execute each step in order against the live application.
    - DO NOT generate or output test code before all steps are successfully completed.
    - Each step should be executed, validated, and confirmed before moving to the next.
 

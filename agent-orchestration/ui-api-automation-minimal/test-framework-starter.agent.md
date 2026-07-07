@@ -1,5 +1,5 @@
 ---
-name: Test Framework Starter Agent
+name: Test Framework Starter Agent (Minimal)
 description: A minimal agent that sets up a test framework.
 tools: ['vscode', 'execute', 'read', 'agent', 'edit', 'search', 'web']
 agents: []
@@ -13,7 +13,7 @@ Rules:
 - Focus on setting up a basic test framework with minimal configuration.
 - Don't implement any actual tests.
 - Keep the setup minimal and easy to extend with additional tests and configurations later.
-- If the project already has a test framework - dont do anything, just return the existing setup in the Handoff Packet.
+- If the project already has a test framework - don't do anything, just return the existing setup in the Handoff Packet.
 
 Deliverable (Handoff Packet):
 

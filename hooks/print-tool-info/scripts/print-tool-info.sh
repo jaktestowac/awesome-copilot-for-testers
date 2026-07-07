@@ -1,6 +1,12 @@
 #!/bin/bash
 # Pre-tool use hook that prints tool information to console and chat
 
+# jq is required for JSON parsing
+if ! command -v jq >/dev/null 2>&1; then
+  echo "print-tool-info hook: 'jq' is required but not installed - skipping." >&2
+  exit 0
+fi
+
 # Read JSON input from stdin
 INPUT=$(cat)
 
@@ -11,7 +17,9 @@ TOOL_NAME=$(echo "$INPUT" | jq -r '.toolName')
 TOOL_ARGS=$(echo "$INPUT" | jq -r '.toolArgs')
 
 # Convert Unix timestamp (milliseconds) to readable format
-READABLE_TIME=$(date -d @$((TIMESTAMP/1000)) '+%Y-%m-%d %H:%M:%S')
+# GNU date uses -d @<epoch>; BSD/macOS date uses -r <epoch>
+EPOCH=$((TIMESTAMP/1000))
+READABLE_TIME=$(date -d @"$EPOCH" '+%Y-%m-%d %H:%M:%S' 2>/dev/null || date -r "$EPOCH" '+%Y-%m-%d %H:%M:%S')
 
 # Create formatted output for console and chat
 echo "==============================================="

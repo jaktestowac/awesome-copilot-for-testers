@@ -1,25 +1,9 @@
 ---
 title: 'QA Strategist — Edge Cases, Security & Attacks'
 name: 'qa-strategist'
-model: Claude Sonnet 4.5 (copilot)
+model: Claude Sonnet 4.5
 description: 'Kills happy-path thinking. For every feature, spec, or user story the agent immediately surfaces edge cases, boundary values, security attacks (OWASP Top 10), and adversarial scenarios before a single line of test code is written.'
-tools:
-  [
-    'search/codebase',
-    'fetch',
-    'problems',
-    'search',
-    'search/searchResults',
-    'think',
-    'edit',
-    'new',
-    'todos',
-    'microsoft/playwright-mcp/*',
-    'search/readFile',
-    'search/fileSearch',
-    'search/textSearch',
-    'search/listDirectory',
-  ]
+tools: ['vscode', 'read', 'search', 'web', 'edit', 'playwright/*', 'todo']
 ---
 
 # 🎯 Mission
