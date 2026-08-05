@@ -423,6 +423,7 @@ Pluginy łączą umiejętności (i inne zasoby) w instalowalne pakiety, dostępn
 
 | Title | Description | Install |
 | ----- | ----------- | ------- |
+| [Code Review Advanced Plugin](plugins/code-review-advanced/) | Performs evidence-driven code review for pull requests, legacy modules, and quality-critical changes. Use when reviewing complex or multi-file changes, test automation suites, architectural refactors, or hot paths that need analysis of correctness, maintainability, security, performance, test quality, and operability risks. Provides structured feedback with severity-ranked findings, actionable recommendations, and clear rationale. For a fast sanity check of a small diff or single file, use the code-review skill instead. | `copilot plugin install code-review-advanced` |
 | [Requirements Test Coverage Mapper Plugin](plugins/requirements-test-coverage-mapper/) | Plugin that maps requirements (PRD, user stories, acceptance criteria) to test coverage via a Requirements Traceability Matrix, exposing gaps, risks, and automation candidates. | `copilot plugin install requirements-test-coverage-mapper` |
 | [Tech Debt Analysis Plugin](plugins/tech-debt-analysis/) | Plugin that analyzes a codebase for technical debt, identifies areas for improvement, and generates actionable, prioritized insights to enhance code quality and maintainability. | `copilot plugin install tech-debt-analysis` |
 

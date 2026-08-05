@@ -5,6 +5,7 @@
   "scripts": {
     "generate": "node scripts/regenerate-readme.js",
     "check": "node scripts/regenerate-readme.js --check",
+    "plugin:materialize": "node scripts/materialize-plugins.js",
     "lint": "node scripts/lint-frontmatter.js && node scripts/lint-orchestration.js && node scripts/check-plugin-sync.js"
   },
   "author": "jaktestowac.pl",

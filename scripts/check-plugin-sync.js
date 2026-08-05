@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 
-// Ensures plugin skill copies are byte-identical to their source of truth in skills/.
-// For each plugins/<plugin>/skills/<skill>/, if skills/<skill>/ exists at the repo root,
-// the file lists and file contents must match exactly.
+// Verifies that `npm run plugin:materialize` has been run — i.e. that the generated
+// plugin skill copies are byte-identical to their source of truth in skills/.
+//
+// Two checks:
+//   1. Every skill declared in plugins/<plugin>/.github/plugin/plugin.json has a copy.
+//   2. For each plugins/<plugin>/skills/<skill>/, if skills/<skill>/ exists at the repo
+//      root, the file lists and file contents match exactly.
 
 const fs = require('fs');
 const path = require('path');
@@ -37,6 +41,27 @@ if (!fs.existsSync(pluginsDir)) {
 let checked = 0;
 
 for (const pluginName of fs.readdirSync(pluginsDir)) {
+  // Check 1: every skill the manifest declares must have been materialized.
+  const manifestPath = path.join(pluginsDir, pluginName, '.github/plugin/plugin.json');
+  if (fs.existsSync(manifestPath)) {
+    let manifest = null;
+    try {
+      manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+    } catch (err) {
+      errors.push(`${rel(manifestPath)}: invalid JSON — ${err.message}`);
+    }
+    for (const relPath of (manifest && Array.isArray(manifest.skills) ? manifest.skills : [])) {
+      if (typeof relPath !== 'string') continue;
+      const skillName = relPath.replace(/^\.\/skills\//, '').replace(/\/$/, '');
+      const copyPath = path.join(pluginsDir, pluginName, 'skills', skillName);
+      if (!fs.existsSync(path.join(copyPath, 'SKILL.md'))) {
+        errors.push(
+          `${rel(manifestPath)}: declares '${relPath}' but ${rel(copyPath)}/SKILL.md is missing — run 'npm run plugin:materialize'`,
+        );
+      }
+    }
+  }
+
   const pluginSkillsDir = path.join(pluginsDir, pluginName, 'skills');
   if (!fs.existsSync(pluginSkillsDir) || !fs.statSync(pluginSkillsDir).isDirectory()) continue;
 
@@ -65,7 +90,7 @@ for (const pluginName of fs.readdirSync(pluginsDir)) {
       const b = fs.readFileSync(path.join(pluginSkill, f));
       if (!a.equals(b)) {
         errors.push(
-          `plugin copy of skill '${skillName}' is out of sync at '${f}' — copy skills/${skillName} into plugins/${pluginName}/skills/${skillName}`,
+          `plugin copy of skill '${skillName}' is out of sync at '${f}' — run 'npm run plugin:materialize'`,
         );
       }
     }

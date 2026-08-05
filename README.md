@@ -418,12 +418,22 @@ Plugins bundle skills (and other resources) into installable packages served fro
 > copilot plugin install <plugin-name>
 > ```
 >
-> The plugin skill copies are synced from the [skills/](skills/) directory, which is the source of truth.
+> The plugin skill copies under `plugins/<plugin>/skills/` are **generated** from the [skills/](skills/) directory, which is the source of truth. A plugin must ship its content self-contained (skill paths resolve relative to the plugin root, so a plugin cannot point up at `skills/`), which is why the copies exist.
+>
+> Never edit them by hand. After changing anything under `skills/`, regenerate and verify:
+>
+> ```
+> npm run plugin:materialize
+> npm run lint
+> ```
+>
+> Each plugin declares what it ships in its `.github/plugin/plugin.json` (`"skills": ["./skills/<name>/"]`); the generator copies those from the repo root and prunes anything no longer declared.
 
 <!-- START_PLUGINS -->
 
 | Title | Description | Install |
 | ----- | ----------- | ------- |
+| [Code Review Advanced Plugin](plugins/code-review-advanced/) | Performs evidence-driven code review for pull requests, legacy modules, and quality-critical changes. Use when reviewing complex or multi-file changes, test automation suites, architectural refactors, or hot paths that need analysis of correctness, maintainability, security, performance, test quality, and operability risks. Provides structured feedback with severity-ranked findings, actionable recommendations, and clear rationale. For a fast sanity check of a small diff or single file, use the code-review skill instead. | `copilot plugin install code-review-advanced` |
 | [Requirements Test Coverage Mapper Plugin](plugins/requirements-test-coverage-mapper/) | Plugin that maps requirements (PRD, user stories, acceptance criteria) to test coverage via a Requirements Traceability Matrix, exposing gaps, risks, and automation candidates. | `copilot plugin install requirements-test-coverage-mapper` |
 | [Tech Debt Analysis Plugin](plugins/tech-debt-analysis/) | Plugin that analyzes a codebase for technical debt, identifies areas for improvement, and generates actionable, prioritized insights to enhance code quality and maintainability. | `copilot plugin install tech-debt-analysis` |
 
