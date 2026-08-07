@@ -204,6 +204,7 @@ Two checks matter most:
 
 ## Related Skills
 
+- `writing-unit-tests-quick` - the compact version, for routine everyday tests that do not need the full workflow
 - `test-driven-development` - when the tests should drive the implementation instead of following it
 - `designing-test-data` - when the inputs and boundary values need deliberate design first
 - `designing-functional-tests` - when the behavior belongs in functional or end-to-end coverage instead

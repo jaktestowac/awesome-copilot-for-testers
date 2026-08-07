@@ -226,6 +226,7 @@ Before declaring the work finished:
 
 ## Related Skills
 
+- `test-driven-development-quick` - the compact version, for routine single-behavior cycles that do not need the full workflow
 - `writing-unit-tests` - the quality standard each test produced by the loop must meet, and the characterization-test procedure for legacy code
 - `designing-test-data` - when the inputs and boundary values need deliberate design before the cycles start
 - `designing-functional-tests` - when the behavior belongs in functional or end-to-end coverage instead
