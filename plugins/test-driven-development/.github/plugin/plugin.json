@@ -1,0 +1,26 @@
+{
+  "name": "test-driven-development",
+  "description": "Drives implementation test-first through red-green-refactor cycles: one failing test, the minimal code to pass it, then cleanup under green. Bundles the full workflow — loop shape, green-step strategies, bug reproduction, legacy entry, a worked example, and a cycle log — together with a compact quick version for routine single-behavior cycles. Framework-agnostic: no runner, assertion library, or mocking tool is assumed.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "tdd",
+    "test-driven development",
+    "test-first",
+    "red green refactor",
+    "unit tests",
+    "refactoring",
+    "regression test",
+    "bug reproduction",
+    "software design",
+    "testing"
+  ],
+  "skills": [
+    "./skills/test-driven-development/",
+    "./skills/test-driven-development-quick/"
+  ]
+}

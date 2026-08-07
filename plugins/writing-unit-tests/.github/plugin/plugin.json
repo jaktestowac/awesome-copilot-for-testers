@@ -1,0 +1,26 @@
+{
+  "name": "writing-unit-tests",
+  "description": "Writes and reviews focused, deterministic unit tests that verify behavior through public interfaces instead of implementation details. Bundles the full workflow — test-level choice, case design, determinism control, test doubles, legacy characterization, and a review checklist — together with a compact quick version for routine everyday testing. Framework-agnostic: no runner, assertion library, or mocking tool is assumed.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "unit tests",
+    "unit testing",
+    "test design",
+    "edge cases",
+    "boundary value analysis",
+    "test doubles",
+    "mocking",
+    "flaky tests",
+    "test review",
+    "testing"
+  ],
+  "skills": [
+    "./skills/writing-unit-tests/",
+    "./skills/writing-unit-tests-quick/"
+  ]
+}

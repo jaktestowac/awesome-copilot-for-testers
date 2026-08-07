@@ -26,6 +26,18 @@
       "source": "plugins/code-review-advanced",
       "description": "Performs evidence-driven code review for pull requests, legacy modules, and quality-critical changes. Use when reviewing complex or multi-file changes, test automation suites, architectural refactors, or hot paths that need analysis of correctness, maintainability, security, performance, test quality, and operability risks. Provides structured feedback with severity-ranked findings, actionable recommendations, and clear rationale. For a fast sanity check of a small diff or single file, use the code-review skill instead.",
       "version": "1.0.0"
+    },
+    {
+      "name": "writing-unit-tests",
+      "source": "plugins/writing-unit-tests",
+      "description": "Writes and reviews focused, deterministic unit tests that verify behavior through public interfaces instead of implementation details. Bundles the full workflow — test-level choice, case design, determinism control, test doubles, legacy characterization, and a review checklist — together with a compact quick version for routine everyday testing. Framework-agnostic: no runner, assertion library, or mocking tool is assumed.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "test-driven-development",
+      "source": "plugins/test-driven-development",
+      "description": "Drives implementation test-first through red-green-refactor cycles: one failing test, the minimal code to pass it, then cleanup under green. Bundles the full workflow — loop shape, green-step strategies, bug reproduction, legacy entry, a worked example, and a cycle log — together with a compact quick version for routine single-behavior cycles. Framework-agnostic: no runner, assertion library, or mocking tool is assumed.",
+      "version": "1.0.0"
     }
   ]
 }
