@@ -1,5 +1,5 @@
 ---
-description: 'Plugin that analyzes a codebase for technical debt, identifies areas for improvement, and generates actionable, prioritized insights to enhance code quality and maintainability.'
+description: 'Analyzes technical debt in codebases, test suites, architecture, dependencies, and delivery workflows using observable signals. Use when auditing repository health, explaining slow delivery or flaky tests, prioritizing refactoring, or building an evidence-based remediation roadmap with risk, effort, and ROI. Use when user asks for technical debt analysis, repository audit, or refactor planning.'
 ---
 
 # Tech Debt Analysis Plugin

@@ -1,0 +1,17 @@
+{
+  "name": "creating-hooks",
+  "description": "Creates GitHub Copilot hooks for VS Code using `hooks.json`, supporting scripts, and companion docs. Use when automating deterministic checks, pre/post tool policies, or reusable hook packs that need safe defaults, observability, and clear installation guidance.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "creating",
+    "hooks"
+  ],
+  "skills": [
+    "./skills/creating-hooks/"
+  ]
+}

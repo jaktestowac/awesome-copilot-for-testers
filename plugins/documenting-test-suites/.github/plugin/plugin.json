@@ -1,0 +1,18 @@
+{
+  "name": "documenting-test-suites",
+  "description": "Writes the documentation a test suite needs to be usable by someone who did not build it: run instructions, environment setup, tag glossary, ownership, fixture and data notes, and architecture decision records. Use when onboarding someone into a suite, when \"how do I run these\" keeps being asked, when a test architecture decision needs recording, or when a suite is inherited with no documentation.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "documenting",
+    "test",
+    "suites"
+  ],
+  "skills": [
+    "./skills/documenting-test-suites/"
+  ]
+}

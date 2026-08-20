@@ -1,0 +1,18 @@
+{
+  "name": "testing-api-contracts",
+  "description": "Validates API responses against OpenAPI or JSON Schema, detects breaking changes between spec versions, and builds consumer-driven contract checks. Use when an API has a published spec, when a backend change might break a client, when API tests assert only status codes, or when mocked fixtures need a guard against drifting from the real service.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "testing",
+    "api",
+    "contracts"
+  ],
+  "skills": [
+    "./skills/testing-api-contracts/"
+  ]
+}

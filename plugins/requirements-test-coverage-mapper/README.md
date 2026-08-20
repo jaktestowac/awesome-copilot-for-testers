@@ -1,5 +1,5 @@
 ---
-description: 'Plugin that maps requirements (PRD, user stories, acceptance criteria) to test coverage via a Requirements Traceability Matrix, exposing gaps, risks, and automation candidates.'
+description: 'Maps requirements (PRD, user stories, acceptance criteria) to planned test coverage via a Requirements Traceability Matrix, exposing coverage gaps, risks, test levels, prioritization, and automation candidates. Use when designing coverage from a specification, checking coverage completeness for a PRD or user story, finding missing acceptance criteria, or building a risk-based regression strategy. When the tests already exist and the matrix has to be extracted from them, verified, and kept accurate, use the tracing-requirements-to-code skill instead.'
 ---
 
 # Requirements Test Coverage Mapper Plugin

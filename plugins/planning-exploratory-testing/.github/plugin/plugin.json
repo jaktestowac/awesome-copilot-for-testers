@@ -1,0 +1,18 @@
+{
+  "name": "planning-exploratory-testing",
+  "description": "Runs session-based exploratory testing: writes charters, timeboxes sessions, applies coverage heuristics and tours, captures notes as evidence, debriefs, and converts findings into bug reports and automation candidates. Use when a feature needs testing before requirements settle, when scripted cases keep passing while users hit problems, when a release needs a risk sweep with limited time, or when the request mentions charters or exploratory sessions.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "planning",
+    "exploratory",
+    "testing"
+  ],
+  "skills": [
+    "./skills/planning-exploratory-testing/"
+  ]
+}

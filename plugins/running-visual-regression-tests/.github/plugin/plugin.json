@@ -1,0 +1,19 @@
+{
+  "name": "running-visual-regression-tests",
+  "description": "Sets up and maintains visual regression testing: what to snapshot, baseline strategy, masking dynamic regions, threshold tuning, containerized baselines, and the review-and-update workflow. Use when styling regressions escape to production, when snapshots fail on every machine or every run, when baselines are being updated without being looked at, or when deciding whether visual testing is the right tool at all.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "running",
+    "visual",
+    "regression",
+    "tests"
+  ],
+  "skills": [
+    "./skills/running-visual-regression-tests/"
+  ]
+}

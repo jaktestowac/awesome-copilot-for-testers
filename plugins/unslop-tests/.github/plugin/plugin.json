@@ -1,6 +1,6 @@
 {
   "name": "unslop-tests",
-  "description": "Audits existing test code for the tells that make a suite look like coverage while proving nothing: tautological assertions, mock-only tests, hardcoded waits, coverage theater, swallowed errors, and retries used as fixes. Findings are ranked into three tiers, and every top-tier finding has to be proven by breaking the behavior and showing the test stayed green. Bundles the named-tell list, before/after pairs, per-runner mutation-check commands for Vitest, Jest, Playwright, and Mocha, and a report template. Framework-agnostic body, with framework-specific spellings in resources.",
+  "description": "Cuts AI tells from test code: tests that pass without proving anything, tautological assertions, mock-only tests, hardcoded waits, coverage theater, vague names, swallowed errors, retries used as fixes. Use whenever test code is written, changed, or reviewed, including tests produced as a side effect of a feature task, and when the request mentions \"review these tests\", \"are these tests any good\", \"this test always passes\", \"this suite is flaky\", or \"clean up these tests\". Must always apply to test code.",
   "version": "1.0.0",
   "author": {
     "name": "jaktestowac.pl"

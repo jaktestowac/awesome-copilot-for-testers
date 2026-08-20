@@ -1,0 +1,18 @@
+{
+  "name": "designing-functional-tests",
+  "description": "Designs risk-based functional test plans, manual test cases, regression slices, and automation handoff packs from requirements, URLs, or exploratory notes. Use when preparing manual QA coverage before automation, turning feature descriptions into scenario catalogs, or converting exploratory findings into structured test assets.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "designing",
+    "functional",
+    "tests"
+  ],
+  "skills": [
+    "./skills/designing-functional-tests/"
+  ]
+}

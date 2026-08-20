@@ -1,6 +1,6 @@
 {
   "name": "writing-unit-tests",
-  "description": "Writes and reviews focused, deterministic unit tests that verify behavior through public interfaces instead of implementation details. Bundles the full workflow — test-level choice, case design, determinism control, test doubles, legacy characterization, and a review checklist — together with a compact quick version for routine everyday testing. Framework-agnostic: no runner, assertion library, or mocking tool is assumed.",
+  "description": "Writes and reviews focused, deterministic unit tests that verify behavior through public interfaces instead of implementation details. Use whenever tests are added to code that already exists, and when the request mentions unit tests, test coverage, edge cases, mocks or test doubles, \"add tests for this function\", \"cover this module\", \"these tests are flaky\", or \"this test breaks every refactor\". Also use when reviewing an existing suite for brittleness, weak assertions, or missing boundary cases.",
   "version": "1.0.0",
   "author": {
     "name": "jaktestowac.pl"

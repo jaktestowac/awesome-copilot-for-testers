@@ -1,0 +1,17 @@
+{
+  "name": "prd-generator",
+  "description": "Produces production-ready Product Requirements Documents (PRDs) for software systems and AI-powered features, with clear problem framing, measurable outcomes, scoped functionality, testable requirements, and explicit risks. Use when the user wants to write a PRD, define requirements, plan a feature, or turn a vague product idea into an implementation-ready specification.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "prd",
+    "generator"
+  ],
+  "skills": [
+    "./skills/prd-generator/"
+  ]
+}

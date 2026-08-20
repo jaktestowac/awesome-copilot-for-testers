@@ -1,0 +1,19 @@
+{
+  "name": "handling-sensitive-test-data",
+  "description": "Keeps test data legally and operationally safe: classifies personal data, replaces production copies with synthetic or anonymized fixtures, manages secrets in local runs and CI, strips personal data from traces and HAR files, and sets retention rules. Use when tests run against a production data copy, when fixtures contain real names or emails, when a data protection review is coming, or when test artifacts might carry personal data into CI logs.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "handling",
+    "sensitive",
+    "test",
+    "data"
+  ],
+  "skills": [
+    "./skills/handling-sensitive-test-data/"
+  ]
+}

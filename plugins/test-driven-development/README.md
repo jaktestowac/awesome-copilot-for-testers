@@ -1,5 +1,5 @@
 ---
-description: 'Drives implementation test-first through red-green-refactor cycles: one failing test, the minimal code to pass it, then cleanup under green. Bundles the full workflow — loop shape, green-step strategies, bug reproduction, legacy entry, a worked example, and a cycle log — together with a compact quick version for routine single-behavior cycles. Framework-agnostic: no runner, assertion library, or mocking tool is assumed.'
+description: 'Drives implementation test-first through red-green-refactor cycles: one failing test, the minimal code to pass it, then cleanup under green. Use before writing production code for a new behavior, and whenever the request mentions TDD, test-driven, test-first, red-green-refactor, "write the test first", "start with a failing test", or reproducing a bug with a test before fixing it. Also use when implementation keeps landing before anyone knows how it will be verified.'
 ---
 
 # Test Driven Development Plugin

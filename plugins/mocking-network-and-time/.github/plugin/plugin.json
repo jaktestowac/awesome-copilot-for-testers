@@ -1,0 +1,19 @@
+{
+  "name": "mocking-network-and-time",
+  "description": "Decides what to fake and stubs it correctly: network interception with Playwright route or HAR replay, MSW handlers, fake clocks, and fixed timezones. Use when a test depends on a third party, when a date-sensitive test breaks overnight, when a suite is slow because it calls real services, or when a mocked test stays green while production is broken.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "mocking",
+    "network",
+    "and",
+    "time"
+  ],
+  "skills": [
+    "./skills/mocking-network-and-time/"
+  ]
+}

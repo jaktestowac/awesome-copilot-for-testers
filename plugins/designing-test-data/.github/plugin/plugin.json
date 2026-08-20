@@ -1,0 +1,18 @@
+{
+  "name": "designing-test-data",
+  "description": "Designs realistic, boundary-heavy, and role-aware test data packs for manual and automated testing. Use when a feature needs deliberate inputs and fixtures before execution, when edge-case values keep being improvised, or when automation needs stable example data with setup notes.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "designing",
+    "test",
+    "data"
+  ],
+  "skills": [
+    "./skills/designing-test-data/"
+  ]
+}

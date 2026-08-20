@@ -3,7 +3,10 @@
 // Validates agent orchestration packs:
 // - every handoffs[].agent and agents[] entry must match a `name:` defined in the same pack (hard error)
 // - heuristic tool checks (warnings): agents told to run tests/commands should have an
-//   'execute' tool; agents told to write files/documents should have an 'edit' tool
+//   'execute' tool; agents told to write files/documents should have an 'edit' tool.
+//   Scanned per line, skipping negations ("you CANNOT run commands"), descriptions
+//   ("how to run tests"), and template blocks whose contents the agent emits rather
+//   than follows — see instructionLines().
 
 const fs = require('fs');
 const path = require('path');
@@ -77,6 +80,41 @@ function parseAgent(filePath) {
   return { name, handoffTargets, agentRefs, tools, body };
 }
 
+const RUNS_COMMANDS = /\brun (the )?(relevant )?(tests?|test suites?|test commands?|commands?)\b/;
+const WRITES_FILES = /\b(write|create|save)\b[^.\n]{0,60}\b(file|document|report|plan|summary|\.md)\b/;
+
+// A line that forbids something is not an instruction to do it: "you CANNOT run
+// commands" must not read as "run commands".
+const NEGATED = /\b(cannot|can ?not|can't|do not|don't|never|no need to)\b/;
+
+// "How to run tests" is a section the agent documents, not a command it runs.
+const DESCRIPTIVE = /\bhow to (run|execute)\b/;
+
+// Blocks the agent *emits* rather than *follows*. Packs mark them with tag names
+// like <output_format>, <plan_style_guide>, <documentation_template>: content
+// inside is a template for a downstream agent or a report, so the imperatives in
+// there describe someone else's work.
+const TEMPLATE_BLOCK = /^<(\/?)(\w*(?:_style_guide|_template|_format|_contract))>\s*$/;
+
+// Body lines that actually instruct this agent, lowercased for matching.
+function instructionLines(body) {
+  const out = [];
+  let openTemplates = 0;
+  for (const raw of body.split(/\r?\n/)) {
+    const tag = raw.trim().match(TEMPLATE_BLOCK);
+    if (tag) {
+      if (tag[1]) openTemplates = Math.max(0, openTemplates - 1);
+      else openTemplates += 1;
+      continue;
+    }
+    if (openTemplates > 0) continue;
+    const line = raw.toLowerCase();
+    if (NEGATED.test(line) || DESCRIPTIVE.test(line)) continue;
+    out.push(line);
+  }
+  return out;
+}
+
 // Packs: each direct subdirectory of agent-orchestration, plus sets/*/custom-agents
 const packDirs = [];
 const orchRoot = path.join(repoRoot, 'agent-orchestration');
@@ -126,14 +164,14 @@ for (const packDir of packDirs) {
     }
 
     // Heuristic tool checks (warnings only)
-    const bodyLower = p.body.toLowerCase();
     const hasExecute = /execute/.test(p.tools);
     const hasEdit = /'edit|"edit|\bedit\b/.test(p.tools);
+    const lines = instructionLines(p.body);
 
-    if (/\brun (the )?(relevant )?(tests?|test suites?|test commands?|commands?)\b/.test(bodyLower) && !hasExecute) {
+    if (lines.some((l) => RUNS_COMMANDS.test(l)) && !hasExecute) {
       warnings.push(`${rel(p.file)}: body says to run tests/commands but tools lack 'execute'`);
     }
-    if (/\b(write|create|save)\b[^.\n]{0,60}\b(file|document|report|plan|summary|\.md)\b/.test(bodyLower) && !hasEdit) {
+    if (lines.some((l) => WRITES_FILES.test(l)) && !hasEdit) {
       warnings.push(`${rel(p.file)}: body says to write/create files but tools lack 'edit'`);
     }
   }

@@ -1,0 +1,18 @@
+{
+  "name": "analyzing-quality-metrics",
+  "description": "Defines, computes, and interprets test and quality metrics: pass rate, flake rate, suite duration, defect escape rate, time to detect, and coverage with its caveats. Use when building a QA dashboard, reporting suite health to stakeholders, comparing releases over time, or when a coverage percentage or a bug count is being treated as a measure of quality.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "analyzing",
+    "quality",
+    "metrics"
+  ],
+  "skills": [
+    "./skills/analyzing-quality-metrics/"
+  ]
+}

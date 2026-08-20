@@ -1,0 +1,18 @@
+{
+  "name": "analyzing-regression-scope",
+  "description": "Analyzes diffs, changed files, hotfixes, and release candidates to identify where regression risk spreads and what must be retested first. Use when scoping retest after a change, reviewing QA impact for a pull request, or building a minimal confidence suite for release validation.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "analyzing",
+    "regression",
+    "scope"
+  ],
+  "skills": [
+    "./skills/analyzing-regression-scope/"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "static-code-analysis-typescript",
+  "description": "Creates, reviews, and modernizes static code analysis setups for Node.js and TypeScript repositories, covering ESLint flat config, typescript-eslint, tsconfig, Prettier, import sorting, Husky, lint-staged, package.json quality scripts, and CI quality gates. Use when setting up or auditing linting, formatting, type-checking, commit hooks, or GitHub Actions quality checks in a TypeScript project.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "static",
+    "code",
+    "analysis",
+    "typescript"
+  ],
+  "skills": [
+    "./skills/static-code-analysis-typescript/"
+  ]
+}

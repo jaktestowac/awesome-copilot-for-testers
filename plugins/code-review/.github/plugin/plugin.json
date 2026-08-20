@@ -1,0 +1,17 @@
+{
+  "name": "code-review",
+  "description": "Performs a quick, lightweight review of a small diff or single file, giving concise feedback on correctness, readability, tests, and obvious risks. Use when the user asks for a fast sanity-check review of a small change. For test-automation suites, architectural refactors, security-sensitive paths, or multi-file reviews, use the code-review-advanced skill instead.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "code",
+    "review"
+  ],
+  "skills": [
+    "./skills/code-review/"
+  ]
+}

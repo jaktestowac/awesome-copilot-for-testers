@@ -1,0 +1,17 @@
+{
+  "name": "creating-instructions",
+  "description": "Creates GitHub Copilot instruction files for VS Code, including repository guidance and scoped `.instructions.md` rules. Use when encoding project conventions, choosing `applyTo` patterns, or shipping install-ready instruction examples with rationale and guardrails.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "creating",
+    "instructions"
+  ],
+  "skills": [
+    "./skills/creating-instructions/"
+  ]
+}

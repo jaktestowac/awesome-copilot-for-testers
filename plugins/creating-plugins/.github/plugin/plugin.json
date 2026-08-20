@@ -1,0 +1,17 @@
+{
+  "name": "creating-plugins",
+  "description": "Packages repository skills as installable Copilot plugins: marketplace registration, `plugin.json` manifests, generated skill copies, and the sync check CI enforces. Use when bundling one or more skills for installation, when adding a plugin to the marketplace, or when `npm run lint` reports that a plugin copy has drifted from its source skill.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "creating",
+    "plugins"
+  ],
+  "skills": [
+    "./skills/creating-plugins/"
+  ]
+}

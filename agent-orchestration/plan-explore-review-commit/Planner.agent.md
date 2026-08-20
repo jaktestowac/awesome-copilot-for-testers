@@ -175,6 +175,7 @@ A good plan is:
 
 # Output format (STRICT)
 
+```markdown
 # Plan: {Short Title}
 
 **Created:** (use today's date, YYYY-MM-DD)

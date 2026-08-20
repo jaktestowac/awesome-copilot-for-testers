@@ -1,0 +1,18 @@
+{
+  "name": "testing-application-security",
+  "description": "Applies OWASP-informed security testing within a tester scope: an authorization gate before any probing, authorization matrices, broken access control and IDOR checks, input validation and injection observation, session and auth behaviour, and safe reporting of findings. Use when testing auth-protected features, when a security review needs QA coverage, when an exploratory session surfaced something security-shaped, or when access control needs a systematic check rather than a spot check.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "testing",
+    "application",
+    "security"
+  ],
+  "skills": [
+    "./skills/testing-application-security/"
+  ]
+}

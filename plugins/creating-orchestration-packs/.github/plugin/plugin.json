@@ -1,0 +1,18 @@
+{
+  "name": "creating-orchestration-packs",
+  "description": "Creates agent orchestration packs: cooperating `.agent.md` files with an orchestrator, subagents, matched handoffs, minimal tool grants, and a shared handoff packet contract. Use when one agent role is too broad for a job, when a workflow needs explore, plan, implement, review, and verify as separate roles, or when a pack fails the orchestration lint because a handoff target does not resolve.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "creating",
+    "orchestration",
+    "packs"
+  ],
+  "skills": [
+    "./skills/creating-orchestration-packs/"
+  ]
+}

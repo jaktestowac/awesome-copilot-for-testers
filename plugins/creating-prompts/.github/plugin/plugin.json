@@ -1,0 +1,17 @@
+{
+  "name": "creating-prompts",
+  "description": "Creates GitHub Copilot prompt files (`.prompt.md`) for VS Code. Use when building reusable workflow starters that route work to the right agent, collect the right inputs, and ship with install-ready templates, examples, and validation guidance.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "creating",
+    "prompts"
+  ],
+  "skills": [
+    "./skills/creating-prompts/"
+  ]
+}

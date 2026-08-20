@@ -1,0 +1,19 @@
+{
+  "name": "migrating-tests-to-playwright",
+  "description": "Migrates Cypress, Selenium, WebdriverIO, or Protractor suites to Playwright in staged slices, each with a parity gate before the old test is deleted. Use when porting a legacy browser suite, when deciding which tests are not worth porting, when a half-finished migration has stalled with two suites running in parallel, or when a suite migration needs a plan before anyone starts translating files.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "migrating",
+    "tests",
+    "to",
+    "playwright"
+  ],
+  "skills": [
+    "./skills/migrating-tests-to-playwright/"
+  ]
+}

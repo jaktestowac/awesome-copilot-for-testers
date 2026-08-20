@@ -1,0 +1,19 @@
+{
+  "name": "testing-performance-and-load",
+  "description": "Designs and runs performance and load tests: workload modelling from real traffic, thresholds tied to SLOs, warmup and ramp shapes, percentile-based analysis, and lightweight CI perf checks with k6 or Artillery. Use when a feature has latency or throughput requirements, when \"it feels slow\" needs to become a number, when a launch needs a capacity check, or when a performance result needs interpreting rather than just collecting.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "testing",
+    "performance",
+    "and",
+    "load"
+  ],
+  "skills": [
+    "./skills/testing-performance-and-load/"
+  ]
+}

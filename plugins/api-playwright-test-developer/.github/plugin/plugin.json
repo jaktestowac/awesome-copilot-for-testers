@@ -1,0 +1,19 @@
+{
+  "name": "api-playwright-test-developer",
+  "description": "Writes and reviews API automation tests with Playwright Test, covering setup/teardown, assertions, data management, and hybrid API+UI flows. Use when creating backend API tests, contract checks, data-driven API coverage, API+UI hybrid workflows, or reviewing existing Playwright API suites.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "api",
+    "playwright",
+    "test",
+    "developer"
+  ],
+  "skills": [
+    "./skills/api-playwright-test-developer/"
+  ]
+}

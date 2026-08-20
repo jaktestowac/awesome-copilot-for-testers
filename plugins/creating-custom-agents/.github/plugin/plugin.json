@@ -1,0 +1,18 @@
+{
+  "name": "creating-custom-agents",
+  "description": "Creates GitHub Copilot custom agents (`.agent.md`) for VS Code. Use when defining a specialized agent role, selecting a minimal toolset, referencing supporting skills, or shipping install-ready agent examples with clear boundaries and collaboration rules.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "creating",
+    "custom",
+    "agents"
+  ],
+  "skills": [
+    "./skills/creating-custom-agents/"
+  ]
+}

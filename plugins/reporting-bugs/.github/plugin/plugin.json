@@ -1,0 +1,17 @@
+{
+  "name": "reporting-bugs",
+  "description": "Transforms rough tester notes, screenshots, console output, or observed behavior into reproducible defect reports with severity, evidence, and follow-up guidance. Use when logging bugs, triaging intermittent issues, or rewriting vague defect notes into developer-ready reports.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "reporting",
+    "bugs"
+  ],
+  "skills": [
+    "./skills/reporting-bugs/"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "auditing-accessibility",
+  "description": "Performs webpage and user-flow accessibility audits with WCAG 2.2 guidance, manual verification checklists, prioritized remediation output, and stakeholder-ready summaries. Use when auditing accessibility on a URL, triaging suspected a11y issues, or producing technical findings with practical next steps.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "auditing",
+    "accessibility"
+  ],
+  "skills": [
+    "./skills/auditing-accessibility/"
+  ]
+}
