@@ -77,6 +77,7 @@ If a test fails intermittently, do not add a retry or raise a timeout. Reproduce
 ## Related Skills
 
 - `writing-unit-tests` - the full standard: legacy backfills, flaky suites, test-double design, suite review
+- `unslop-tests` - the named-tell audit for tests that already exist
 - `test-driven-development-quick` - when the tests should drive the implementation, in the same compact form
 - `test-driven-development` - the full loop, for multi-unit features and legacy code
 - `designing-test-data` - when the inputs and boundary values need deliberate design first

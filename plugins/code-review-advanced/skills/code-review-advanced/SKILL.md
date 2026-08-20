@@ -182,6 +182,7 @@ If the user asks for an example of the expected result, use `./resources/example
 ## Related Skills
 
 - `code-review` - quick, lightweight review for small diffs and single files
+- `unslop-tests` - the test lens: named tells in test code, severity-tiered, with Tier 1 findings proven by execution
 - `tech-debt-analysis` - when review findings should feed a broader debt assessment
 - `analyzing-regression-scope` - when the review should be paired with a retest scope analysis
 

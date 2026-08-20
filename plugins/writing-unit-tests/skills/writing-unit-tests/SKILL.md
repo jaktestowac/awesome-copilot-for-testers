@@ -218,6 +218,8 @@ When reviewing a whole suite rather than one test, add the suite-level signals: 
 
 Run the tests against `./resources/unit-test-review-checklist.md`.
 
+For a suite that already exists, or when the review is the whole job rather than the last step of authoring, use `unslop-tests` instead. It carries the named-tell list, the severity tiers, and the evidence ladder for proving a weak test really is weak.
+
 Two checks matter most, and both are **run, not imagined**:
 
 - **Mutation check** - deliberately break the behavior the test claims to cover, run the test, confirm it fails, then restore the code and confirm it passes again. A test written after the implementation has never been seen failing; this is the only thing that proves it can. If it stays green while the behavior is broken, the assertion is too weak. Where the project runs a mutation-testing tool, that is the systematic version of the same check.
@@ -259,6 +261,7 @@ Then report what was actually done:
 
 ## Related Skills
 
+- `unslop-tests` - the review pass on tests that already exist: the named-tell detector and the mutation-check gate
 - `writing-unit-tests-quick` - the compact version, for routine everyday tests that do not need the full workflow
 - `test-driven-development` - when the tests should drive the implementation instead of following it
 - `designing-test-data` - when the inputs and boundary values need deliberate design first

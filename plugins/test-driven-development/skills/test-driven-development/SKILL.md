@@ -279,6 +279,7 @@ Report the evidence, not just the outcome:
 
 - `test-driven-development-quick` - the compact version, for routine single-behavior cycles that do not need the full workflow
 - `writing-unit-tests` - the quality standard each test produced by the loop must meet, and the characterization-test procedure for legacy code
+- `unslop-tests` - the audit for tests that already exist, including the ones the loop produced under time pressure
 - `designing-test-data` - when the inputs and boundary values need deliberate design before the cycles start
 - `designing-functional-tests` - when the behavior belongs in functional or end-to-end coverage instead
 - `code-review` - for the deeper structural cleanup that does not belong inside the loop
