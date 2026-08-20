@@ -39,6 +39,8 @@ A **seam** is the public boundary the test observes behavior through — the int
 
 Every cycle starts by knowing which seam it drives. If you cannot name the seam, you are not ready to write the test.
 
+**Seams are agreed, not assumed.** Name the seams you intend to test at and get them confirmed before the first test exists. Testing effort is finite; agreeing the seams up front is how it lands on the critical paths and the complex logic instead of on every edge case. Do not write a test at a seam nobody has confirmed.
+
 ### Choosing the loop shape
 
 | Situation | Loop shape |
@@ -50,6 +52,10 @@ Every cycle starts by knowing which seam it drives. If you cannot name the seam,
 
 In the double loop, the outer test stays red for several inner cycles. Say so explicitly, so a red suite is not mistaken for broken work.
 
+**Never drive the loop with a slow test.** Red-green pays for itself only while the feedback is fast. A browser or end-to-end test as the cycle signal costs minutes per iteration, and looping on one for a feature that does not exist yet reliably ends in concluding the *test* is broken. Drive with the fastest thing that can observe the behavior; in a double loop the outer acceptance test is the cheapest test that proves the feature, not the heaviest. Browser coverage is written after the behavior works.
+
+Before the first cycle, decide whether this change deserves the loop at all — `./resources/tdd-fit-check.md` has the decision table and what to verify with when the answer is no.
+
 ## Core Rules
 
 - **Red before green** - no production code is written without a failing test demanding it.
@@ -59,8 +65,10 @@ In the double loop, the outer test stays red for several inner cycles. Say so ex
 - **One slice at a time** - one behavior, one test, one implementation. Never write a batch of tests up front against imagined behavior.
 - **Refactor only under green** - restructure with the suite passing, and run it again after. Behavior must not change during a refactor step.
 - **Test at the public interface** - drive the unit through the seam a real caller would use, not through internals.
+- **Assert against an independent source of truth** - the expected value comes from the spec, a worked example, a known-good literal, or the reported symptom. A value recomputed the way the implementation computes it passes by construction.
+- **Never weaken a test to reach green** - if an existing assertion has to change, the specification changed. Say that out loud and get it confirmed. Loosening an assertion, deleting a stubborn test, or editing a test to match a wrong implementation ends the loop's value.
 - **Match step size to confidence** - obvious behavior takes bigger steps; unfamiliar or fiddly behavior takes smaller ones. Repeated failure to reach green means the step was too big.
-- **Commit at green** - each completed cycle is a safe point to commit.
+- **Commit at green** - each completed cycle is a safe point to commit. Order the commits so the sequence proves itself: the failing test lands before the code that satisfies it.
 
 ## Workflow
 
@@ -70,11 +78,21 @@ Before the first cycle, establish:
 
 - the behavior being built, in the user's own vocabulary
 - the public interface it will live behind
-- the seam the tests will observe it through
+- the seam the tests will observe it through, confirmed rather than assumed
 - the loop shape from the table above
 - what is explicitly out of scope for this session
 
 If the interface is genuinely unknown, that is fine: write the call you wish existed in the first test and let it define the shape. Do not silently invent requirements the user has not stated.
+
+Then detect what the project already does, so the loop matches it instead of importing habits from elsewhere:
+
+- where tests live and how test files are named
+- the exact command to run **one** test file, and the command to run the **full suite**
+- the runner's assertion and parameterized-test style
+- helpers, factories, fixtures, and custom matchers already available
+- project instruction files — `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, ADRs — and the domain vocabulary they establish, so test names and interface terms match it
+
+The single-test command matters more than it looks: the loop only works while observing red and green is cheap. Do not introduce a new runner, library, or folder layout unless the user asks for it.
 
 ### Phase 1: Write the test list
 
@@ -101,7 +119,8 @@ Repeat for one entry at a time. `./resources/worked-example.md` shows several co
 2. Run it and read the actual output.
 3. Confirm it fails, and that the failure message describes the **missing behavior** — not a syntax error, missing file, or broken fixture. If it fails for a mechanical reason, fix that first and run again; the mechanical failure does not count as red.
 4. If it passes immediately, stop: either the behavior already exists, or the test asserts nothing meaningful. Fix the test before continuing.
-5. Check the failure message would be understandable to someone who did not write the test. If not, improve the assertion now — this is the cheapest moment to do it.
+5. Check where the expected value came from. It must come from outside the implementation — the spec, a worked example, a known-good literal, the reported symptom. An expected value recomputed the way the code computes it, or imported from the implementation's own constants, passes by construction and can never disagree with the code.
+6. Check the failure message would be understandable to someone who did not write the test. If not, improve the assertion now — this is the cheapest moment to do it.
 
 #### Green
 
@@ -123,7 +142,9 @@ Then:
 
 Hardcoding is legitimate — the next test is what forces generalization. What is not legitimate is leaving a fake in place with no test on the list that will remove it.
 
-See `./resources/green-step-strategies.md` for how to choose between them and how to triangulate deliberately.
+**Doubles only at real boundaries.** Substitute what you do not own — the clock, randomness, the network, storage. If reaching green pushes you to mock a module you *do* own, the seam is in the wrong place: stop and say so rather than mocking your way to green. A test held up by stubs of your own code proves the stubs were called, freezes the current design, and breaks on the next refactor.
+
+See `./resources/green-step-strategies.md` for how to choose between them and how to triangulate deliberately, and the test-doubles guide in `writing-unit-tests` for the double taxonomy and the boundary rule.
 
 #### Refactor
 
@@ -141,7 +162,7 @@ Rules:
 - if a refactor turns the suite red, revert it rather than chasing the failure forward
 - duplication is a signal, not a sin — wait until the third occurrence before extracting an abstraction
 
-Refactoring is optional per cycle but not optional overall. Skipping it repeatedly is how a green suite ends up guarding a mess.
+Refactoring is optional per cycle but not optional overall. Skipping it repeatedly is how a green suite ends up guarding a mess — and it is the step that quietly disappears first, because the next test is always more interesting than cleaning up the last one. At session close, state whether it happened. If it consistently does not, hand the cleanup to `code-review` as an explicit follow-up instead of leaving it implied.
 
 Then take the next entry from the list.
 
@@ -167,6 +188,13 @@ For a defect, the cycle starts with reproduction.
 5. **Re-run the original, un-minimised scenario** to confirm the real-world symptom is gone.
 6. **Keep the test permanently** — it is the regression guard.
 
+Two conditions change the procedure:
+
+- **The bug is intermittent.** Make the repro deterministic before fixing it — pin the clock, the seed, the ordering, the concurrency — and state which signal the test locks down. A flaky test cannot prove a fix; it can only fail to disprove one.
+- **The bug exposes a class of failures.** Land the focused regression test first, then propose the sibling cases as separate cycles. Do not widen the repro into general coverage while the fix is still unproven.
+
+Stage the commits so history reads red then green: the failing repro lands first, the fix on top. A reviewer can then replay the bug and its resolution instead of taking the fix on trust. Keep the regression test focused — no unrelated fixture churn riding along.
+
 If no correct seam exists — the bug can only be reproduced through a path nothing can drive in a test — **that is itself the finding**. Say so, fix the bug, and flag the missing seam as a design problem rather than pretending a shallow test covers it.
 
 Never fix first and test afterwards. A test written after the fix has never been seen catching the bug.
@@ -181,7 +209,7 @@ To change code that has no tests, get a safety net before the loop starts:
 
 See the legacy phase in `writing-unit-tests` for how to write those characterization tests.
 
-### Phase 6: Know when to step out of the loop
+### Phase 6: Know when the loop does not fit
 
 TDD is not the right tool for everything. Step out and say so when:
 
@@ -189,8 +217,14 @@ TDD is not the right tool for everything. Step out and say so when:
 - the task is a pure rename or mechanical migration with no behavior change
 - the design question is too open to express as an assertion yet — spike first, throw the spike away, then start the cycle properly
 - the code is exploratory and genuinely disposable
+- **there is no independent source of truth to assert against** — config, wiring, glue, straight delegation. The only assertion available restates the implementation, which is the tautology the loop exists to prevent, arrived at from the other direction.
+- **the only available test would be a bad test** — one that mostly exercises its own mocks, needs expensive infrastructure for a small change, depends on production-only state, or would be deleted the moment it went green. Prefer no test to a bad test.
 
 Say which of these applies instead of forcing a unit-shaped test onto the problem.
+
+**Stepping out is not skipping verification.** Name the closest check you can actually execute — a targeted script, a manual reproduction command, a log or output comparison, an existing focused integration test, a type or startup check for wiring — run it before and after the change, and report its output in place of the red-green pair. Deciding a failing test is impractical is a legitimate call; reporting only the fix, with no substitute check named, is not.
+
+`./resources/tdd-fit-check.md` holds the decision table, the bad-test definition, and the fallback checks.
 
 ### Phase 7: Close the session
 
@@ -201,6 +235,16 @@ Before declaring the work finished:
 - list any test-list entries left unbuilt, rather than dropping them silently
 - name any fake implementation still in place and the test that should remove it
 - state what the loop revealed about the design, including seams that turned out to be in the wrong place
+
+Report the evidence, not just the outcome:
+
+- the test that was **seen failing first**, and the failure output it produced
+- the run that shows it passing, and the full-suite result
+- any nearby validation run when the change carried wider risk — type check, lint, adjacent suites
+- where red-green evidence could not be produced: why, which check replaced it, and what that check showed
+- whether refactoring happened, or was deferred and to what
+
+"It works and the tests pass" is not a report — it names no check that was ever seen failing.
 
 ## Common Failure Modes
 
@@ -214,12 +258,19 @@ Before declaring the work finished:
 - **Never refactoring** - always moving to the next test, so the design debt the loop was supposed to prevent accumulates anyway.
 - **Step too big** - fighting for green across many attempts instead of reverting and splitting the behavior.
 - **Testing internals** - driving private methods, which makes every later refactor break the suite.
+- **Tautological assertion** - the expected value is recomputed the way the code computes it, or imported from the implementation's own constants, so the test passes by construction.
+- **Mocking your way to green** - stubbing modules you own until the test passes, which proves only that the stubs were called and freezes the current design.
+- **Driving with a slow test** - a browser or end-to-end test as the red-green signal, so every cycle costs minutes and the loop stops paying for itself.
+- **Cycling over glue** - running the loop on config, wiring, or straight delegation, where the only possible assertion restates the code.
+- **Silently skipping the test** - judging a failing test impractical and then reporting just the fix, with no substitute check named or run.
 - **Skipping the suite run** - running only the new test and discovering the regression several cycles later.
 - **Deleting the red** - loosening or removing a stubborn test instead of fixing the behavior it describes.
+- **Testing at an unagreed seam** - picking a boundary nobody confirmed, so the effort lands somewhere that was never the risk.
 - **Treating TDD as a coverage tool** - chasing a percentage rather than using the loop to shape the interface.
 
 ## Resource Map
 
+- `./resources/tdd-fit-check.md` - whether the change deserves the loop, what a bad test is, and which check to run when it does not
 - `./resources/worked-example.md` - consecutive cycles in full, in neutral pseudocode
 - `./resources/green-step-strategies.md` - fake it, obvious implementation, triangulation, step size, and the revert protocol
 - `./resources/tdd-cycle-log-template.md` - test list plus per-cycle record of red, green, and refactor steps
@@ -236,12 +287,17 @@ Before declaring the work finished:
 
 This skill is complete when:
 
-- the interface, the seam, and the loop shape were agreed before the first test
+- the interface, the seam, and the loop shape were agreed before the first test, and no test was written at an unconfirmed seam
+- the project's existing test conventions, commands, and vocabulary were detected and followed
 - a test list exists and was worked one entry at a time
 - every production change was preceded by a test **seen** failing for the right reason, with real output
-- each green step contained only the code the current test demanded
+- expected values came from an independent source of truth, never from the implementation
+- each green step contained only the code the current test demanded, with doubles only at real boundaries
 - any faked implementation was either generalized or has a listed test that will force it
-- refactoring happened under a passing suite and changed no behavior
+- no existing assertion was weakened to reach green
+- refactoring happened under a passing suite and changed no behavior, or was explicitly deferred
 - the full suite passes and any bug fixed in the session has a minimised, permanent regression test
+- where the loop did not fit, that was stated and a substitute check was named and run
+- the closing report quotes the failing-before and passing-after output
 - design findings the loop surfaced — awkward seams, heavy setup, missing boundaries — were stated
 - remaining entries on the test list are stated explicitly rather than silently dropped

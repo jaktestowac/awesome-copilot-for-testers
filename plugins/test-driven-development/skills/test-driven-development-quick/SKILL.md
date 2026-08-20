@@ -24,10 +24,12 @@ Escalate to `test-driven-development` when the feature spans several units, need
 State three things:
 
 - the **behavior** being built, in the user's vocabulary
-- the **seam** — the public interface a real caller would use, which the tests observe through
+- the **seam** — the public interface a real caller would use, which the tests observe through; name it and get it confirmed rather than assuming it
 - the **test list** — the behaviors to build, smallest and most central first, worked one at a time
 
 The list is a queue, not a batch. Writing all the tests up front verifies imagined behavior and locks in a shape nobody has validated.
+
+Match the project's existing runner, test locations, and naming, and find the command that runs a single test file — the loop only works while observing red and green is cheap.
 
 ## The Loop
 
@@ -37,6 +39,7 @@ The list is a queue, not a batch. Writing all the tests up front verifies imagin
 2. Run it and read the real output.
 3. Confirm it fails on the **missing behavior** — not a typo, missing import, or broken fixture. A mechanical failure is not red: fix it and run again.
 4. If it passes immediately, stop. Either the behavior exists already or the test asserts nothing.
+5. Check the expected value came from outside the implementation — the spec, a worked example, a known-good literal. A value recomputed the way the code computes it, or imported from the code's own constants, passes by construction.
 
 ### Green
 
@@ -49,6 +52,8 @@ Write the simplest thing that passes. Pick by confidence:
 Then run the **full suite**, not just the new test. Do not clean up yet.
 
 A fake is fine only while a listed test will remove it. A fake with nothing scheduled to kill it is a bug with a passing test.
+
+Substitute only what you do not own — clock, randomness, network, storage. If getting to green needs a mock of your own module, the seam is wrong; say so instead of mocking your way through.
 
 ### Refactor
 
@@ -64,7 +69,9 @@ Commit at green, then take the next entry.
 4. **One slice at a time.** One behavior, one test, one implementation.
 5. **Refactor only under green**, and never mix it with the green step.
 6. **Drive the public seam**, never private methods.
-7. **Match step size to confidence.** Repeated failure to reach green means the step was too big — revert to the last green and split the behavior.
+7. **Assert against an independent source of truth**, never a value the implementation hands you.
+8. **Never weaken a test to reach green.** If an assertion has to change, the specification changed — say so and get it confirmed.
+9. **Match step size to confidence.** Repeated failure to reach green means the step was too big — revert to the last green and split the behavior.
 
 ## Bugs: Reproduce First
 
@@ -72,19 +79,27 @@ Commit at green, then take the next entry.
 2. Confirm the failure matches the reported symptom, not a different one nearby.
 3. Shrink it until every remaining element is load-bearing.
 4. Fix the code until it passes, then re-check the original scenario.
-5. Keep the test — it is the regression guard.
+5. Keep the test — it is the regression guard. If the bug was intermittent, make the repro deterministic first and say which signal the test locks down.
+6. Stage the failing test before the fix, so history reads red then green.
 
 Never fix first and test after. A test written after the fix has never been seen catching the bug.
 
 ## When to Step Out
 
-Say so and stop looping when the behavior needs a real network, database, or browser to prove (integration work), when the change is a pure rename or mechanical migration, or when the design is too open to express as an assertion yet — spike first, throw the spike away, then start cycling.
+Say so and stop looping when the behavior needs a real network, database, or browser to prove (integration work), when the change is a pure rename or mechanical migration, when there is no independent source of truth to assert against (config, wiring, straight delegation), or when the design is too open to express as an assertion yet — spike first, throw the spike away, then start cycling.
+
+Do not drive the loop with a browser or end-to-end test; the feedback is too slow to cycle on, and that coverage is written after the behavior works.
+
+Stepping out is not skipping verification. Name the closest check you can actually run — a script, a manual repro command, an output comparison, a type check — run it before and after, and report that output in place of the red-green pair. Prefer no test to a bad test, but never a silent skip.
 
 ## Common Failure Modes
 
 - writing all the tests first, then all the implementation
 - claiming a test is red or green without running it
 - red that fails on a missing import, so the assertion is never exercised
+- an expected value recomputed the way the code computes it, so the test can never disagree with it
+- stubbing modules you own until the test passes, which only proves the stubs were called
+- judging a test impractical and then reporting the fix with no substitute check named
 - a fake left in place because nothing was queued to generalize it
 - cleanup smuggled into the green step, so a failure has two causes
 - always moving to the next test and never refactoring
@@ -99,8 +114,9 @@ Say so and stop looping when the behavior needs a real network, database, or bro
 
 ## Definition of Done
 
-- every production change was preceded by a test seen failing for the right reason
-- each green step held only the code the current test demanded
+- every production change was preceded by a test seen failing for the right reason, with its output quoted
+- expected values came from an independent source, not from the implementation
+- each green step held only the code the current test demanded, with doubles only at real boundaries
 - no fake remains without a listed test to remove it
 - refactoring happened under a passing suite and changed no behavior
 - the full suite passes, and any bug fixed has a permanent regression test
