@@ -190,7 +190,7 @@ For a defect, the cycle starts with reproduction.
 
 Two conditions change the procedure:
 
-- **The bug is intermittent.** Make the repro deterministic before fixing it — pin the clock, the seed, the ordering, the concurrency — and state which signal the test locks down. A flaky test cannot prove a fix; it can only fail to disprove one.
+- **The bug is intermittent.** Make the repro deterministic before fixing it — pin the clock, the seed, the ordering, the concurrency — and state which signal the test locks down. A flaky test cannot prove a fix; it can only fail to disprove one. The flaky-test triage resource in `writing-unit-tests` has the reproduction configurations and the symptom-to-cause table.
 - **The bug exposes a class of failures.** Land the focused regression test first, then propose the sibling cases as separate cycles. Do not widen the repro into general coverage while the fix is still unproven.
 
 Stage the commits so history reads red then green: the failing repro lands first, the fix on top. A reviewer can then replay the bug and its resolution instead of taking the fix on trust. Keep the regression test focused — no unrelated fixture churn riding along.

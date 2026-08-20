@@ -31,6 +31,9 @@ Escalate to `writing-unit-tests` when the job is a legacy backfill, a flaky or s
 8. **Control nondeterminism.** Inject or freeze time, randomness, and IDs; use fake timers instead of real delays; await every promise and assert rejections directly.
 9. **Mock only what you do not own.** Network, storage, clock. Never stub your own modules — that freezes the design and breaks on every refactor.
 10. **No real I/O.** If proving the behavior needs a database, HTTP call, or browser, say so and route it to integration coverage instead of mocking around it.
+11. **Synthetic test data only.** No credentials, tokens, or real personal data — a fixture committed once stays in history forever.
+12. **Leave nothing skipped silently.** A `skip` or `only` carries an issue link and an owner, or it does not land.
+13. **Do not reshape the code to suit the test.** Hard-to-test code is a design finding to raise, not something to restructure inside a test-adding change.
 
 ## Cases to Cover
 
@@ -47,12 +50,14 @@ Skip trivial getters, framework wiring, and third-party library behavior. A test
 
 ## Before You Finish
 
-Two checks, both quick:
+Two checks, both quick, and both **run rather than imagined**:
 
-- **Mutation check** — deliberately break the behavior. Does the test fail? If not, the assertion is too weak.
+- **Mutation check** — break the covered behavior on purpose, run the test, see it fail, restore the code, see it pass. A test written after the code has never been seen failing; this is the only thing that proves it can.
 - **Refactor check** — rename internals and restructure without changing behavior. Does the test still pass? If not, it is coupled to implementation.
 
-Then run the full suite, not just the new tests.
+Then run the full suite, not just the new tests, and quote the real result.
+
+If a test fails intermittently, do not add a retry or raise a timeout. Reproduce it first — repeat runs, isolation, random order, parallel on and off — then fix the cause. `writing-unit-tests` carries the triage procedure.
 
 ## Common Failure Modes
 
@@ -62,6 +67,11 @@ Then run the full suite, not just the new tests.
 - a `try/catch` around the act step that passes when nothing throws
 - real clock, real `sleep`, or real network inside a unit test
 - every collaborator stubbed, so the test only proves the stubs were called
+- a mutation check assumed rather than executed, so nobody knows the test can fail
+- an expected value quietly changed to match whatever the code returned, turning a spec into a characterization test
+- a flake contained with a retry or a longer timeout instead of diagnosed
+- a skipped test with no issue link, quietly removing coverage
+- real credentials or personal data in a fixture
 - tests added to move a coverage number
 
 ## Related Skills
@@ -77,4 +87,5 @@ Then run the full suite, not just the new tests.
 - expected values are independent literals
 - nothing depends on real time, randomness, I/O, or another test's state
 - boundaries and error paths are covered, not just the happy path
-- both the mutation and refactor checks pass, and the full suite is green
+- test data is synthetic, and nothing was left skipped without an issue link
+- both the mutation and refactor checks were actually run, and the full suite is green with its result quoted

@@ -24,6 +24,7 @@ Run this before declaring unit tests finished. Anything unchecked is either fixe
 - [ ] No loops, conditionals, or try/catch scaffolding in the test body
 - [ ] Repeated cases use the runner's parameterized/table-driven API, so each case reports separately
 - [ ] Setup is minimal; irrelevant fields come from a factory default, not the test body
+- [ ] Load-bearing values are named rather than left as bare magic numbers or strings
 
 ## Assertions
 
@@ -45,7 +46,10 @@ Run this before declaring unit tests finished. Anything unchecked is either fixe
 - [ ] Locale, timezone, and encoding are pinned, or assertions use structured values instead of formatted strings
 - [ ] Environment variables and config are set per test and restored afterwards
 - [ ] Tests pass when run in isolation, in reverse order, and repeatedly
+- [ ] Tests pass with parallelism on as well as off
 - [ ] No shared mutable state between tests; state is rebuilt per test
+- [ ] No retry is standing in for a fix; any retried test is tracked as an open defect
+- [ ] Any quarantined or skipped test carries an issue link and an owner
 
 ## Test doubles
 
@@ -66,17 +70,35 @@ Run this before declaring unit tests finished. Anything unchecked is either fixe
 - [ ] State transitions covered where behavior depends on prior state, including invalid transitions
 - [ ] Contract guarantees covered where they exist: defaults, immutability of inputs, ordering, idempotence
 - [ ] Historically fragile areas got deliberate attention
+- [ ] Where a rule holds across a whole input space, a property was considered instead of more examples — with a recorded seed and the failing case pinned as an example test
+
+## Test data hygiene
+
+- [ ] No credentials, tokens, API keys, or connection strings in test files or fixtures
+- [ ] No real personal data: names, emails, phone numbers, identifiers are obviously synthetic
+- [ ] No hardcoded environment URLs that tie the test to one deployment
 
 ## Legacy code
 
+- [ ] Where a new test failed against existing code, it was decided whether the bug was in the code or the expectation — no expected value was quietly adjusted to match observed output
 - [ ] Tests over untested code pin current behavior rather than assumed behavior
 - [ ] Characterization tests are labelled as such, not presented as a specification
 - [ ] Behavior that looks wrong was raised as a question, not silently corrected
 
+## Suite level
+
+Run these when reviewing a whole suite rather than a single test.
+
+- [ ] Setup is not copy-pasted across files, drifting apart as it is edited
+- [ ] No helper or fixture has grown into a god object nobody can safely change
+- [ ] No commented-out or `only`-scoped tests left behind
+- [ ] Someone owns the total runtime, and it is stated
+- [ ] Production code was not reshaped to suit the tests; testability findings were raised instead
+
 ## Final gates
 
-- [ ] **Mutation check** - deliberately breaking the covered behavior makes this test fail
+- [ ] **Mutation check, actually executed** - the covered behavior was deliberately broken, the test was run and seen failing, then the code was restored and the test seen passing again
 - [ ] **Refactor check** - renaming internals and restructuring the code without changing behavior leaves this test passing
-- [ ] The full suite still passes, and runtime stayed in the milliseconds range
+- [ ] The full suite still passes, the real result was quoted, and runtime stayed in the milliseconds range
 - [ ] Coverage was used to find gaps, not as the reason any test exists
 - [ ] No test was added purely to move a coverage number

@@ -41,6 +41,7 @@ A unit test exercises **one unit of behavior in isolation**, with no real I/O.
 | A calculation, rule, or transformation     | Unit                                 | Fast, exhaustive on edge cases, no setup cost   |
 | Collaboration between two owned modules    | Unit at the outer module's interface | Keeps the seam public without mocking internals |
 | A query, schema, or serialization contract | Integration                          | Only the real dependency can prove it           |
+| The shape of an external provider's responses | Contract test                     | Stubs encode an assumption; a contract test is what notices when it rots |
 | A user-visible workflow across layers      | End-to-end / functional              | Unit tests cannot observe it                    |
 
 Push edge cases down to the unit level and keep the higher levels thin.
@@ -68,6 +69,10 @@ A test with nothing to prove still costs review time and still breaks on refacto
 - **No logic in the test** - no loops, conditionals, or recomputation of the expected value. Expected values are literals from an independent source: the spec, a worked example, a known-good result.
 - **Parameterize, don't loop** - many similar cases belong in the runner's table-driven or parameterized API, where each row reports as its own test. A hand-rolled `for` loop hides which case failed.
 - **Mock only at real boundaries** - substitute things you do not own (clock, network, storage). Mocking internal collaborators couples the test to the design and makes refactoring painful.
+- **Prove the test can fail** - a test written after the code has never been seen failing. Break the behavior on purpose, watch the test go red, restore, and watch it go green. Evidence, not confidence.
+- **Do not reshape production code to make testing easier without saying so** - hard-to-test code is a design finding to raise, not something to quietly restructure inside a "just adding tests" change. Ask, then do it as its own change.
+- **No secrets, credentials, or real personal data in test data** - fixtures live in version control forever. Use obviously synthetic values.
+- **No silently skipped tests** - a `skip`, an `only`, or a commented-out test carries an issue link and an owner, or it does not land.
 - **Coverage is a gap detector, not a target** - use it to find untested branches, never as the reason a test exists.
 
 ## Workflow
@@ -82,6 +87,8 @@ Before writing anything, state:
 - the collaborators it depends on, and which of them are real boundaries
 
 If the interface is unclear or the unit does too many things, say so. Untestable code is a design finding, not a testing failure.
+
+The interface is the test surface: callers and tests cross the same seam. Wanting to test *past* the interface — reaching into internals, stubbing things the unit owns, asserting on private state — means the unit is the wrong shape, and that is worth reporting even when the tests get written anyway.
 
 ### Phase 1: Detect the project's testing conventions
 
@@ -114,6 +121,17 @@ List the behaviors to cover before writing code. Each lens maps to a standard te
 Prefer a representative case per class over exhaustive permutations. Coverage of behavior beats coverage of lines.
 When several inputs combine, cover the pairs that matter rather than the full cross-product.
 
+#### When examples are the wrong tool
+
+Some behaviors are defined by a rule that holds across the whole input space, not by a handful of cases. Where the project already has a property-based library, a single property earns more than twenty examples:
+
+- **round trips** — `decode(encode(x))` equals `x` for any `x`
+- **invariants** — the total never goes negative; the output is always sorted; every input item appears exactly once
+- **idempotence** — applying it twice changes nothing after the first time
+- **equivalence** — the fast path and the obvious slow path agree
+
+Two conditions before reaching for one: the property must come from an independent source of truth, not from re-describing the implementation, and failures must be reproducible — record the seed and pin the failing case as a normal example test once it is found. Do not introduce a new library for this without asking.
+
 ### Phase 3: Write each test with a visible structure
 
 Every test follows **Arrange - Act - Assert**, in that order and visibly separated:
@@ -135,6 +153,14 @@ Assertion rules:
 - avoid broad snapshots of whole objects when only one field carries the behavior
 
 See `./resources/good-and-bad-tests.md` for worked before/after pairs of each rule.
+
+#### When a new test fails against existing code
+
+A test added to code that already works can fail for two very different reasons: you found a bug, or you wrote the wrong expectation. Decide which before changing anything.
+
+- Suspect the observation before the system: re-read the test, the setup, and the interface being called.
+- If the expectation came from a real source of truth and the code disagrees, that is a defect — report it rather than editing the assertion.
+- Never adjust the expected value to match the output you observed unless you have confirmed that output is correct. That move silently turns a specification into a characterization test, and nobody reading it later can tell the difference.
 
 ### Phase 4: Control every source of nondeterminism
 
@@ -159,6 +185,8 @@ If a test cannot be made deterministic at the unit level, that is the signal it 
 - keep irrelevant setup out of the test body
 - avoid shared mutable fixtures across tests; recreate state per test
 - prefer the lightest test double that answers the question — a stub that returns a value usually beats a mock that verifies calls
+- give load-bearing values a name — `expect(items).toHaveLength(7)` says nothing about why seven is right
+- keep test data obviously synthetic: no real credentials, tokens, customer names, emails, or identifiers. A fixture committed once is committed forever
 
 See `./resources/test-doubles-guide.md` for the double taxonomy, the boundary rule, and how to design code that does not need heavy mocking.
 
@@ -173,14 +201,35 @@ When the code has no tests and its behavior is not documented, do not start from
 
 Say clearly which tests are characterization tests, so nobody mistakes them for a specification of intended behavior.
 
-### Phase 7: Review before finishing
+### Phase 7: Repair an unreliable or slow suite
+
+When the job is an existing test that fails intermittently, or a suite that has become too slow to trust:
+
+1. **Reproduce the failure first** — repeated runs, the test in isolation, random order, parallel on and off, CI versus local. Each configuration accuses a different cause.
+2. **Classify it** before editing: shared state, order dependence, resource contention, real clock, real delay, unawaited async, nondeterministic output.
+3. **Fix the cause, not the symptom.** A raised timeout, an added retry, or a `skip` is containment. Every retried test is an open defect reporting itself as a pass.
+4. **Prove it** by running the configuration that used to fail, repeatedly, and quoting both the original failure and the repeated green.
+
+`./resources/flaky-test-triage.md` has the reproduction commands, the symptom-to-cause table, the retry and quarantine rules, and the slow-test cases.
+
+When reviewing a whole suite rather than one test, add the suite-level signals: duplicated setup drifting across files, helpers that have grown into god objects, magic values with no stated meaning, skipped or commented-out tests with no issue link, global retries masking instability, committed secrets or personal data in fixtures, and a total runtime nobody owns.
+
+### Phase 8: Review before finishing
 
 Run the tests against `./resources/unit-test-review-checklist.md`.
 
-Two checks matter most:
+Two checks matter most, and both are **run, not imagined**:
 
-- **Mutation check** - would this test still pass if you deliberately broke the behavior it claims to cover? If yes, the assertion is too weak.
-- **Refactor check** - would this test still pass if you renamed internals and restructured the code without changing behavior? If no, it is coupled to implementation.
+- **Mutation check** - deliberately break the behavior the test claims to cover, run the test, confirm it fails, then restore the code and confirm it passes again. A test written after the implementation has never been seen failing; this is the only thing that proves it can. If it stays green while the behavior is broken, the assertion is too weak. Where the project runs a mutation-testing tool, that is the systematic version of the same check.
+- **Refactor check** - rename internals and restructure without changing behavior; the test must still pass. If it breaks, it is coupled to implementation, not behavior.
+
+Then report what was actually done:
+
+- the command that ran, and the real result — counts, not "all green"
+- the mutation check: which behavior was broken, and the failure it produced
+- what is covered, and which listed cases were deliberately left out
+- which tests are characterization tests rather than specifications
+- design findings the tests surfaced: untestable seams, heavy setup, boundaries in the wrong place
 
 ## Common Failure Modes
 
@@ -195,11 +244,17 @@ Two checks matter most:
 - **Restating the implementation** - the test reads as a line-by-line echo of the function body
 - **Over-mocking internals** - substituting collaborators the unit legitimately owns, which freezes the current design
 - **Silently correcting legacy behavior** - changing what the code does while claiming to only add tests
+- **Reshaping production code to suit the test** - restructuring the unit inside a test-adding change instead of raising the design finding
+- **An imagined mutation check** - asserting the test would catch a break without ever breaking the behavior to see it
+- **Retries as the fix** - a flake contained by re-running it, so the race stays in the product and the suite keeps reporting green
+- **Skips with no owner** - a `skip`, `only`, or commented-out test with no issue link, quietly removing coverage
+- **Secrets or real personal data in fixtures** - committed once, present in history forever
 
 ## Resource Map
 
 - `./resources/good-and-bad-tests.md` - before/after examples of each rule, in neutral pseudocode
 - `./resources/test-doubles-guide.md` - dummy, stub, spy, fake, and mock; where the boundary is; designing for testability
+- `./resources/flaky-test-triage.md` - reproducing a flake, symptom-to-cause table, retry and quarantine rules, slow-test causes
 - `./resources/unit-test-review-checklist.md` - final quality gate for new or reviewed unit tests
 
 ## Related Skills
@@ -222,5 +277,9 @@ This skill is complete when:
 - expected values are independent literals, not recomputed logic
 - every source of nondeterminism is controlled: time, randomness, async, locale, environment, shared state
 - test doubles appear only at real boundaries
+- test data is synthetic, with no secrets, credentials, or real personal data
+- no test was left skipped without an issue link and an owner
 - legacy behavior was characterized rather than silently changed
-- the checklist passes, including the mutation and refactor checks
+- production code was not reshaped inside the change; any testability finding was raised instead
+- any flake was reproduced, diagnosed, and proved fixed by repeated runs — not contained by a retry
+- the checklist passes, and the mutation and refactor checks were actually executed with their output quoted
