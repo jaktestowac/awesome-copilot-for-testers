@@ -58,7 +58,8 @@ Each plugin folder contains `.github/plugin/plugin.json` and vendored copies of 
 
 - **`skills/` at the repo root is the source of truth** — plugin skill copies must be byte-identical; CI enforces this via `scripts/check-plugin-sync.js`
 - After changing a root skill that a plugin vendors, copy the skill folder into the plugin
-- Register new plugins in `.github/plugin/marketplace.json`
+- Register new plugins in `.github/plugin/marketplace.json` — `npm run plugin:generate -- <name>` writes the entry for a root skill or an existing plugin folder, `npm run plugin:generate` alone backfills any plugin folder that is missing one, and `npm run plugin:generate:all` adds an entry for every skill under `skills/` that has no plugin yet; CI enforces this via `scripts/generate-plugins.js --check`
+- Then run `npm run plugin:materialize` to scaffold the plugin folder and copy the skills into it
 
 ### Agent orchestration packs (`agent-orchestration/`)
 

@@ -46,7 +46,36 @@ Before bundling, confirm the skills are distinct enough to coexist. Two skills w
 
 ### Phase 1: Register in the marketplace
 
-Add the entry to `.github/plugin/marketplace.json`:
+```bash
+npm run plugin:generate -- planning-exploratory-testing
+```
+
+`scripts/generate-plugins.js` appends the entry to `.github/plugin/marketplace.json`, taking the
+description from `plugins/<name>/.github/plugin/plugin.json` if the plugin folder already exists,
+otherwise from the frontmatter of `skills/<name>/SKILL.md`. Existing entries keep their order and
+their wording, so a curated description is never overwritten.
+
+| Command | Does |
+| --- | --- |
+| `npm run plugin:generate -- <name>` | add the entry for one plugin or root skill |
+| `npm run plugin:generate -- <name> --description='...'` | add it with a written description instead of the skill's |
+| `npm run plugin:generate` | backfill entries for every plugin folder missing one |
+| `npm run plugin:generate:all` | add an entry for **every** unpackaged skill under `skills/` |
+| `npm run plugin:generate -- --dry-run` | print what would be added, write nothing |
+| `npm run plugin:generate -- --sync` | take `description` and `version` from `plugin.json` for entries that drifted |
+| `node scripts/generate-plugins.js --check` | fail if a plugin folder has no entry, or a field drifted (CI, part of `npm run lint`) |
+
+`plugin:generate:all` packages the repository in bulk. It skips a skill some plugin already
+ships, and it skips `<name>-quick` when `skills/<name>/` exists, printing the `plugin.json` line
+that bundles the quick variant with its parent instead. Pair it with `--dry-run` first, and read
+Phase 0 before accepting the result: one plugin per skill is a defensible default, but a pair used
+together belongs in one plugin. `--check` never demands a plugin for a root skill — an unpackaged
+skill is a normal state — so bulk mode stays opt-in and CI stays quiet about it.
+
+A description derived from the skill frontmatter is a starting point, not the finished entry — the
+generator says so when it uses one. Rewrite it as a marketplace listing, then continue.
+
+The resulting entry, hand-written or generated:
 
 ```jsonc
 {

@@ -5,8 +5,12 @@
   "scripts": {
     "generate": "node scripts/regenerate-readme.js",
     "check": "node scripts/regenerate-readme.js --check",
+    "plugin:generate": "node scripts/generate-plugins.js",
+    "plugin:generate:all": "node scripts/generate-plugins.js --all-skills",
+    "plugin:generate:check": "node scripts/generate-plugins.js --check",
+    "plugin:generate:dry": "node scripts/generate-plugins.js --dry-run",
     "plugin:materialize": "node scripts/materialize-plugins.js",
-    "lint": "node scripts/lint-frontmatter.js && node scripts/lint-orchestration.js && node scripts/check-plugin-sync.js"
+    "lint": "node scripts/lint-frontmatter.js && node scripts/lint-orchestration.js && node scripts/generate-plugins.js --check && node scripts/check-plugin-sync.js"
   },
   "author": "jaktestowac.pl",
   "license": "MIT",
