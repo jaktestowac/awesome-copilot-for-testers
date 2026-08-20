@@ -24,7 +24,7 @@ The rule that governs everything here: **`skills/` at the repository root is the
 - **The root skill is the source of truth.** Every change starts in `skills/<name>/` and flows outward.
 - **Plugin skill copies are generated.** Never hand-edited, always regenerated.
 - **A plugin is self-contained.** The plugin format resolves skill paths relative to the plugin root, so a plugin cannot reference `skills/` at the repository root. That is why the copies exist.
-- **The marketplace entry comes first.** The scaffolder builds the plugin directory from it.
+- **The marketplace entry comes first.** The scaffolder builds the plugin directory from it, and rewrites the generated fields from it on every run — edits flow downstream, never back up.
 - **A bundle is justified by use together.** Two skills in one plugin because a user reaching for one reaches for the other, not because they share a topic.
 - **The description is the install decision.** It is what a user reads in a marketplace listing, and it is the only thing they read.
 
@@ -50,22 +50,37 @@ Before bundling, confirm the skills are distinct enough to coexist. Two skills w
 npm run plugin:generate -- planning-exploratory-testing
 ```
 
-`scripts/generate-plugins.js` appends the entry to `.github/plugin/marketplace.json`, taking the
+`scripts/generate-plugins.js` writes the entry into `.github/plugin/marketplace.json`, taking the
 description from `plugins/<name>/.github/plugin/plugin.json` if the plugin folder already exists,
-otherwise from the frontmatter of `skills/<name>/SKILL.md`. Existing entries keep their order and
-their wording, so a curated description is never overwritten.
+otherwise from the frontmatter of `skills/<name>/SKILL.md`. Entry order is preserved and new
+entries are appended, so the file stays readable in diffs.
 
 | Command | Does |
 | --- | --- |
 | `npm run plugin:generate -- <name>` | add the entry for one plugin or root skill |
 | `npm run plugin:generate -- <name> --description='...'` | add it with a written description instead of the skill's |
 | `npm run plugin:generate` | backfill entries for every plugin folder missing one |
-| `npm run plugin:generate:all` | add an entry for **every** unpackaged skill under `skills/` |
-| `npm run plugin:generate -- --dry-run` | print what would be added, write nothing |
-| `npm run plugin:generate -- --sync` | take `description` and `version` from `plugin.json` for entries that drifted |
-| `node scripts/generate-plugins.js --check` | fail if a plugin folder has no entry, or a field drifted (CI, part of `npm run lint`) |
+| `npm run plugin:generate:all` | register **every** root skill, refreshing existing entries from their `SKILL.md` |
+| `npm run plugin:generate -- --dry-run` | print what would change, write nothing |
+| `npm run plugin:generate -- --no-overwrite` | report drift instead of rewriting an entry |
+| `npm run plugin:generate -- --verbose` | list every item instead of a count |
+| `node scripts/generate-plugins.js --check` | fail if a plugin folder has no entry (CI, part of `npm run lint`) |
 
-`plugin:generate:all` packages the repository in bulk. It skips a skill some plugin already
+**Which file wins.** The pipeline flows one way, and each step overwrites what is downstream of it:
+
+```
+skills/<name>/SKILL.md  →  marketplace.json  →  plugins/<name>/  →  README.md
+   (frontmatter)            (the registry)      (plugin.json,        (the tables)
+                                                 README description)
+```
+
+`plugin:generate:all` therefore rewrites an existing entry's description from the skill's
+frontmatter — a marketplace description edited by hand does not survive it. Write the listing
+description in the skill's frontmatter, or use `--description=` per plugin, or pass
+`--no-overwrite` to keep what is there and have the drift reported instead. A `version` somebody
+bumped is never reset by a refresh; only `--version=` changes it.
+
+`plugin:generate:all` packages the repository in bulk. It skips a skill another plugin already
 ships, and it skips `<name>-quick` when `skills/<name>/` exists, printing the `plugin.json` line
 that bundles the quick variant with its parent instead. Pair it with `--dry-run` first, and read
 Phase 0 before accepting the result: one plugin per skill is a defensible default, but a pair used
@@ -96,8 +111,16 @@ npm run plugin:materialize
 
 This does two things, per `scripts/materialize-plugins.js`:
 
-1. **Scaffold** - creates the plugin directory, a `.github/plugin/plugin.json`, and a `README.md` for every marketplace entry with a local `source`. **Existing files are never overwritten**, so hand edits to `plugin.json` and `README.md` are safe.
-2. **Materialize** - copies each skill declared in each `plugin.json` from `skills/` into the plugin, and prunes copies no longer declared.
+1. **Scaffold** - creates the plugin directory, a `.github/plugin/plugin.json`, and a `README.md` for every marketplace entry with a local `source`, then **rewrites the generated fields on every run** so the plugin always matches its marketplace entry:
+
+   | File | Overwritten | Preserved |
+   | --- | --- | --- |
+   | `plugin.json` | `name`, `description`, `version`, `author`, `repository`, `license` | `keywords` and `skills` — curated by hand, and not derivable from the entry |
+   | `README.md` | the frontmatter `description` | the whole body, which is hand-written prose |
+
+   `--force-readme` rewrites plugin READMEs wholesale from the template, discarding that prose. Use it to reset a README the scaffolder generated, not one somebody wrote.
+
+2. **Materialize** - copies each skill declared in each `plugin.json` from `skills/` into the plugin, and prunes copies no longer declared. A copy that already matches its source is left alone, so the output names only what changed.
 
 The generated tree:
 
@@ -132,11 +155,13 @@ The scaffolder writes a `plugin.json`; fill in what it cannot know.
 
 - `skills` paths are **relative to the plugin root** and resolve to `skills/<name>/` at the repository root during materialize
 - `keywords` are how a user finds the plugin; include the terms they would search, including the ones the skill's own description does not need
-- bump `version` in both `plugin.json` and the marketplace entry when the bundled content changes materially
+- `keywords` and `skills` are the two fields a re-materialize leaves alone — edit them here
+- `description` and `version` come from the marketplace entry and are rewritten on every materialize; change them there, not here
 
 ### Phase 4: Write the plugin README
 
-Frontmatter with a `description` for the README generator, then:
+The body is yours to write and survives every re-materialize; the frontmatter `description` is
+taken from the marketplace entry, so change it there. Then:
 
 - what problem the plugin solves, in one paragraph
 - **what is inside**: each skill, plus its bundled resources listed individually. This is the part a user reads to judge depth.
@@ -180,7 +205,8 @@ Add it to the pull request habit. The lint catches it, but catching it in CI cos
 - bundling by topic, so one plugin ships a dozen competing descriptions
 - a marketplace description that describes the topic and never says when to install it
 - a README listing the skill but not its resources, so the depth is invisible
-- version bumped in `plugin.json` and not in `marketplace.json`, or the reverse
+- editing `description` or `version` in `plugin.json`, which the next materialize overwrites from the marketplace entry
+- rewording a marketplace description by hand and then running `plugin:generate:all`, which takes the skill's frontmatter back
 - a plugin created for a skill still being iterated on, so every skill edit becomes a plugin release
 
 ## Resource Map

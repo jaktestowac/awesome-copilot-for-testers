@@ -3,8 +3,13 @@
 const fs = require('fs');
 const path = require('path');
 const { ADDITIONAL_DESCRIPTIONS } = require('./additional-descriptions');
+const { createLogger, isVerbose, style } = require('./lib/log');
 
 const FILES_TO_PROCESS = ['README.md', 'README.pl.md'];
+
+const log = createLogger('regenerate-readme');
+const verbose = isVerbose();
+const errors = [];
 
 // Configuration for the repository
 const REPO_CONFIG = {
@@ -131,6 +136,12 @@ function logConsole(message) {
   } else {
     console.log(message);
   }
+}
+
+// Per-section chatter: useful when a table comes out wrong, noise the rest of the time.
+// The counted summary per README file stands in for it by default.
+function logProgress(message) {
+  if (verbose) console.log(style.dim(`    ${message}`));
 }
 
 // Content extraction functions
@@ -562,7 +573,7 @@ function generateSection(sectionConfig) {
   // Get all files matching the extension (supports recursive scan for nested skills)
   const files = collectFiles(sectionDir, sectionConfig.fileExtension, !!sectionConfig.recursive);
 
-  logConsole(`> Found ${files.length} ${sectionConfig.directory} files`);
+  logProgress(`${files.length} file(s) in ${sectionConfig.directory}/`);
 
   // If no files, return empty table
   if (files.length === 0) {
@@ -691,7 +702,7 @@ function generateSetsSection(sectionConfig) {
     .filter((name) => fs.statSync(path.join(setsDir, name)).isDirectory())
     .sort();
 
-  logConsole(`> Found ${setNames.length} ${sectionConfig.directory} sets`);
+  logProgress(`${setNames.length} set(s) in ${sectionConfig.directory}/`);
 
   if (setNames.length === 0) {
     return `| Title | Description | Install |\n| ----- | ----------- | ------- |\n| No ${sectionConfig.directory} available | | |`;
@@ -805,7 +816,7 @@ function generateAgentOrchestrationSection(sectionConfig) {
     .filter((name) => fs.statSync(path.join(packsDir, name)).isDirectory())
     .sort();
 
-  logConsole(`> Found ${packNames.length} ${sectionConfig.directory} packs`);
+  logProgress(`${packNames.length} pack(s) in ${sectionConfig.directory}/`);
 
   if (packNames.length === 0) {
     return `| Title | Description | Install |\n| ----- | ----------- | ------- |\n| No ${sectionConfig.directory} available | | |`;
@@ -820,7 +831,7 @@ function generateAgentOrchestrationSection(sectionConfig) {
     // skip subdirectories that don't contain any .agent.md files or contin "-temp" in the name (used for temp testing folders)
     const hasAgentFiles = listFilesRecursively(packPath, (f) => f.endsWith('.agent.md')).length > 0;
     if (!hasAgentFiles || packName.includes('-temp')) {
-      logConsole(`Skipping ${packName} as it has no agent files or is marked as temp`);
+      logProgress(`skipping ${packName}: no agent files, or marked temp`);
       continue;
     }
 
@@ -891,7 +902,7 @@ function generateHooksSection(sectionConfig) {
     .filter((name) => fs.statSync(path.join(hooksDir, name)).isDirectory())
     .sort();
 
-  logConsole(`> Found ${hookNames.length} ${sectionConfig.directory} hooks`);
+  logProgress(`${hookNames.length} hook(s) in ${sectionConfig.directory}/`);
 
   if (hookNames.length === 0) {
     return `| Title | Description | Install |\n| ----- | ----------- | ------- |\n| No ${sectionConfig.directory} available | | |`;
@@ -949,7 +960,7 @@ function generateHooksSection(sectionConfig) {
     // For hooks, we don't support direct install (commented in SECTIONS_CONFIG)
     const installInfo = 'Manual setup required';
 
-    logConsole(`✓ Added hook: ${title}`);
+    logProgress(`added hook: ${title}`);
     content += `| [${title}](${link}) | ${safeDesc} | ${installInfo} |\n`;
   }
 
@@ -976,7 +987,7 @@ function generatePluginsSection(sectionConfig) {
     .filter((name) => fs.statSync(path.join(pluginsDir, name)).isDirectory())
     .sort();
 
-  logConsole(`> Found ${pluginNames.length} ${sectionConfig.directory} plugins`);
+  logProgress(`${pluginNames.length} plugin(s) in ${sectionConfig.directory}/`);
 
   if (pluginNames.length === 0) {
     return `| Title | Description | Install |\n| ----- | ----------- | ------- |\n| No ${sectionConfig.directory} available | | |`;
@@ -1058,7 +1069,7 @@ function updateSection(readmeContent, sectionConfig) {
           return `${header}${newTable}${endComment}`;
         },
       );
-      logConsole(`✅ Updated ${sectionConfig.title} section`);
+      logProgress(`updated ${sectionConfig.title} section`);
       return updatedContent;
     } else {
       logConsole(`⚠️ ${sectionConfig.title} section not found in README`);
@@ -1075,7 +1086,7 @@ function updateSection(readmeContent, sectionConfig) {
 function updateReadmeSections(readmePath) {
   // Read the existing README
   let readmeContent = fs.readFileSync(readmePath, 'utf8');
-  logConsole(`Read existing ${path.basename(readmePath)}`);
+  logProgress(`read ${path.basename(readmePath)}`);
 
   // Store original content for rollback if needed
   const originalContent = readmeContent;
@@ -1098,32 +1109,28 @@ function updateReadmeSections(readmePath) {
 function main() {
   const checkMode = process.argv.includes('--check');
 
-  logConsole(
-    checkMode
-      ? 'Checking README sections are up to date (--check mode, no files will be written)...'
-      : 'Regenerating README sections for directories...',
-  );
-
   const repoRoot = path.join(__dirname, '..');
   const readmeFiles = FILES_TO_PROCESS;
 
   if (readmeFiles.length === 0) {
-    console.error('❌ No files specified in FILES_TO_PROCESS.');
-    process.exit(1);
+    errors.push('no files specified in FILES_TO_PROCESS');
+    log.finish({ errors });
   }
 
-  logConsole(`Processing README files: ${readmeFiles.join(', ')}`);
+  log.intro(
+    `${checkMode ? 'checking' : 'regenerating'} generated sections in ${readmeFiles.join(', ')}`,
+  );
 
   let hasAnyChanges = false;
   const staleFiles = [];
 
   for (const readmeFile of readmeFiles) {
     const readmePath = path.join(repoRoot, readmeFile);
-    logConsole(`\n🔄 Processing ${readmeFile}...`);
+    logProgress(`processing ${readmeFile}`);
 
     // Validate README exists
     if (!fs.existsSync(readmePath)) {
-      console.error(`❌ ${readmeFile} does not exist. Skipping.`);
+      errors.push(`${readmeFile} does not exist`);
       continue;
     }
 
@@ -1141,33 +1148,26 @@ function main() {
       const hasChanges = originalContent !== newReadmeContent;
 
       if (hasChanges) {
+        const changedLines = countChangedLines(originalContent, newReadmeContent);
         if (checkMode) {
           staleFiles.push(readmeFile);
-          // Print a compact summary of differing lines to aid debugging in CI
-          const oldLines = originalContent.split('\n');
-          const newLines = newReadmeContent.split('\n');
-          const maxLines = Math.max(oldLines.length, newLines.length);
-          let shown = 0;
-          for (let i = 0; i < maxLines && shown < 10; i++) {
-            if (oldLines[i] !== newLines[i]) {
-              console.error(`  ${readmeFile}:${i + 1}`);
-              console.error(`    - ${(oldLines[i] || '').slice(0, 120)}`);
-              console.error(`    + ${(newLines[i] || '').slice(0, 120)}`);
-              shown++;
-            }
-          }
-          console.error(`❌ ${readmeFile} is out of date.`);
+          errors.push(
+            `${readmeFile} is out of date (${changedLines} line(s) differ) — ` +
+              "run 'npm run generate' and commit the result",
+          );
+          // The differing lines are the evidence; a few are enough to see which table drifted.
+          printDiff(readmeFile, originalContent, newReadmeContent);
         } else {
           // Write new content directly (original content is kept in memory)
           fs.writeFileSync(readmePath, newReadmeContent);
-          logConsole(`✅ ${readmeFile} updated successfully!`);
+          log.added(readmeFile, `${changedLines} line(s) rewritten`);
         }
         hasAnyChanges = true;
       } else {
-        logConsole(`💡 ${readmeFile} is already up to date. No changes needed.`);
+        log.kept(readmeFile, 'already up to date');
       }
     } catch (error) {
-      console.error(`❌ Error regenerating ${readmeFile}: ${error.message}`);
+      errors.push(`${readmeFile}: ${error.message}`);
 
       // If we have original content and something went wrong after reading it,
       // try to restore the original content from memory (never in check mode)
@@ -1189,21 +1189,38 @@ function main() {
     }
   }
 
+  const fileCount = `${readmeFiles.length} file(s)`;
   if (checkMode) {
-    if (staleFiles.length > 0) {
-      console.error(
-        `\n❌ README check failed: ${staleFiles.join(', ')} out of date. Run \`npm run generate\` and commit the result.`,
-      );
-      process.exit(1);
-    }
-    logConsole('🎉 All README files are up to date.');
-    return;
+    log.finish({ errors, ok: `(${fileCount} up to date)` });
   }
+  log.finish({
+    errors,
+    ok: hasAnyChanges ? `(${fileCount} processed, some rewritten)` : `(${fileCount} up to date)`,
+  });
+}
 
-  if (hasAnyChanges) {
-    logConsole('🎉 All README files processed. Some were updated.');
-  } else {
-    logConsole('🎉 All README files are up to date.');
+function countChangedLines(before, after) {
+  const oldLines = before.split('\n');
+  const newLines = after.split('\n');
+  let changed = 0;
+  for (let i = 0; i < Math.max(oldLines.length, newLines.length); i++) {
+    if (oldLines[i] !== newLines[i]) changed++;
+  }
+  return changed;
+}
+
+// A few differing lines, truncated, so CI shows which table drifted without a wall of diff.
+function printDiff(readmeFile, before, after) {
+  const oldLines = before.split('\n');
+  const newLines = after.split('\n');
+  const limit = verbose ? Number.MAX_SAFE_INTEGER : 6;
+  let shown = 0;
+  for (let i = 0; i < Math.max(oldLines.length, newLines.length) && shown < limit; i++) {
+    if (oldLines[i] === newLines[i]) continue;
+    console.error(style.dim(`    ${readmeFile}:${i + 1}`));
+    console.error(style.dim(`      - ${(oldLines[i] || '').slice(0, 110)}`));
+    console.error(style.dim(`      + ${(newLines[i] || '').slice(0, 110)}`));
+    shown++;
   }
 }
 

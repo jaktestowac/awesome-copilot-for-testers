@@ -7,8 +7,10 @@
 
 const fs = require('fs');
 const path = require('path');
+const { createLogger } = require('./lib/log');
 
 const repoRoot = path.join(__dirname, '..');
+const log = createLogger('lint-orchestration');
 const errors = [];
 const warnings = [];
 
@@ -137,10 +139,4 @@ for (const packDir of packDirs) {
   }
 }
 
-for (const w of warnings) console.warn(`⚠️  ${w}`);
-if (errors.length) {
-  for (const e of errors) console.error(`❌ ${e}`);
-  console.error(`\nlint-orchestration: ${errors.length} error(s), ${warnings.length} warning(s)`);
-  process.exit(1);
-}
-console.log(`lint-orchestration: OK (${checkedAgents} agents checked, ${warnings.length} warning(s))`);
+log.finish({ errors, warnings, ok: `(${checkedAgents} agents checked)` });

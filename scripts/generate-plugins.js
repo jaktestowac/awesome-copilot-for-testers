@@ -33,17 +33,19 @@
 //   --all-skills         add an entry for every unpackaged skill under skills/
 //   --check              write nothing; exit 1 if the manifest is out of date (for CI)
 //   --dry-run            print what would be written, write nothing
-//   --sync               pull description/version from plugin.json into existing entries
-//                        (without it, a mismatch is reported as an error)
+//   --no-overwrite       report drift instead of rewriting an existing entry
 //   --description=<text> description for the entries being added (named mode, single name)
 //   --version=<semver>   version for the entries being added (default 1.0.0)
 //   --help
 //
-// Existing entries keep their order and their fields; new entries are appended, so a
-// hand-curated marketplace description is never silently rewritten.
+// An entry whose description or version no longer matches its source is rewritten from
+// that source: the plugin manifest in reconcile mode, the skill frontmatter in bulk mode.
+// Entry order is preserved and new entries are appended, so the file stays readable in
+// diffs. Pass --no-overwrite to make drift an error instead — that is what --check does.
 
 const fs = require('fs');
 const path = require('path');
+const { createLogger } = require('./lib/log');
 
 const repoRoot = path.join(__dirname, '..');
 const marketplacePath = path.join(repoRoot, '.github/plugin/marketplace.json');
@@ -51,6 +53,7 @@ const pluginsDir = path.join(repoRoot, 'plugins');
 const skillsDir = path.join(repoRoot, 'skills');
 
 const DEFAULT_VERSION = '1.0.0';
+const log = createLogger('generate-plugins');
 const errors = [];
 const warnings = [];
 
@@ -69,10 +72,11 @@ function usage() {
       'Options:',
       '  --all-skills          add an entry for every skill under skills/ that has no plugin yet',
       '  --check               write nothing; exit 1 if entries are missing or drifted',
-      '  --dry-run             print the entries that would be added, write nothing',
-      '  --sync                update existing entries from plugins/<name>/.github/plugin/plugin.json',
+      '  --dry-run             print what would change, write nothing',
+      '  --no-overwrite        report drift instead of rewriting an existing entry',
       '  --description=<text>  description for the added entry (single name only)',
       '  --version=<semver>    version for the added entries (default 1.0.0)',
+      '  --verbose             list every item instead of a count',
       '  --help                show this message',
     ].join('\n'),
   );
@@ -84,7 +88,7 @@ function parseArgs(argv) {
     allSkills: false,
     check: false,
     dryRun: false,
-    sync: false,
+    overwrite: true,
     description: null,
     version: null,
     help: false,
@@ -93,7 +97,9 @@ function parseArgs(argv) {
     if (arg === '--all-skills') opts.allSkills = true;
     else if (arg === '--check') opts.check = true;
     else if (arg === '--dry-run') opts.dryRun = true;
-    else if (arg === '--sync') opts.sync = true;
+    else if (arg === '--no-overwrite') opts.overwrite = false;
+    else if (arg === '--sync') opts.overwrite = true; // kept for the earlier spelling
+    else if (arg === '--verbose' || arg === '-v') continue; // handled by the logger
     else if (arg === '--help' || arg === '-h') opts.help = true;
     else if (arg.startsWith('--description=')) opts.description = arg.slice('--description='.length);
     else if (arg.startsWith('--version=')) opts.version = arg.slice('--version='.length);
@@ -177,7 +183,11 @@ function resolveEntry(name, opts) {
   const manifestPath = path.join(pluginsDir, name, '.github/plugin/plugin.json');
   const skillMdPath = path.join(skillsDir, name, 'SKILL.md');
 
-  if (fs.existsSync(manifestPath)) {
+  // Bulk mode regenerates definitions *from the skills*, so the skill wins there even
+  // when a plugin manifest exists. Otherwise the manifest is the closer description.
+  const skillFirst = opts.allSkills && fs.existsSync(skillMdPath);
+
+  if (fs.existsSync(manifestPath) && !skillFirst) {
     const { data: manifest, error } = readJson(manifestPath);
     if (error) return { error: `${name}: invalid plugin manifest — ${error}` };
     if (manifest.name && manifest.name !== name) {
@@ -268,8 +278,10 @@ function vendoredSkills() {
   return owners;
 }
 
-// Which root skills still deserve a plugin definition, and why the rest were passed over.
-function unpackagedSkills(byName) {
+// Which root skills get a plugin definition, and why the rest were passed over. A skill
+// that already has an entry stays in the list: bulk mode refreshes it from the frontmatter
+// rather than skipping it.
+function bulkSkillTargets() {
   const skills = rootSkillNames();
   const owners = vendoredSkills();
   const skillSet = new Set(skills);
@@ -277,13 +289,10 @@ function unpackagedSkills(byName) {
   const skipped = [];
 
   for (const name of skills) {
-    if (byName.has(name)) {
-      skipped.push({ name, reason: 'already in marketplace.json' });
-      continue;
-    }
+    // Shipped inside somebody else's bundle — it must not also be a plugin of its own.
     const owner = owners.get(name);
-    if (owner) {
-      skipped.push({ name, reason: `already shipped by the ${owner} plugin` });
+    if (owner && owner !== name) {
+      skipped.push({ name, reason: `shipped by the ${owner} plugin` });
       continue;
     }
     // A quick variant belongs in its parent's bundle; a plugin of its own would compete
@@ -299,19 +308,23 @@ function unpackagedSkills(byName) {
   return { take, skipped };
 }
 
-function reportSkipped(skipped, opts) {
+function reportSkipped(skipped) {
   if (!skipped.length) return;
   const bundle = skipped.filter((s) => s.bundleWith);
-  const registered = skipped.filter((s) => !s.bundleWith).length;
-  if (registered) console.log(`  ${registered} skill(s) already packaged — skipped`);
+  const packaged = skipped.filter((s) => !s.bundleWith);
+
+  // The bundled-elsewhere list is background, not an action item: count it, and only
+  // spell it out when asked.
+  if (packaged.length) {
+    log.kept(`${packaged.length} skill(s) shipped inside another plugin`);
+    if (log.verbose) log.names(packaged.map((s) => `${s.name} — ${s.reason}`));
+  }
   for (const item of bundle) {
-    console.log(
-      `  ${item.name}: skipped as a quick variant — to ship it, add './skills/${item.name}/' to ` +
-        `plugins/${item.bundleWith}/.github/plugin/plugin.json`,
+    log.kept(`${item.name}`, 'quick variant, not shipped on its own');
+    log.note(
+      `to ship it, add './skills/${item.name}/' to plugins/${item.bundleWith}/.github/plugin/plugin.json`,
     );
   }
-  if (opts.check) return;
-  console.log('');
 }
 
 function main() {
@@ -342,26 +355,27 @@ function main() {
 
   const byName = new Map(marketplace.plugins.filter((e) => e && e.name).map((e) => [e.name, e]));
 
+  log.intro(describeRun(opts));
+
   // Explicit names win; otherwise reconcile the plugins/ tree, plus every unpackaged
   // root skill when --all-skills asked for it.
   const targets = new Set(opts.names.length ? opts.names : localPluginNames());
   if (opts.allSkills) {
-    const { take, skipped } = unpackagedSkills(byName);
+    const { take, skipped } = bulkSkillTargets();
     for (const name of take) targets.add(name);
-    reportSkipped(skipped, opts);
+    reportSkipped(skipped);
   }
 
   if (!targets.size) {
-    console.log(
-      opts.allSkills
-        ? 'generate-plugins: every root skill is already packaged or bundled, nothing to add.'
-        : 'generate-plugins: no plugins found under plugins/, nothing to add.',
-    );
-    return finish(true);
+    return finish(true, {
+      ok: opts.allSkills
+        ? '(every root skill is already packaged or bundled)'
+        : '(no plugins found under plugins/)',
+    });
   }
 
   const added = [];
-  const synced = [];
+  const updated = [];
 
   for (const name of targets) {
     const { entry, error: resolveError, origin, from, derivedFromSkill } = resolveEntry(name, opts);
@@ -378,27 +392,43 @@ function main() {
       continue;
     }
 
-    // Already registered — only report or reconcile the fields both files carry.
+    // Already registered.
     if (existing.source !== entry.source) {
       warnings.push(
         `${name}: marketplace "source" is '${existing.source}', not '${entry.source}' — left as is`,
       );
     }
-    for (const field of ['description', 'version']) {
-      if (existing[field] === entry[field]) continue;
-      if (opts.sync) {
-        existing[field] = entry[field];
-        synced.push(`${name}.${field}`);
-      } else {
-        errors.push(
-          `${name}: "${field}" differs between ${rel(marketplacePath)} and ${origin} — ` +
-            'reconcile by hand, or run with --sync to take the plugin manifest value',
-        );
-      }
+
+    // A skill's frontmatter says nothing about the plugin's version, so a refresh from
+    // skills/ must not reset a version somebody bumped. --version=x still applies.
+    const fields = from === 'skill' && !opts.version ? ['description'] : ['description', 'version'];
+    const drifted = fields.filter((field) => existing[field] !== entry[field]);
+    if (!drifted.length) {
+      if (opts.names.length) log.kept(name, 'already registered, unchanged');
+      continue;
     }
-    if (opts.names.length && !opts.sync) {
-      console.log(`= ${name}: already registered in ${rel(marketplacePath)}`);
+
+    // Direction matters. skills/ is upstream of the marketplace, so a skill's frontmatter
+    // overwrites the entry. plugin.json is downstream — materialize rewrites it from the
+    // marketplace entry — so pulling it back here would make the two scripts fight.
+    if (from !== 'skill') {
+      warnings.push(
+        `${name}: ${origin} does not match the marketplace entry (${drifted.join(', ')}) — ` +
+          "'npm run plugin:materialize' rewrites the manifest from marketplace.json",
+      );
+      continue;
     }
+
+    if (!opts.overwrite) {
+      errors.push(
+        `${name}: the marketplace entry does not match ${origin} (${drifted.join(', ')}) — ` +
+          'drop --no-overwrite to take the skill value, or reconcile by hand',
+      );
+      continue;
+    }
+
+    for (const field of drifted) existing[field] = entry[field];
+    updated.push({ name, origin, fields: drifted });
   }
 
   // Entries pointing at a local directory that does not exist yet are fine — materialize
@@ -418,6 +448,8 @@ function main() {
   const nextText = JSON.stringify(marketplace, null, 2).split('\n').join(eol) + eol;
   const changed = nextText !== originalText;
 
+  const registered = marketplace.plugins.filter((e) => e?.source?.startsWith?.('plugins/')).length;
+
   if (opts.check) {
     // A plugin folder with no marketplace entry is a real defect. A root skill with no
     // plugin is not — it is only a candidate, so --all-skills reports, never fails.
@@ -427,72 +459,97 @@ function main() {
     for (const item of unregistered) {
       errors.push(
         `${rel(marketplacePath)}: no entry for '${item.name}' (declared in ${item.origin}) — ` +
-          "run 'node scripts/generate-plugins.js' and commit the result",
+          "run 'npm run plugin:generate' and commit the result",
       );
     }
-    if (changed && !added.length) {
+    if (updated.length) {
+      log.change('~', `${updated.length} entry/entries stale`, 'source description has moved on');
+      log.names(updated.map((item) => `${item.name} (${item.fields.join(', ')})`));
+    }
+    if (changed && !added.length && !updated.length) {
       errors.push(
-        `${rel(marketplacePath)} is out of date — run 'node scripts/generate-plugins.js' and commit the result`,
+        `${rel(marketplacePath)} is out of date — run 'npm run plugin:generate' and commit the result`,
       );
     }
-    for (const item of candidates) {
-      console.log(`  ${item.name}: not packaged — 'npm run plugin:generate -- ${item.name}' would add it`);
+    if (candidates.length) {
+      log.kept(`${candidates.length} skill(s) not packaged`, 'run with --all-skills to register them');
+      log.names(candidates.map((item) => item.name));
     }
-    if (!errors.length) {
-      // added entries were staged into marketplace.plugins above but never written.
-      const local =
-        marketplace.plugins.filter((e) => e?.source?.startsWith?.('plugins/')).length - added.length;
-      const pending = candidates.length ? `, ${candidates.length} skill(s) unpackaged` : '';
-      console.log(
-        `generate-plugins: OK (${local} local plugin(s) registered in ${rel(marketplacePath)}${pending})`,
-      );
-    }
-    return finish(!errors.length);
+
+    // added entries were staged into marketplace.plugins above but never written.
+    const pending = candidates.length ? `, ${candidates.length} skill(s) unpackaged` : '';
+    return finish(!errors.length, {
+      ok: `(${registered - added.length} plugin(s) registered${pending})`,
+    });
   }
 
   // Never write a partially reconciled manifest.
-  if (errors.length) {
-    if (changed) console.error('generate-plugins: errors found, nothing written.');
-    return finish(false);
-  }
+  if (errors.length) return finish(false);
 
   if (!changed) {
-    console.log(`generate-plugins: OK (${rel(marketplacePath)} already up to date)`);
-    return finish(true);
+    return finish(true, { ok: `(${registered} plugin(s) registered, nothing to add)` });
   }
 
+  const summary = () => {
+    const parts = [];
+    if (added.length) parts.push(`${added.length} added`);
+    if (updated.length) parts.push(`${updated.length} rewritten`);
+    return `(${parts.join(', ')}, ${registered - added.length - updated.length} unchanged)`;
+  };
+
   if (opts.dryRun) {
-    console.log(`--dry-run: ${rel(marketplacePath)} would change:`);
-    for (const item of added) console.log(`+ ${JSON.stringify(byName.get(item.name), null, 2)}`);
-    for (const field of synced) console.log(`~ ${field} would be updated from the plugin manifest`);
-    return finish(true);
+    reportEntries(added, updated, 'would be added');
+    log.note('nothing written — drop --dry-run to apply');
+    return finish(true, { ok: `${summary()} — dry run` });
   }
 
   fs.writeFileSync(marketplacePath, nextText);
-  for (const item of added) {
-    console.log(`+ ${item.name}: added to ${rel(marketplacePath)} (from ${item.origin})`);
-    if (item.derivedFromSkill) {
-      console.log(
-        '  ↳ description came from the skill frontmatter — expand it to say what the plugin ' +
-          'bundles and when to install it',
-      );
-    }
-  }
-  for (const field of synced) console.log(`~ ${field} updated from the plugin manifest`);
-  return finish(true, true);
+  reportEntries(added, updated, `added to ${rel(marketplacePath)}`);
+  return finish(true, {
+    ok: summary(),
+    next: ['npm run plugin:materialize', 'npm run generate'],
+  });
 }
 
-function finish(ok, wroteChanges = false) {
-  for (const w of warnings) console.warn(`⚠️  ${w}`);
-  if (errors.length) {
-    for (const e of errors) console.error(`❌ ${e}`);
-    console.error(`\ngenerate-plugins: ${errors.length} error(s)`);
-    process.exit(1);
+// One line per entry when there are few, a counted list when there are many. The
+// frontmatter-description caveat is one note with a count, not one per entry.
+function reportEntries(added, updated, verb) {
+  if (added.length === 1) {
+    log.added(added[0].name, `${verb}, from ${added[0].origin}`);
+  } else if (added.length) {
+    log.added(`${added.length} entries ${verb}`);
+    log.names(added.map((item) => item.name));
   }
-  if (wroteChanges) {
-    console.log("Next: run 'npm run plugin:materialize && npm run generate'.");
+
+  const derived = added.filter((item) => item.derivedFromSkill);
+  if (derived.length) {
+    log.note(
+      `${derived.length} description(s) came from skill frontmatter — rewrite them to say what ` +
+        'the plugin bundles and when to install it',
+    );
   }
-  process.exit(ok ? 0 : 1);
+
+  if (updated.length === 1) {
+    log.change('~', updated[0].name, `${updated[0].fields.join(', ')} taken from ${updated[0].origin}`);
+  } else if (updated.length) {
+    log.change('~', `${updated.length} entries rewritten from their source`);
+    log.names(updated.map((item) => `${item.name} (${item.fields.join(', ')})`));
+  }
+}
+
+function describeRun(opts) {
+  const scope = opts.names.length
+    ? opts.names.join(', ')
+    : opts.allSkills
+      ? 'every unpackaged skill under skills/'
+      : 'plugins/';
+  if (opts.check) return `checking ${rel(marketplacePath)} against ${scope}`;
+  if (opts.dryRun) return `previewing entries for ${scope}`;
+  return `registering ${scope}`;
+}
+
+function finish(succeeded, { ok = '', next = [] } = {}) {
+  log.finish({ errors, warnings, ok: succeeded ? ok : '', next });
 }
 
 main();

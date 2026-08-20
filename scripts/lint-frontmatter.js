@@ -10,8 +10,10 @@
 
 const fs = require('fs');
 const path = require('path');
+const { createLogger } = require('./lib/log');
 
 const repoRoot = path.join(__dirname, '..');
+const log = createLogger('lint-frontmatter');
 const errors = [];
 const warnings = [];
 
@@ -136,10 +138,8 @@ for (const file of skillFiles) {
   }
 }
 
-for (const w of warnings) console.warn(`⚠️  ${w}`);
-if (errors.length) {
-  for (const e of errors) console.error(`❌ ${e}`);
-  console.error(`\nlint-frontmatter: ${errors.length} error(s), ${warnings.length} warning(s)`);
-  process.exit(1);
-}
-console.log(`lint-frontmatter: OK (${describedFiles.length + skillFiles.length} files checked, ${warnings.length} warning(s))`);
+log.finish({
+  errors,
+  warnings,
+  ok: `(${describedFiles.length + skillFiles.length} files checked)`,
+});

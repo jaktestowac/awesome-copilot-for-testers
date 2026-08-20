@@ -10,10 +10,13 @@
 
 const fs = require('fs');
 const path = require('path');
+const { createLogger } = require('./lib/log');
 
 const repoRoot = path.join(__dirname, '..');
 const pluginsDir = path.join(repoRoot, 'plugins');
+const log = createLogger('check-plugin-sync');
 const errors = [];
+const warnings = [];
 
 function rel(p) {
   return path.relative(repoRoot, p).split(path.sep).join('/');
@@ -34,11 +37,22 @@ function listFilesRecursively(basePath) {
 }
 
 if (!fs.existsSync(pluginsDir)) {
-  console.log('check-plugin-sync: no plugins directory, nothing to check.');
-  process.exit(0);
+  log.finish({ ok: '(no plugins directory, nothing to check)' });
+}
+
+// One line per drifted skill, listing the files, beats one line per file: the fix is
+// the same command either way, and the file list is the evidence for it.
+function reportDrift(skillName, kind, files) {
+  const shown = files.slice(0, 5).join(', ');
+  const more = files.length > 5 ? `, … +${files.length - 5} more` : '';
+  errors.push(
+    `plugin copy of skill '${skillName}' ${kind}: ${files.length} file(s) — ${shown}${more} — ` +
+      "run 'npm run plugin:materialize'",
+  );
 }
 
 let checked = 0;
+const drifted = new Set();
 
 for (const pluginName of fs.readdirSync(pluginsDir)) {
   // Check 1: every skill the manifest declares must have been materialized.
@@ -77,29 +91,24 @@ for (const pluginName of fs.readdirSync(pluginsDir)) {
 
     const missing = rootFiles.filter((f) => !pluginFiles.includes(f));
     const extra = pluginFiles.filter((f) => !rootFiles.includes(f));
+    const differing = rootFiles
+      .filter((f) => pluginFiles.includes(f))
+      .filter(
+        (f) =>
+          !fs
+            .readFileSync(path.join(rootSkill, f))
+            .equals(fs.readFileSync(path.join(pluginSkill, f))),
+      );
 
-    for (const f of missing) {
-      errors.push(`${rel(pluginSkill)}: missing file '${f}' present in skills/${skillName}`);
-    }
-    for (const f of extra) {
-      errors.push(`${rel(pluginSkill)}: extra file '${f}' not present in skills/${skillName}`);
-    }
-
-    for (const f of rootFiles.filter((f) => pluginFiles.includes(f))) {
-      const a = fs.readFileSync(path.join(rootSkill, f));
-      const b = fs.readFileSync(path.join(pluginSkill, f));
-      if (!a.equals(b)) {
-        errors.push(
-          `plugin copy of skill '${skillName}' is out of sync at '${f}' — run 'npm run plugin:materialize'`,
-        );
-      }
-    }
+    if (missing.length) reportDrift(skillName, 'is missing files its source has', missing);
+    if (extra.length) reportDrift(skillName, 'has files its source does not', extra);
+    if (differing.length) reportDrift(skillName, 'differs from its source', differing);
+    if (missing.length || extra.length || differing.length) drifted.add(skillName);
   }
 }
 
-if (errors.length) {
-  for (const e of errors) console.error(`❌ ${e}`);
-  console.error(`\ncheck-plugin-sync: ${errors.length} error(s)`);
-  process.exit(1);
-}
-console.log(`check-plugin-sync: OK (${checked} plugin skill(s) in sync)`);
+log.finish({
+  errors,
+  warnings,
+  ok: `(${checked - drifted.size} plugin skill copy/copies match skills/)`,
+});
