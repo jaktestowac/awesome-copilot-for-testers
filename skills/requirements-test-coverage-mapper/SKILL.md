@@ -1,6 +1,6 @@
 ---
 name: requirements-test-coverage-mapper
-description: 'Maps requirements (PRD, user stories, acceptance criteria) to test coverage via a Requirements Traceability Matrix, exposing coverage gaps, risks, test levels, prioritization, and automation candidates. Use when mapping requirements to tests, checking coverage completeness for a PRD or user story, finding missing acceptance criteria, or building a risk-based regression strategy.'
+description: 'Maps requirements (PRD, user stories, acceptance criteria) to planned test coverage via a Requirements Traceability Matrix, exposing coverage gaps, risks, test levels, prioritization, and automation candidates. Use when designing coverage from a specification, checking coverage completeness for a PRD or user story, finding missing acceptance criteria, or building a risk-based regression strategy. When the tests already exist and the matrix has to be extracted from them, verified, and kept accurate, use the tracing-requirements-to-code skill instead.'
 argument-hint: 'PRD, user stories, or acceptance criteria to map, plus scope boundaries and known constraints'
 user-invocable: true
 ---
@@ -73,6 +73,18 @@ For each requirement, propose coverage across:
 
 Use risk-based thinking: assign impact (H/M/L) and likelihood (H/M/L), and derive priority and test depth from risk.
 
+### Phase 3b: Cross-Check the Backward Direction
+
+The RTM table has one row per requirement, so it can only ever show requirements with no test. When tests already exist, also run the other direction: **which existing tests map to no requirement?**
+
+An orphan test is one of three things, and they need different actions:
+
+- an **undocumented requirement** - the behaviour matters, someone tested it, nobody wrote it down. Add it to the requirement set.
+- a **test of removed behaviour** - delete it.
+- a **test that proves nothing** - route it to `unslop-tests` rather than mapping it.
+
+Report orphans classified, not counted. For a full bidirectional pass over an existing codebase, including annotation, link verification, and drift detection, use `tracing-requirements-to-code`.
+
 ### Phase 4: Produce the Output
 
 Follow the strict output schema in `./resources/coverage-map-template.md` — document metadata, executive coverage summary, RTM table, scenario catalog, gap report, risk-based prioritization, automation/CI recommendations, and assumptions/change-impact notes, in that order.
@@ -100,6 +112,8 @@ Before final output:
 
 - [ ] Every requirement has an ID and is atomic
 - [ ] Every requirement maps to ≥1 scenario OR is flagged missing
+- [ ] Where tests already exist, orphan tests are identified and classified
+- [ ] A scenario marked `Exists` was confirmed against the actual test, not assumed from its title
 - [ ] Ambiguities are captured as explicit questions
 - [ ] Risk is assigned and used to prioritize
 - [ ] Non-functional coverage is addressed where relevant
@@ -111,10 +125,12 @@ Before final output:
 
 ## Related Skills
 
+- `tracing-requirements-to-code` - when the tests already exist and the matrix must be extracted from them, verified, and kept accurate. Use this skill to plan coverage from a spec, that one to trace what was actually built.
 - `prd-generator` - when requirements themselves still need to be written before mapping
 - `verifying-acceptance-criteria` - when a specific build must be checked against the acceptance criteria
 - `analyzing-regression-scope` - when the question is tactical retest scope after a change rather than full traceability
 - `designing-functional-tests` - when RTM scenarios should expand into detailed test cases
+- `assessing-release-readiness` - when the coverage gaps found here feed a go/no-go decision
 
 ## Definition of Done
 
