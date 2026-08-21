@@ -9,7 +9,7 @@ user-invocable: true
 
 A compact standard for everyday unit testing: enough to keep tests honest, short enough to read in one pass.
 
-Framework-agnostic — match whatever runner, assertion style, and file layout the project already uses. If none exists, ask which runner to target before writing anything.
+Framework-agnostic - match whatever runner, assertion style, and file layout the project already uses. If none exists, ask which runner to target before writing anything.
 
 ## When to Use
 
@@ -23,15 +23,15 @@ Escalate to `writing-unit-tests` when the job is a legacy backfill, a flaky or s
 
 1. **Test behavior, not implementation.** Assert what the public interface returns, throws, or emits. Never touch private state.
 2. **One reason to fail.** If the test name needs "and", split it.
-3. **Name the behavior and the condition.** `returns zero when the cart is empty` — the CI log alone should say what broke.
+3. **Name the behavior and the condition.** `returns zero when the cart is empty` - the CI log alone should say what broke.
 4. **Arrange - Act - Assert**, visibly separated, with exactly one call to the unit under test.
-5. **Expected values are independent literals.** Never recompute them the way the code does, and never import the implementation's own constant — that test can only agree with the code.
+5. **Expected values are independent literals.** Never recompute them the way the code does, and never import the implementation's own constant - that test can only agree with the code.
 6. **Assert specific values.** Not truthy, not defined. For errors, assert the type and the meaningful part of the message.
-7. **No logic in the test.** No loops or conditionals — use the runner's parameterized/table-driven API so each case reports separately.
+7. **No logic in the test.** No loops or conditionals - use the runner's parameterized/table-driven API so each case reports separately.
 8. **Control nondeterminism.** Inject or freeze time, randomness, and IDs; use fake timers instead of real delays; await every promise and assert rejections directly.
-9. **Mock only what you do not own.** Network, storage, clock. Never stub your own modules — that freezes the design and breaks on every refactor.
+9. **Mock only what you do not own.** Network, storage, clock. Never stub your own modules - that freezes the design and breaks on every refactor.
 10. **No real I/O.** If proving the behavior needs a database, HTTP call, or browser, say so and route it to integration coverage instead of mocking around it.
-11. **Synthetic test data only.** No credentials, tokens, or real personal data — a fixture committed once stays in history forever.
+11. **Synthetic test data only.** No credentials, tokens, or real personal data - a fixture committed once stays in history forever.
 12. **Leave nothing skipped silently.** A `skip` or `only` carries an issue link and an owner, or it does not land.
 13. **Do not reshape the code to suit the test.** Hard-to-test code is a design finding to raise, not something to restructure inside a test-adding change.
 
@@ -39,12 +39,12 @@ Escalate to `writing-unit-tests` when the job is a legacy backfill, a flaky or s
 
 For each unit, walk this list and keep what applies:
 
-- **happy path** — typical input
-- **input classes** — one representative per meaningfully different group
-- **boundaries** — empty, zero, one, min, max, off-by-one, just outside the range
-- **invalid input** — wrong type, malformed value, missing required field
-- **error paths** — thrown errors, rejected promises, failure return values
-- **state or sequence** — behavior that depends on what happened before
+- **happy path** - typical input
+- **input classes** - one representative per meaningfully different group
+- **boundaries** - empty, zero, one, min, max, off-by-one, just outside the range
+- **invalid input** - wrong type, malformed value, missing required field
+- **error paths** - thrown errors, rejected promises, failure return values
+- **state or sequence** - behavior that depends on what happened before
 
 Skip trivial getters, framework wiring, and third-party library behavior. A test with nothing to prove still breaks on refactors.
 
@@ -52,12 +52,12 @@ Skip trivial getters, framework wiring, and third-party library behavior. A test
 
 Two checks, both quick, and both **run rather than imagined**:
 
-- **Mutation check** — break the covered behavior on purpose, run the test, see it fail, restore the code, see it pass. A test written after the code has never been seen failing; this is the only thing that proves it can.
-- **Refactor check** — rename internals and restructure without changing behavior. Does the test still pass? If not, it is coupled to implementation.
+- **Mutation check** - break the covered behavior on purpose, run the test, see it fail, restore the code, see it pass. A test written after the code has never been seen failing; this is the only thing that proves it can.
+- **Refactor check** - rename internals and restructure without changing behavior. Does the test still pass? If not, it is coupled to implementation.
 
 Then run the full suite, not just the new tests, and quote the real result.
 
-If a test fails intermittently, do not add a retry or raise a timeout. Reproduce it first — repeat runs, isolation, random order, parallel on and off — then fix the cause. `writing-unit-tests` carries the triage procedure.
+If a test fails intermittently, do not add a retry or raise a timeout. Reproduce it first - repeat runs, isolation, random order, parallel on and off - then fix the cause. `writing-unit-tests` carries the triage procedure.
 
 ## Common Failure Modes
 

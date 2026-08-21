@@ -8,7 +8,7 @@ Performs evidence-driven code review for pull requests, legacy modules, and qual
 
 ## What's inside
 
-- `skills/code-review-advanced/` — the agent skill, generated from the repository's `skills/code-review-advanced/` directory, which is the source of truth
+- `skills/code-review-advanced/` - the agent skill, generated from the repository's `skills/code-review-advanced/` directory, which is the source of truth
 
 ## Installation
 
@@ -22,4 +22,4 @@ copilot plugin install code-review-advanced
 ## Note on source of truth
 
 The skill content is a copy of `skills/code-review-advanced/` at the repository root. Do not edit the plugin copy
-directly — update the root skill and run `npm run plugin:materialize`.
+directly - update the root skill and run `npm run plugin:materialize`.

@@ -25,7 +25,7 @@ Typical situations:
 - expand coverage of edge cases and error paths
 - decide what deserves a unit test versus an integration test
 
-Reach for this skill when the code already exists. If the tests should come first and drive the implementation, use `test-driven-development` instead — then return here for the standard each test it produces must meet.
+Reach for this skill when the code already exists. If the tests should come first and drive the implementation, use `test-driven-development` instead - then return here for the standard each test it produces must meet.
 
 ## What a Unit Test Is Here
 
@@ -52,10 +52,10 @@ If a behavior can only be proven by crossing a process or network boundary, say 
 Skip these unless they carry real logic:
 
 - trivial getters, setters, and pass-through wrappers
-- third-party library behavior — test your use of it, not the library itself
+- third-party library behavior - test your use of it, not the library itself
 - framework wiring and generated code
 - constants, or anything the type system already guarantees
-- private helpers — they get covered through the public interface that uses them
+- private helpers - they get covered through the public interface that uses them
 
 A test with nothing to prove still costs review time and still breaks on refactors.
 
@@ -88,7 +88,7 @@ Before writing anything, state:
 
 If the interface is unclear or the unit does too many things, say so. Untestable code is a design finding, not a testing failure.
 
-The interface is the test surface: callers and tests cross the same seam. Wanting to test *past* the interface — reaching into internals, stubbing things the unit owns, asserting on private state — means the unit is the wrong shape, and that is worth reporting even when the tests get written anyway.
+The interface is the test surface: callers and tests cross the same seam. Wanting to test *past* the interface - reaching into internals, stubbing things the unit owns, asserting on private state - means the unit is the wrong shape, and that is worth reporting even when the tests get written anyway.
 
 ### Phase 1: Detect the project's testing conventions
 
@@ -108,14 +108,14 @@ List the behaviors to cover before writing code. Each lens maps to a standard te
 
 | Lens                | Technique                | What to cover                                                                        |
 | ------------------- | ------------------------ | ------------------------------------------------------------------------------------ |
-| Happy path          | —                        | The main expected behavior with typical input                                        |
+| Happy path          | -                        | The main expected behavior with typical input                                        |
 | Input classes       | Equivalence partitioning | One representative per meaningfully different input group                            |
 | Boundaries          | Boundary value analysis  | Empty, zero, one, min, max, off-by-one, just outside the range                       |
 | Rule combinations   | Decision table           | Each meaningful combination of the flags or conditions that drive branching          |
 | Invalid input       | Negative testing         | Wrong type, malformed value, missing required field                                  |
 | Error paths         | Negative testing         | Thrown errors, rejected results, failure return values                               |
 | State transitions   | State transition testing | Behavior that depends on prior state or call sequence, including invalid transitions |
-| Contract guarantees | —                        | Idempotence, immutability of inputs, ordering, defaults                              |
+| Contract guarantees | -                        | Idempotence, immutability of inputs, ordering, defaults                              |
 | Known-risky spots   | Error guessing           | Places this unit or its neighbors have broken before                                 |
 
 Prefer a representative case per class over exhaustive permutations. Coverage of behavior beats coverage of lines.
@@ -125,12 +125,12 @@ When several inputs combine, cover the pairs that matter rather than the full cr
 
 Some behaviors are defined by a rule that holds across the whole input space, not by a handful of cases. Where the project already has a property-based library, a single property earns more than twenty examples:
 
-- **round trips** — `decode(encode(x))` equals `x` for any `x`
-- **invariants** — the total never goes negative; the output is always sorted; every input item appears exactly once
-- **idempotence** — applying it twice changes nothing after the first time
-- **equivalence** — the fast path and the obvious slow path agree
+- **round trips** - `decode(encode(x))` equals `x` for any `x`
+- **invariants** - the total never goes negative; the output is always sorted; every input item appears exactly once
+- **idempotence** - applying it twice changes nothing after the first time
+- **equivalence** - the fast path and the obvious slow path agree
 
-Two conditions before reaching for one: the property must come from an independent source of truth, not from re-describing the implementation, and failures must be reproducible — record the seed and pin the failing case as a normal example test once it is found. Do not introduce a new library for this without asking.
+Two conditions before reaching for one: the property must come from an independent source of truth, not from re-describing the implementation, and failures must be reproducible - record the seed and pin the failing case as a normal example test once it is found. Do not introduce a new library for this without asking.
 
 ### Phase 3: Write each test with a visible structure
 
@@ -159,7 +159,7 @@ See `./resources/good-and-bad-tests.md` for worked before/after pairs of each ru
 A test added to code that already works can fail for two very different reasons: you found a bug, or you wrote the wrong expectation. Decide which before changing anything.
 
 - Suspect the observation before the system: re-read the test, the setup, and the interface being called.
-- If the expectation came from a real source of truth and the code disagrees, that is a defect — report it rather than editing the assertion.
+- If the expectation came from a real source of truth and the code disagrees, that is a defect - report it rather than editing the assertion.
 - Never adjust the expected value to match the output you observed unless you have confirmed that output is correct. That move silently turns a specification into a characterization test, and nobody reading it later can tell the difference.
 
 ### Phase 4: Control every source of nondeterminism
@@ -184,8 +184,8 @@ If a test cannot be made deterministic at the unit level, that is the signal it 
 - build inputs with a small factory or builder that takes overrides, so each test states only the fields it cares about
 - keep irrelevant setup out of the test body
 - avoid shared mutable fixtures across tests; recreate state per test
-- prefer the lightest test double that answers the question — a stub that returns a value usually beats a mock that verifies calls
-- give load-bearing values a name — `expect(items).toHaveLength(7)` says nothing about why seven is right
+- prefer the lightest test double that answers the question - a stub that returns a value usually beats a mock that verifies calls
+- give load-bearing values a name - `expect(items).toHaveLength(7)` says nothing about why seven is right
 - keep test data obviously synthetic: no real credentials, tokens, customer names, emails, or identifiers. A fixture committed once is committed forever
 
 See `./resources/test-doubles-guide.md` for the double taxonomy, the boundary rule, and how to design code that does not need heavy mocking.
@@ -196,7 +196,7 @@ When the code has no tests and its behavior is not documented, do not start from
 
 1. Write tests that pin down what it _currently_ does, including behavior that looks wrong.
 2. Run them and let the actual output define the expected values.
-3. Flag anything suspicious as a question for the user — do not silently "fix" it while adding tests.
+3. Flag anything suspicious as a question for the user - do not silently "fix" it while adding tests.
 4. Only once the behavior is pinned, refactor or correct it, using those tests as the safety net.
 
 Say clearly which tests are characterization tests, so nobody mistakes them for a specification of intended behavior.
@@ -205,7 +205,7 @@ Say clearly which tests are characterization tests, so nobody mistakes them for 
 
 When the job is an existing test that fails intermittently, or a suite that has become too slow to trust:
 
-1. **Reproduce the failure first** — repeated runs, the test in isolation, random order, parallel on and off, CI versus local. Each configuration accuses a different cause.
+1. **Reproduce the failure first** - repeated runs, the test in isolation, random order, parallel on and off, CI versus local. Each configuration accuses a different cause.
 2. **Classify it** before editing: shared state, order dependence, resource contention, real clock, real delay, unawaited async, nondeterministic output.
 3. **Fix the cause, not the symptom.** A raised timeout, an added retry, or a `skip` is containment. Every retried test is an open defect reporting itself as a pass.
 4. **Prove it** by running the configuration that used to fail, repeatedly, and quoting both the original failure and the repeated green.
@@ -227,7 +227,7 @@ Two checks matter most, and both are **run, not imagined**:
 
 Then report what was actually done:
 
-- the command that ran, and the real result — counts, not "all green"
+- the command that ran, and the real result - counts, not "all green"
 - the mutation check: which behavior was broken, and the failure it produced
 - what is covered, and which listed cases were deliberately left out
 - which tests are characterization tests rather than specifications
@@ -284,5 +284,5 @@ This skill is complete when:
 - no test was left skipped without an issue link and an owner
 - legacy behavior was characterized rather than silently changed
 - production code was not reshaped inside the change; any testability finding was raised instead
-- any flake was reproduced, diagnosed, and proved fixed by repeated runs — not contained by a retry
+- any flake was reproduced, diagnosed, and proved fixed by repeated runs - not contained by a retry
 - the checklist passes, and the mutation and refactor checks were actually executed with their output quoted

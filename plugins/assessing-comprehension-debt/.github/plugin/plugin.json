@@ -1,0 +1,25 @@
+{
+  "name": "assessing-comprehension-debt",
+  "description": "Measures the risk that code shipped without anyone understanding it: a teach-back attestation on high-risk changes, a risk band from changed-code complexity, diff size and whether a human explanation accompanied it, and optional AI-authorship provenance. Findings stay advisory by design. Use when an AI-assisted codebase grows faster than the team reads it, when reviews are rubber-stamped, when nobody can explain a module that ships weekly, or when leadership asks how much of the code the team can actually maintain.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "comprehension debt",
+    "code understanding",
+    "bus factor",
+    "ai assisted development",
+    "teach back",
+    "code review",
+    "technical debt",
+    "maintainability",
+    "knowledge transfer",
+    "quality governance"
+  ],
+  "skills": [
+    "./skills/assessing-comprehension-debt/"
+  ]
+}

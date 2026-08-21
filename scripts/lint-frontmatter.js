@@ -72,7 +72,7 @@ function requireField(filePath, fields, name) {
   }
   const value = fields[name];
   if (value === undefined || value === '') {
-    // Allow block scalars (|, >) — treat presence of the key as non-empty enough
+    // Allow block scalars (|, >) - treat presence of the key as non-empty enough
     if (value === '' && (name === 'description' || name === 'name')) {
       errors.push(`${rel(filePath)}: frontmatter '${name}' is empty`);
     } else if (value === undefined) {
@@ -96,9 +96,12 @@ const describedFiles = [
   ...listFilesRecursively(path.join(repoRoot, 'prompts'), (f) => f.endsWith('.prompt.md')),
   ...listFilesRecursively(path.join(repoRoot, 'agents'), (f) => f.endsWith('.agent.md')),
   ...listFilesRecursively(path.join(repoRoot, 'chatmodes'), (f) => f.endsWith('.chatmode.md')),
-  ...listFilesRecursively(path.join(repoRoot, 'agent-orchestration'), (f) => f.endsWith('.agent.md')),
-  ...listFilesRecursively(path.join(repoRoot, 'sets'), (f) =>
-    f.endsWith('.agent.md') || f.endsWith('.prompt.md'),
+  ...listFilesRecursively(path.join(repoRoot, 'agent-orchestration'), (f) =>
+    f.endsWith('.agent.md'),
+  ),
+  ...listFilesRecursively(
+    path.join(repoRoot, 'sets'),
+    (f) => f.endsWith('.agent.md') || f.endsWith('.prompt.md'),
   ),
 ];
 
@@ -134,7 +137,9 @@ for (const file of skillFiles) {
     errors.push(`${rel(file)}: frontmatter name '${name}' does not match folder '${folderName}'`);
   }
   if (lineCount > 500) {
-    warnings.push(`${rel(file)}: SKILL.md is ${lineCount} lines (> 500) — consider moving detail to resources/`);
+    warnings.push(
+      `${rel(file)}: SKILL.md is ${lineCount} lines (> 500) - consider moving detail to resources/`,
+    );
   }
 }
 

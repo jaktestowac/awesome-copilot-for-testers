@@ -8,7 +8,7 @@ Performs webpage and user-flow accessibility audits with WCAG 2.2 guidance, manu
 
 ## What's inside
 
-- `skills/auditing-accessibility/` — the agent skill, generated from the repository's `skills/auditing-accessibility/` directory, which is the source of truth
+- `skills/auditing-accessibility/` - the agent skill, generated from the repository's `skills/auditing-accessibility/` directory, which is the source of truth
 
 ## Installation
 
@@ -22,4 +22,4 @@ copilot plugin install auditing-accessibility
 ## Note on source of truth
 
 The skill content is a copy of `skills/auditing-accessibility/` at the repository root. Do not edit the plugin copy
-directly — update the root skill and run `npm run plugin:materialize`.
+directly - update the root skill and run `npm run plugin:materialize`.

@@ -23,17 +23,17 @@ Docs: [VS Code custom instructions](https://code.visualstudio.com/docs/copilot/c
 
 ## Files in this directory
 
-| File | Scope (`applyTo`) | Purpose |
-| ---- | ----------------- | ------- |
-| [playwright-typescript.instructions.md](playwright-typescript.instructions.md) | `tests/**/*.ts` | Playwright test generation: locators, assertions, structure, and testing patterns (AAA, POM, DTO, Builder, Factory, fixtures) |
-| [e2e-playwright.instructions.md](e2e-playwright.instructions.md) | `tests/e2e/**/*.spec.ts` | E2E-specific rules: test intent, isolation, locator strategy, waiting discipline, flake prevention, diagnostics |
-| [api-playwright-tests.instructions.md](api-playwright-tests.instructions.md) | `tests/api/**/*.spec.ts` | API test rules: HTTP semantics, contract assertions, typed clients, data isolation |
-| [page-objects.instructions.md](page-objects.instructions.md) | `**/pages/**/*.ts` | Page Object Model conventions: structure, private locators, intent-level methods, navigation waits |
-| [typescript-style.instructions.md](typescript-style.instructions.md) | `{tests,src}/**/*.ts` | TypeScript style: explicit types at boundaries, typed errors, import hygiene, async conventions |
+| File                                                                           | Scope (`applyTo`)        | Purpose                                                                                                                       |
+| ------------------------------------------------------------------------------ | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| [playwright-typescript.instructions.md](playwright-typescript.instructions.md) | `tests/**/*.ts`          | Playwright test generation: locators, assertions, structure, and testing patterns (AAA, POM, DTO, Builder, Factory, fixtures) |
+| [e2e-playwright.instructions.md](e2e-playwright.instructions.md)               | `tests/e2e/**/*.spec.ts` | E2E-specific rules: test intent, isolation, locator strategy, waiting discipline, flake prevention, diagnostics               |
+| [api-playwright-tests.instructions.md](api-playwright-tests.instructions.md)   | `tests/api/**/*.spec.ts` | API test rules: HTTP semantics, contract assertions, typed clients, data isolation                                            |
+| [page-objects.instructions.md](page-objects.instructions.md)                   | `**/pages/**/*.ts`       | Page Object Model conventions: structure, private locators, intent-level methods, navigation waits                            |
+| [typescript-style.instructions.md](typescript-style.instructions.md)           | `{tests,src}/**/*.ts`    | TypeScript style: explicit types at boundaries, typed errors, import hygiene, async conventions                               |
 
 ## Writing good instruction files
 
-- Keep rules **specific and testable** — "Use `getByRole` before CSS selectors", not "write good locators".
+- Keep rules **specific and testable** - "Use `getByRole` before CSS selectors", not "write good locators".
 - Scope `applyTo` as narrowly as the content allows; only truly universal rules belong in broad globs.
-- Don't duplicate rules across files — each rule should have one home, and other files can cross-reference it.
+- Don't duplicate rules across files - each rule should have one home, and other files can cross-reference it.
 - Keep files short; every matching request pays the token cost of the whole file.

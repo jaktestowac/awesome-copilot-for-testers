@@ -55,7 +55,7 @@ Run this before declaring unit tests finished. Anything unchecked is either fixe
 
 - [ ] Doubles replace only things the project does not own: external services, storage, clock, randomness
 - [ ] No internal collaborator, private helper, or pure function is substituted
-- [ ] The lightest double that answers the question was used — stub or fake over mock
+- [ ] The lightest double that answers the question was used - stub or fake over mock
 - [ ] No stub contains conditional logic
 - [ ] Something, somewhere, still exercises the real boundary the stubs stand in for
 
@@ -70,7 +70,7 @@ Run this before declaring unit tests finished. Anything unchecked is either fixe
 - [ ] State transitions covered where behavior depends on prior state, including invalid transitions
 - [ ] Contract guarantees covered where they exist: defaults, immutability of inputs, ordering, idempotence
 - [ ] Historically fragile areas got deliberate attention
-- [ ] Where a rule holds across a whole input space, a property was considered instead of more examples — with a recorded seed and the failing case pinned as an example test
+- [ ] Where a rule holds across a whole input space, a property was considered instead of more examples - with a recorded seed and the failing case pinned as an example test
 
 ## Test data hygiene
 
@@ -80,7 +80,7 @@ Run this before declaring unit tests finished. Anything unchecked is either fixe
 
 ## Legacy code
 
-- [ ] Where a new test failed against existing code, it was decided whether the bug was in the code or the expectation — no expected value was quietly adjusted to match observed output
+- [ ] Where a new test failed against existing code, it was decided whether the bug was in the code or the expectation - no expected value was quietly adjusted to match observed output
 - [ ] Tests over untested code pin current behavior rather than assumed behavior
 - [ ] Characterization tests are labelled as such, not presented as a specification
 - [ ] Behavior that looks wrong was raised as a question, not silently corrected

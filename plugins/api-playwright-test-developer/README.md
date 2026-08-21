@@ -8,7 +8,7 @@ Writes and reviews API automation tests with Playwright Test, covering setup/tea
 
 ## What's inside
 
-- `skills/api-playwright-test-developer/` — the agent skill, generated from the repository's `skills/api-playwright-test-developer/` directory, which is the source of truth
+- `skills/api-playwright-test-developer/` - the agent skill, generated from the repository's `skills/api-playwright-test-developer/` directory, which is the source of truth
 
 ## Installation
 
@@ -22,4 +22,4 @@ copilot plugin install api-playwright-test-developer
 ## Note on source of truth
 
 The skill content is a copy of `skills/api-playwright-test-developer/` at the repository root. Do not edit the plugin copy
-directly — update the root skill and run `npm run plugin:materialize`.
+directly - update the root skill and run `npm run plugin:materialize`.

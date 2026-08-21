@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// Verifies that `npm run plugin:materialize` has been run — i.e. that the generated
+// Verifies that `npm run plugin:materialize` has been run - i.e. that the generated
 // plugin skill copies are byte-identical to their source of truth in skills/.
 //
 // Two checks:
@@ -46,7 +46,7 @@ function reportDrift(skillName, kind, files) {
   const shown = files.slice(0, 5).join(', ');
   const more = files.length > 5 ? `, … +${files.length - 5} more` : '';
   errors.push(
-    `plugin copy of skill '${skillName}' ${kind}: ${files.length} file(s) — ${shown}${more} — ` +
+    `plugin copy of skill '${skillName}' ${kind}: ${files.length} file(s) - ${shown}${more} - ` +
       "run 'npm run plugin:materialize'",
   );
 }
@@ -62,15 +62,15 @@ for (const pluginName of fs.readdirSync(pluginsDir)) {
     try {
       manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
     } catch (err) {
-      errors.push(`${rel(manifestPath)}: invalid JSON — ${err.message}`);
+      errors.push(`${rel(manifestPath)}: invalid JSON - ${err.message}`);
     }
-    for (const relPath of (manifest && Array.isArray(manifest.skills) ? manifest.skills : [])) {
+    for (const relPath of manifest && Array.isArray(manifest.skills) ? manifest.skills : []) {
       if (typeof relPath !== 'string') continue;
       const skillName = relPath.replace(/^\.\/skills\//, '').replace(/\/$/, '');
       const copyPath = path.join(pluginsDir, pluginName, 'skills', skillName);
       if (!fs.existsSync(path.join(copyPath, 'SKILL.md'))) {
         errors.push(
-          `${rel(manifestPath)}: declares '${relPath}' but ${rel(copyPath)}/SKILL.md is missing — run 'npm run plugin:materialize'`,
+          `${rel(manifestPath)}: declares '${relPath}' but ${rel(copyPath)}/SKILL.md is missing - run 'npm run plugin:materialize'`,
         );
       }
     }

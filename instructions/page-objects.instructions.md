@@ -39,7 +39,7 @@ Create stable, readable, and reusable automation primitives:
 - NEVER use `page.waitForTimeout()` as synchronization.
 - Use Playwright’s auto-wait + explicit `expect(...)` waits for readiness/visibility.
 - Any method that triggers navigation must wait for completion:
-  - prefer sequential `await locator.click(); await page.waitForURL(...);` — `waitForURL` accounts for navigations that already started, so no `Promise.all` race is needed
+  - prefer sequential `await locator.click(); await page.waitForURL(...);` - `waitForURL` accounts for navigations that already started, so no `Promise.all` race is needed
   - or assert the new page’s stable element.
   - (the legacy `Promise.all([...])` idiom is only needed for `waitForEvent('popup')`-style races.)
 - Prefer assertions that validate user-visible outcomes (URL, heading, toast, table row).

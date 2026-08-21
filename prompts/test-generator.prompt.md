@@ -19,8 +19,8 @@ Do the following:
 - Keep the generated tests trustworthy:
   - each test is independent and sets up its own state
   - assertions verify meaningful outcomes, not just navigation
-  - no hardcoded waits or sleeps — use the framework's waiting/assertion mechanisms
-  - no hardcoded credentials or environment URLs — use existing config or environment variables
+  - no hardcoded waits or sleeps - use the framework's waiting/assertion mechanisms
+  - no hardcoded credentials or environment URLs - use existing config or environment variables
 - Reference the originating test case ID from the plan in each test title or comment for traceability.
 
 3. Run the tests to ensure they work correctly:

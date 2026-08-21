@@ -1,0 +1,25 @@
+{
+  "name": "deriving-a-quality-contract",
+  "description": "Derives a project-specific quality contract from three axes — risk profile, team maturity, and product surface — labelling each testing practice MUST, SHOULD, or COULD, then produces a PRESENT/PARTIAL/MISSING/WAIVED gap matrix with an ordered remediation plan. Use when a project has no agreed testing strategy, when a team argues about which practices are mandatory, when onboarding a legacy or inherited repository, when a quality strategy document has to be derived from evidence instead of opinion, or when someone asks \"what testing should we actually be doing here\".",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "quality strategy",
+    "quality contract",
+    "testing strategy",
+    "gap analysis",
+    "risk profile",
+    "test maturity",
+    "quality gates",
+    "quality engineering",
+    "remediation plan",
+    "software testing"
+  ],
+  "skills": [
+    "./skills/deriving-a-quality-contract/"
+  ]
+}

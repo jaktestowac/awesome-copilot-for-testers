@@ -10,7 +10,7 @@ Purpose: quickly surface Application structure (pages/routes/code) and high-valu
 
 Outputs (short):
 
-- App map (pages/routes/code) — 3–5 bullet points
+- App map (pages/routes/code) - 3–5 bullet points
 - 2–4 P0 user journeys
 - If API: key endpoints, data models, and edge cases
 - If UI: selectors strategy, flakiness risks, and test data needs

@@ -22,13 +22,13 @@ Then do the following:
 1. Extract the behaviors: each distinct rule or outcome becomes its own scenario. Do not bundle unrelated outcomes into one scenario.
 2. Write scenarios following Gherkin best practices:
    - declarative, business-language steps ("Given the user has an expired subscription"), not UI mechanics ("When I click the red button")
-   - one When per scenario — a single action or event under test
+   - one When per scenario - a single action or event under test
    - concrete example values rather than abstract placeholders
    - `Scenario Outline` with an `Examples` table when the same rule varies only by data
    - `Background` only for setup shared by every scenario in the feature
 3. Cover the rule from all sides: happy path, negative cases, boundary values, and permission variants that the requirements imply.
 4. Reuse step phrasing consistently so steps can map to shared step definitions.
-5. List the requirement statements that could not be expressed as scenarios and why — these go back to the product owner or to the `review-requirements` prompt.
+5. List the requirement statements that could not be expressed as scenarios and why - these go back to the product owner or to the `review-requirements` prompt.
 
 ## Output format
 

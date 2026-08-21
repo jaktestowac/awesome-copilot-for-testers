@@ -1,5 +1,5 @@
 ---
-name: Accessibility audit — deep dive
+name: Accessibility audit - deep dive
 agent: accessibility-expert
 description: 'Run a deeper accessibility audit for a page, sampled set of pages, or user flow with WCAG 2.2 mapping, manual verification guidance, and technical or stakeholder-ready output. For a quick single-URL check, use the a11y-webpage-audit prompt instead.'
 tools: ['vscode', 'execute', 'read', 'search', 'web', 'playwright/*', 'todo']

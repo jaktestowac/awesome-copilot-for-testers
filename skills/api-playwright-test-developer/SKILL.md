@@ -113,7 +113,7 @@ test.describe('API: /users', () => {
 
 - `request.get`, `request.post`, `request.put`, `request.delete`
 - HTTP retries for transient 5xx responses (in test infrastructure, not per-test)
-- Data-driven tests: Playwright Test has no `test.each` — loop over a test-case array instead, so each case registers as its own test:
+- Data-driven tests: Playwright Test has no `test.each` - loop over a test-case array instead, so each case registers as its own test:
 
   ```ts
   const cases = [

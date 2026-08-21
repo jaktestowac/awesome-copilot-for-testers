@@ -17,54 +17,54 @@ Docs: [VS Code prompt files](https://code.visualstudio.com/docs/copilot/customiz
 
 ### Test planning & strategy
 
-- [test-planner.prompt.md](test-planner.prompt.md) — comprehensive, interactive test plan (web + API) with exploration
-- [test-plan-basic.prompt.md](test-plan-basic.prompt.md) — quick single-pass test plan from light exploration
-- [api-test-plan-and-tests.prompt.md](api-test-plan-and-tests.prompt.md) — risk-based API test plan plus example tests from OpenAPI/Postman
-- [qa-strategy.prompt.md](qa-strategy.prompt.md) — adversarial scenario matrix: edge cases, OWASP security, attack sequences
-- [performance-reliability-plan.prompt.md](performance-reliability-plan.prompt.md) — performance and reliability test strategy with load/soak proposals
-- [regression-scope.prompt.md](regression-scope.prompt.md) — prioritized regression scope from a diff or PR
+- [test-planner.prompt.md](test-planner.prompt.md) - comprehensive, interactive test plan (web + API) with exploration
+- [test-plan-basic.prompt.md](test-plan-basic.prompt.md) - quick single-pass test plan from light exploration
+- [api-test-plan-and-tests.prompt.md](api-test-plan-and-tests.prompt.md) - risk-based API test plan plus example tests from OpenAPI/Postman
+- [qa-strategy.prompt.md](qa-strategy.prompt.md) - adversarial scenario matrix: edge cases, OWASP security, attack sequences
+- [performance-reliability-plan.prompt.md](performance-reliability-plan.prompt.md) - performance and reliability test strategy with load/soak proposals
+- [regression-scope.prompt.md](regression-scope.prompt.md) - prioritized regression scope from a diff or PR
 
 ### Requirements & coverage
 
-- [review-requirements.prompt.md](review-requirements.prompt.md) — testability review of user stories and acceptance criteria before implementation
-- [generate-gherkin-scenarios.prompt.md](generate-gherkin-scenarios.prompt.md) — requirements to well-formed Gherkin scenarios for BDD frameworks
-- [map-requirements-coverage.prompt.md](map-requirements-coverage.prompt.md) — Requirements Traceability Matrix against existing tests with gap risks
-- [verify-acceptance-criteria.prompt.md](verify-acceptance-criteria.prompt.md) — check implementation evidence against acceptance criteria
+- [review-requirements.prompt.md](review-requirements.prompt.md) - testability review of user stories and acceptance criteria before implementation
+- [generate-gherkin-scenarios.prompt.md](generate-gherkin-scenarios.prompt.md) - requirements to well-formed Gherkin scenarios for BDD frameworks
+- [map-requirements-coverage.prompt.md](map-requirements-coverage.prompt.md) - Requirements Traceability Matrix against existing tests with gap risks
+- [verify-acceptance-criteria.prompt.md](verify-acceptance-criteria.prompt.md) - check implementation evidence against acceptance criteria
 
 ### Test generation
 
-- [playwright-generate-test.prompt.md](playwright-generate-test.prompt.md) — Playwright test from a scenario, executed live via Playwright MCP first
-- [test-generator.prompt.md](test-generator.prompt.md) — automated tests from a written test plan file
-- [playwright-explore-website.prompt.md](playwright-explore-website.prompt.md) — explore a site and propose test cases
-- [playwright-explore-website-requests.prompt.md](playwright-explore-website-requests.prompt.md) — explore a site while capturing network traffic
-- [manual-test-cases.prompt.md](manual-test-cases.prompt.md) — detailed manual test cases with risk tags
-- [derive-test-cases-from-code.prompt.md](derive-test-cases-from-code.prompt.md) — white-box test cases from code branches and boundaries, with coverage gaps
-- [generate-exploratory-charters.prompt.md](generate-exploratory-charters.prompt.md) — prioritized, timeboxed exploratory session charters
-- [generate-test-data.prompt.md](generate-test-data.prompt.md) — realistic, edge-covering test data packs
+- [playwright-generate-test.prompt.md](playwright-generate-test.prompt.md) - Playwright test from a scenario, executed live via Playwright MCP first
+- [test-generator.prompt.md](test-generator.prompt.md) - automated tests from a written test plan file
+- [playwright-explore-website.prompt.md](playwright-explore-website.prompt.md) - explore a site and propose test cases
+- [playwright-explore-website-requests.prompt.md](playwright-explore-website-requests.prompt.md) - explore a site while capturing network traffic
+- [manual-test-cases.prompt.md](manual-test-cases.prompt.md) - detailed manual test cases with risk tags
+- [derive-test-cases-from-code.prompt.md](derive-test-cases-from-code.prompt.md) - white-box test cases from code branches and boundaries, with coverage gaps
+- [generate-exploratory-charters.prompt.md](generate-exploratory-charters.prompt.md) - prioritized, timeboxed exploratory session charters
+- [generate-test-data.prompt.md](generate-test-data.prompt.md) - realistic, edge-covering test data packs
 
 ### Audits & verification
 
-- [a11y-webpage-audit.prompt.md](a11y-webpage-audit.prompt.md) — quick single-URL accessibility audit (WCAG 2.1/2.2)
-- [a11y-audit-deep-dive.prompt.md](a11y-audit-deep-dive.prompt.md) — deep accessibility audit for pages and flows with stakeholder output
-- [tech-debt-audit.prompt.md](tech-debt-audit.prompt.md) — severity-ranked tech debt report for test automation code
+- [a11y-webpage-audit.prompt.md](a11y-webpage-audit.prompt.md) - quick single-URL accessibility audit (WCAG 2.1/2.2)
+- [a11y-audit-deep-dive.prompt.md](a11y-audit-deep-dive.prompt.md) - deep accessibility audit for pages and flows with stakeholder output
+- [tech-debt-audit.prompt.md](tech-debt-audit.prompt.md) - severity-ranked tech debt report for test automation code
 
 ### Automation maintenance
 
-- [fix-tests.prompt.md](fix-tests.prompt.md) — fix failing tests without weakening assertions
-- [stabilize-flaky-tests.prompt.md](stabilize-flaky-tests.prompt.md) — reproduce, classify, and root-cause-fix flaky tests, proven with repeated runs
-- [refactor-to-page-objects.prompt.md](refactor-to-page-objects.prompt.md) — extract page objects from specs without changing what tests verify
-- [migrate-tests-to-playwright.prompt.md](migrate-tests-to-playwright.prompt.md) — migrate Cypress/Selenium/Puppeteer tests to Playwright with coverage parity
+- [fix-tests.prompt.md](fix-tests.prompt.md) - fix failing tests without weakening assertions
+- [stabilize-flaky-tests.prompt.md](stabilize-flaky-tests.prompt.md) - reproduce, classify, and root-cause-fix flaky tests, proven with repeated runs
+- [refactor-to-page-objects.prompt.md](refactor-to-page-objects.prompt.md) - extract page objects from specs without changing what tests verify
+- [migrate-tests-to-playwright.prompt.md](migrate-tests-to-playwright.prompt.md) - migrate Cypress/Selenium/Puppeteer tests to Playwright with coverage parity
 
 ### Analysis & explanation
 
-- [explain-code.prompt.md](explain-code.prompt.md) — analyze and explain selected or open code, with a testing perspective
-- [explain-test-failure.prompt.md](explain-test-failure.prompt.md) — diagnose a failing test and classify the root cause, without fixing
-- [analyze-test-results.prompt.md](analyze-test-results.prompt.md) — cluster a test run's failures and prioritize what to investigate
+- [explain-code.prompt.md](explain-code.prompt.md) - analyze and explain selected or open code, with a testing perspective
+- [explain-test-failure.prompt.md](explain-test-failure.prompt.md) - diagnose a failing test and classify the root cause, without fixing
+- [analyze-test-results.prompt.md](analyze-test-results.prompt.md) - cluster a test run's failures and prioritize what to investigate
 
 ### Utilities
 
-- [bug-report.prompt.md](bug-report.prompt.md) — turn rough notes into a developer-ready bug report
-- [create-skill.prompt.md](create-skill.prompt.md) — scaffold a new agent skill following this repo's conventions
+- [bug-report.prompt.md](bug-report.prompt.md) - turn rough notes into a developer-ready bug report
+- [create-skill.prompt.md](create-skill.prompt.md) - scaffold a new agent skill following this repo's conventions
 
 ## Conventions
 

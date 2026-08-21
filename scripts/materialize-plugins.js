@@ -3,7 +3,7 @@
 // Builds the plugins/ tree from .github/plugin/marketplace.json plus the skills/
 // source of truth. Two phases:
 //
-//   1. Scaffold — every marketplace entry with a local "source": "plugins/<dir>"
+//   1. Scaffold - every marketplace entry with a local "source": "plugins/<dir>"
 //      gets a plugin directory, a .github/plugin/plugin.json, and a README.md.
 //      Generated fields are overwritten on every run, so the marketplace entry is
 //      always what the plugin ships:
@@ -12,14 +12,14 @@
 //        README.md    the frontmatter description; the body is left alone, since it
 //                     holds hand-written prose. --force-readme rewrites it wholesale
 //                     from the template.
-//   2. Materialize — copy each skill declared in a plugin.json from skills/ into
+//   2. Materialize - copy each skill declared in a plugin.json from skills/ into
 //      the plugin, prune copies no longer declared. Copies that already match their
 //      source are left untouched, so the output lists only what changed.
 //
 // Plugins must ship self-contained content: the plugin format resolves skill paths
 // relative to the plugin root, so a plugin cannot point up at skills/. The copies
 // under plugins/<plugin>/skills/ are therefore generated output that happens to be
-// committed — never hand-edit them, run this script instead.
+// committed - never hand-edit them, run this script instead.
 //
 // Each plugin's .github/plugin/plugin.json declares what it ships:
 //   "skills": ["./skills/tech-debt-analysis/"]
@@ -70,10 +70,11 @@ function ownerRepoFrom(repositoryUrl) {
 // The marketplace entry owns the identity fields; "keywords" and "skills" are curated
 // in the plugin manifest and survive a rewrite.
 function buildPluginJson(entry, skillNames, pkg, existing) {
-  const curatedKeywords = Array.isArray(existing?.keywords) && existing.keywords.length
-    ? existing.keywords
-    : // Starting point derived from the plugin name — curate these by hand.
-      entry.name.split('-');
+  const curatedKeywords =
+    Array.isArray(existing?.keywords) && existing.keywords.length
+      ? existing.keywords
+      : // Starting point derived from the plugin name - curate these by hand.
+        entry.name.split('-');
 
   return {
     name: entry.name,
@@ -111,7 +112,7 @@ function buildPluginReadme(entry, skillNames, ownerRepo) {
   const inside = skillNames
     .map(
       (name) =>
-        `- \`skills/${name}/\` — the agent skill, generated from the repository's \`skills/${name}/\` directory, which is the source of truth`,
+        `- \`skills/${name}/\` - the agent skill, generated from the repository's \`skills/${name}/\` directory, which is the source of truth`,
     )
     .join('\n');
   const install = ownerRepo
@@ -142,7 +143,7 @@ ${install}
 ## Note on source of truth
 
 The skill content is a copy of ${sources} at the repository root. Do not edit the plugin copy
-directly — update the root skill and run \`npm run plugin:materialize\`.
+directly - update the root skill and run \`npm run plugin:materialize\`.
 `;
 }
 
@@ -206,7 +207,7 @@ log.intro('scaffolding from marketplace.json, then copying skills/ into each plu
 if (fs.existsSync(marketplacePath)) {
   const { data: marketplace, error } = readJson(marketplacePath);
   if (error) {
-    errors.push(`invalid marketplace manifest — ${error}`);
+    errors.push(`invalid marketplace manifest - ${error}`);
   } else {
     const { data: pkg } = readJson(path.join(repoRoot, 'package.json'));
     const ownerRepo = ownerRepoFrom(pkg?.repository?.url || pkg?.repository);
@@ -230,7 +231,9 @@ if (fs.existsSync(marketplacePath)) {
         : readJson(manifestPath);
 
       if (manifestError) {
-        errors.push(`${entry.name}: ${manifestError} — fix the JSON or delete the file to regenerate it`);
+        errors.push(
+          `${entry.name}: ${manifestError} - fix the JSON or delete the file to regenerate it`,
+        );
         continue;
       }
 
@@ -247,7 +250,7 @@ if (fs.existsSync(marketplacePath)) {
         );
         if (!skillName) {
           errors.push(
-            `${entry.name}: no root skill found at skills/${candidates[0]}/SKILL.md — create the skill first, ` +
+            `${entry.name}: no root skill found at skills/${candidates[0]}/SKILL.md - create the skill first, ` +
               `or scaffold ${rel(manifestPath)} by hand and declare its "skills" explicitly`,
           );
           continue;
@@ -256,12 +259,15 @@ if (fs.existsSync(marketplacePath)) {
       }
 
       // The manifest is regenerated from the marketplace entry on every run.
-      const manifestText = JSON.stringify(buildPluginJson(entry, skillNames, pkg || {}, existing), null, 2) + '\n';
+      const manifestText =
+        JSON.stringify(buildPluginJson(entry, skillNames, pkg || {}, existing), null, 2) + '\n';
       if (isNew) {
         fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
         fs.writeFileSync(manifestPath, manifestText);
         scaffoldedPlugins.push(entry.name);
-        log.detail(`${entry.name}: created ${rel(manifestPath)} (skills: ${skillNames.join(', ')})`);
+        log.detail(
+          `${entry.name}: created ${rel(manifestPath)} (skills: ${skillNames.join(', ')})`,
+        );
       } else if (fs.readFileSync(manifestPath, 'utf8') !== manifestText) {
         fs.writeFileSync(manifestPath, manifestText);
         rewrittenManifests.push(entry.name);
@@ -276,7 +282,9 @@ if (fs.existsSync(marketplacePath)) {
         if (fs.readFileSync(readmePath, 'utf8') !== template) {
           fs.writeFileSync(readmePath, template);
           rewrittenReadmes.push(entry.name);
-          log.detail(`${entry.name}: rewrote ${rel(readmePath)} from the template (--force-readme)`);
+          log.detail(
+            `${entry.name}: rewrote ${rel(readmePath)} from the template (--force-readme)`,
+          );
         }
       } else {
         // Keep the prose, take the description: it is what the marketplace listing and
@@ -315,7 +323,7 @@ for (const pluginName of fs.readdirSync(pluginsDir).sort()) {
   try {
     manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
   } catch (err) {
-    errors.push(`${rel(manifestPath)}: invalid JSON — ${err.message}`);
+    errors.push(`${rel(manifestPath)}: invalid JSON - ${err.message}`);
     continue;
   }
 
@@ -343,7 +351,9 @@ for (const pluginName of fs.readdirSync(pluginsDir).sort()) {
 
     const { skillName, sourceDir } = resolveSkillSource(relPath);
     if (!fs.existsSync(sourceDir) || !fs.statSync(sourceDir).isDirectory()) {
-      errors.push(`${rel(manifestPath)}: skills entry '${relPath}' has no source at skills/${skillName}/`);
+      errors.push(
+        `${rel(manifestPath)}: skills entry '${relPath}' has no source at skills/${skillName}/`,
+      );
       continue;
     }
     if (!fs.existsSync(path.join(sourceDir, 'SKILL.md'))) {
@@ -388,10 +398,14 @@ for (const pluginName of fs.readdirSync(pluginsDir).sort()) {
 if (scaffoldedPlugins.length) {
   log.added(`${scaffoldedPlugins.length} plugin(s) scaffolded`);
   log.names(scaffoldedPlugins);
-  log.note('review the generated "keywords" and README — they are derived from the plugin name');
+  log.note('review the generated "keywords" and README - they are derived from the plugin name');
 }
 if (rewrittenManifests.length) {
-  log.change('~', `${rewrittenManifests.length} manifest(s) rewritten`, 'from the marketplace entry');
+  log.change(
+    '~',
+    `${rewrittenManifests.length} manifest(s) rewritten`,
+    'from the marketplace entry',
+  );
   log.names(rewrittenManifests);
 }
 if (rewrittenReadmes.length) {
@@ -404,7 +418,10 @@ if (copiedSkills.length) {
   log.names(copiedSkills);
 }
 if (prunedCopies.length) {
-  log.removed(`${prunedCopies.length} stale copy/copies pruned`, 'no longer declared in plugin.json');
+  log.removed(
+    `${prunedCopies.length} stale copy/copies pruned`,
+    'no longer declared in plugin.json',
+  );
   log.names(prunedCopies);
 }
 

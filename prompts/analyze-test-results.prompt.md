@@ -1,7 +1,7 @@
 ---
 name: Analyze test results
 agent: agent
-description: 'Turn raw test run output — a CI log, JUnit/Playwright report, or console output — into an actionable summary: failure clusters, likely root-cause groups, flakiness suspects, and what to investigate first.'
+description: 'Turn raw test run output - a CI log, JUnit/Playwright report, or console output - into an actionable summary: failure clusters, likely root-cause groups, flakiness suspects, and what to investigate first.'
 tools: ['vscode', 'read', 'search', 'todo']
 ---
 
@@ -37,4 +37,4 @@ Return Markdown only, with:
 ## Constraints
 
 - Distinguish facts from hypotheses; never present a suspected cause as confirmed.
-- Do not modify tests or code — this is analysis only.
+- Do not modify tests or code - this is analysis only.

@@ -1,9 +1,9 @@
 ---
-title: 'Tech Debt Auditor — Test Automation Code Reviewer (Deprecated)'
+title: 'Tech Debt Auditor - Test Automation Code Reviewer (Deprecated)'
 description: '(Deprecated) Chat modes were replaced by custom agents in VS Code 1.106. Use the tech-debt-auditor custom agent instead.'
 ---
 
-# Tech Debt Auditor — Test Automation Code Reviewer (Deprecated)
+# Tech Debt Auditor - Test Automation Code Reviewer (Deprecated)
 
 > [!WARNING]
 > Chat modes were renamed to **custom agents** in [VS Code 1.106](https://code.visualstudio.com/updates/v1_106). This chat mode is deprecated and kept only as a pointer.

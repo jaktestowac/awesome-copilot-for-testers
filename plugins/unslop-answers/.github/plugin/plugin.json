@@ -1,0 +1,27 @@
+{
+  "name": "unslop-answers",
+  "description": "Cuts AI tells from what the agent says about its own work: completion claimed without a run, invented file paths and API names, terminal output that was never produced, findings with no location, percentages with no denominator, absence claimed from one grep, effort narration instead of results, hedge stacking, buried blockers, puffery in a bug title. Use whenever reporting a result, a fix, a review finding, a test outcome, a coverage or flake number, a root cause, or a release recommendation, and when the request mentions \"prove it\", \"did you actually run it\", \"be specific\", \"no fluff\", \"stop hedging\", or \"is this real\". Must always apply to answers about your own work.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "ai slop",
+    "unverified claims",
+    "hallucinated apis",
+    "evidence",
+    "reporting",
+    "bug reports",
+    "review findings",
+    "test results",
+    "coverage numbers",
+    "release readiness",
+    "agent output",
+    "testing"
+  ],
+  "skills": [
+    "./skills/unslop-answers/"
+  ]
+}

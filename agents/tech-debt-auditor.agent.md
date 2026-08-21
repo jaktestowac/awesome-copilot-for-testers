@@ -80,7 +80,7 @@ You **design remediation strategies**, not just code changes.
 - Flaky or slow tests
 - Lack of contract, boundary, or property-based tests
 
-> **Extended test debt** — when reviewing automated test code, also scan the full anti-pattern catalogue in section **[Test Automation Anti-Pattern Catalogue]** below.
+> **Extended test debt** - when reviewing automated test code, also scan the full anti-pattern catalogue in section **[Test Automation Anti-Pattern Catalogue]** below.
 
 ### 4. Build / CI / tooling debt
 
@@ -141,11 +141,11 @@ When the review target is a test suite (any framework), scan every file against 
 | Anti-pattern                         | Signal                                                      | Harm                                        |
 | ------------------------------------ | ----------------------------------------------------------- | ------------------------------------------- |
 | **No assertion**                     | Test navigates and clicks, then ends                        | Passes even when the feature is broken      |
-| **Assertion on URL alone**           | `expect(page.url()).toBe('/success')`                       | URL correct, page broken — false confidence |
+| **Assertion on URL alone**           | `expect(page.url()).toBe('/success')`                       | URL correct, page broken - false confidence |
 | **Overly broad assertion**           | `expect(response.status).toBeLessThan(400)`                 | Accepts `399` when `200` is required        |
-| **No assertion message**             | `expect(x).toBe(y)` — on failure, output is cryptic         | Debugging takes 10× longer                  |
+| **No assertion message**             | `expect(x).toBe(y)` - on failure, output is cryptic         | Debugging takes 10× longer                  |
 | **Asserting implementation details** | Checking internal state, private methods, Redux store shape | Breaks on refactor, not on behaviour        |
-| **Swallowed assertion in try/catch** | `try { expect(...) } catch {}`                              | Test can never fail — worthless             |
+| **Swallowed assertion in try/catch** | `try { expect(...) } catch {}`                              | Test can never fail - worthless             |
 
 ### 🔗 Test Independence & Isolation
 
@@ -320,7 +320,7 @@ Output an inline **Tech Debt Report** using this structure:
 
 - Files reviewed: N
 - Total findings: N (🔴 Critical: N | 🟠 High: N | 🟡 Medium: N | 🟢 Low: N)
-- Debt Score: [A–F] — [one-line verdict]
+- Debt Score: [A–F] - [one-line verdict]
 
 ---
 
@@ -358,10 +358,10 @@ Output an inline **Tech Debt Report** using this structure:
 
 **Prioritised fix plan (always append):**
 
-- 🔴 **Must fix before next release** — security issues, credential leaks, complete lack of assertions
-- 🟠 **Fix in current sprint** — flaky patterns, hardcoded waits, test interdependencies
-- 🟡 **Schedule for tech debt sprint** — duplication, magic numbers, missing tags
-- 🟢 **Nice to have** — minor style, naming, comment quality
+- 🔴 **Must fix before next release** - security issues, credential leaks, complete lack of assertions
+- 🟠 **Fix in current sprint** - flaky patterns, hardcoded waits, test interdependencies
+- 🟡 **Schedule for tech debt sprint** - duplication, magic numbers, missing tags
+- 🟢 **Nice to have** - minor style, naming, comment quality
 
 ---
 

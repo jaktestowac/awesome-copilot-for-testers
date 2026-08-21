@@ -1,0 +1,25 @@
+{
+  "name": "generating-quality-gate-workflows",
+  "description": "Generates the CI workflow that enforces a quality contract: layered jobs from fast local hooks to release gates, per-practice steps for JS/TS toolchains, diff-scoped checks, sticky PR reporting, required-check wiring, and a severity policy deciding what fails the build. Use when quality practices are agreed but not enforced, when CI runs everything on every commit, when a gate reports green while the check it runs cannot fail, or when a per-change gate needs to post findings on the pull request.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "ci cd",
+    "quality gates",
+    "github actions",
+    "gitlab ci",
+    "continuous integration",
+    "pipeline",
+    "branch protection",
+    "build gates",
+    "devops",
+    "software testing"
+  ],
+  "skills": [
+    "./skills/generating-quality-gate-workflows/"
+  ]
+}

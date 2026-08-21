@@ -8,7 +8,7 @@ Analyzes diffs, changed files, hotfixes, and release candidates to identify wher
 
 ## What's inside
 
-- `skills/analyzing-regression-scope/` — the agent skill, generated from the repository's `skills/analyzing-regression-scope/` directory, which is the source of truth
+- `skills/analyzing-regression-scope/` - the agent skill, generated from the repository's `skills/analyzing-regression-scope/` directory, which is the source of truth
 
 ## Installation
 
@@ -22,4 +22,4 @@ copilot plugin install analyzing-regression-scope
 ## Note on source of truth
 
 The skill content is a copy of `skills/analyzing-regression-scope/` at the repository root. Do not edit the plugin copy
-directly — update the root skill and run `npm run plugin:materialize`.
+directly - update the root skill and run `npm run plugin:materialize`.

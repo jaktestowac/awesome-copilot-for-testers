@@ -15,14 +15,14 @@ Exploratory testing gets dismissed because it is indistinguishable from unstruct
 
 ## What's inside
 
-- `skills/planning-exploratory-testing/` — the workflow: frame the mission, write and prioritize charters, pick the heuristics, run the timeboxed session, debrief, route the findings, report coverage.
+- `skills/planning-exploratory-testing/` - the workflow: frame the mission, write and prioritize charters, pick the heuristics, run the timeboxed session, debrief, route the findings, report coverage.
 
 Bundled resources:
 
-- `resources/charter-templates.md` — the explore/with/to-discover format, eight worked charters covering new features, sibling sweeps, third-party failure, legacy areas, release risk, quality attributes, data, and authorization, plus a charter-smells table and the sizing guide
-- `resources/heuristics-cheatsheet.md` — SFDIPOT product elements, CRUSSPIC STMPL quality criteria, twelve named tours with what each finds, and input, state, and data heuristics, ending with the eight oracles that turn an observation into a finding
-- `resources/session-notes-template.md` — the during-session note format with its inline conventions, the time-split table, and the cross-session coverage summary with per-area confidence
-- `resources/debrief-checklist.md` — the PROOF debrief, the routing table that gives every finding a destination, and the session quality check
+- `resources/charter-templates.md` - the explore/with/to-discover format, eight worked charters covering new features, sibling sweeps, third-party failure, legacy areas, release risk, quality attributes, data, and authorization, plus a charter-smells table and the sizing guide
+- `resources/heuristics-cheatsheet.md` - SFDIPOT product elements, CRUSSPIC STMPL quality criteria, twelve named tours with what each finds, and input, state, and data heuristics, ending with the eight oracles that turn an observation into a finding
+- `resources/session-notes-template.md` - the during-session note format with its inline conventions, the time-split table, and the cross-session coverage summary with per-area confidence
+- `resources/debrief-checklist.md` - the PROOF debrief, the routing table that gives every finding a destination, and the session quality check
 
 Generated from the repository's `skills/` directory, which is the source of truth.
 
@@ -40,7 +40,7 @@ copilot plugin install planning-exploratory-testing
 ## Note on source of truth
 
 The skill content is a copy of `skills/planning-exploratory-testing/` at the repository root. Do not edit the plugin copy
-directly — update the root skill and run `npm run plugin:materialize`.
+directly - update the root skill and run `npm run plugin:materialize`.
 ````
 
 ---
@@ -70,7 +70,7 @@ Two levels: the skill and its resources, each with a phrase saying what is in it
 
 This is the section that decides installs. Compare:
 
-> - `resources/heuristics-cheatsheet.md` — heuristics for exploratory testing
+> - `resources/heuristics-cheatsheet.md` - heuristics for exploratory testing
 
 against the version in the template above. The first is the filename restated; the second tells a reader that SFDIPOT, twelve tours, and an oracle list are in there, which is the actual reason to install.
 
@@ -90,13 +90,13 @@ Keep it, verbatim, in every plugin README. It is the line that stops the next co
 
 ## What to leave out
 
-| Do not write | Because |
-| --- | --- |
-| The skill's full workflow | It is in the SKILL.md, one directory down, and it will drift |
-| A changelog | Git has it |
-| Configuration instructions | Skills need no configuration |
-| Aspirational content | It teaches readers the README is marketing |
-| A "coming soon" section | Ship it or leave it out |
+| Do not write               | Because                                                      |
+| -------------------------- | ------------------------------------------------------------ |
+| The skill's full workflow  | It is in the SKILL.md, one directory down, and it will drift |
+| A changelog                | Git has it                                                   |
+| Configuration instructions | Skills need no configuration                                 |
+| Aspirational content       | It teaches readers the README is marketing                   |
+| A "coming soon" section    | Ship it or leave it out                                      |
 
 ## Regenerating
 

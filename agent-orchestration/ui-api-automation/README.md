@@ -4,16 +4,16 @@ An orchestration pack that coordinates specialized subagents to explore an appli
 
 ## Agents and flow
 
-| Agent | Role |
-| ----- | ---- |
-| `QA Orchestrator` | Coordinates the whole flow; delegates, never implements |
-| `OpenAPI Explorer` | Analyzes the OpenAPI spec: endpoints, data models, test scenarios |
-| `FE Explorer (Playwright MCP)` | Explores the UI live: flows, selectors, risks |
-| `Test Planner` | Combines exploration results into a prioritized test plan |
-| `FE Test Implementer` | Implements Playwright UI tests from the plan |
-| `BE Test Implementer` | Implements API tests from the plan |
-| `Solution Reviewer` | Reviews the implemented tests for quality and anti-patterns |
-| `Test Runner & Verifier` | Runs the suites, diagnoses failures, verifies the solution |
+| Agent                          | Role                                                              |
+| ------------------------------ | ----------------------------------------------------------------- |
+| `QA Orchestrator`              | Coordinates the whole flow; delegates, never implements           |
+| `OpenAPI Explorer`             | Analyzes the OpenAPI spec: endpoints, data models, test scenarios |
+| `FE Explorer (Playwright MCP)` | Explores the UI live: flows, selectors, risks                     |
+| `Test Planner`                 | Combines exploration results into a prioritized test plan         |
+| `FE Test Implementer`          | Implements Playwright UI tests from the plan                      |
+| `BE Test Implementer`          | Implements API tests from the plan                                |
+| `Solution Reviewer`            | Reviews the implemented tests for quality and anti-patterns       |
+| `Test Runner & Verifier`       | Runs the suites, diagnoses failures, verifies the solution        |
 
 Typical flow: explore (FE + BE in parallel) → plan → implement (FE + BE in parallel) → review → run & verify. Exploration summaries and reports are written to `.ai-outputs/`.
 
@@ -30,7 +30,7 @@ Reload VS Code, then start with `@QA Orchestrator`.
 
 ## Prerequisites
 
-- The **Playwright MCP server** must be configured in VS Code — agents in this pack declare `playwright/*` tools and cannot explore the UI without it. See [microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp).
+- The **Playwright MCP server** must be configured in VS Code - agents in this pack declare `playwright/*` tools and cannot explore the UI without it. See [microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp).
 - An OpenAPI spec (file or URL) for the backend exploration.
 
 ## Output contract

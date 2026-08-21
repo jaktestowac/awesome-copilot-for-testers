@@ -1,7 +1,7 @@
 ---
 name: Derive test cases from code
 agent: test-planner
-description: 'Read a function, module, or diff and derive white-box test cases from its actual branches, boundaries, and error paths — then compare against existing tests to expose coverage gaps.'
+description: 'Read a function, module, or diff and derive white-box test cases from its actual branches, boundaries, and error paths - then compare against existing tests to expose coverage gaps.'
 tools: ['vscode', 'read', 'search', 'todo']
 ---
 
@@ -41,4 +41,4 @@ End with the top gaps to close first and, when relevant, which cases are good ca
 ## Constraints
 
 - Derive expected results from the code's actual behavior; if the code looks wrong, flag the suspicion instead of inventing a requirement.
-- Do not create or edit any files — this is analysis and design only.
+- Do not create or edit any files - this is analysis and design only.

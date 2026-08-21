@@ -16,15 +16,15 @@
 //
 //   node scripts/generate-plugins.js <name> [<name>...]
 //     Named mode. Adds an entry for each name, resolved in this order:
-//       1. plugins/<name>/.github/plugin/plugin.json  — description and version from the manifest
-//       2. skills/<name>/SKILL.md                     — description from the frontmatter
+//       1. plugins/<name>/.github/plugin/plugin.json  - description and version from the manifest
+//       2. skills/<name>/SKILL.md                     - description from the frontmatter
 //     This is the normal path for packaging an existing root skill as a plugin.
 //
 //   node scripts/generate-plugins.js --all-skills
 //     Bulk mode. Every skill under skills/ that is not packaged yet gets an entry,
 //     with the description taken from its SKILL.md frontmatter. Skipped:
 //       - skills already vendored by a plugin (declared in some plugin.json)
-//       - '<name>-quick' when skills/<name>/ exists — the repository convention is to
+//       - '<name>-quick' when skills/<name>/ exists - the repository convention is to
 //         bundle a quick variant with its parent plugin, not ship it separately
 //     Bulk mode is deliberately opt-in, and deliberately outside --check: a root skill
 //     with no plugin is a normal state, not an error, so CI must not demand one.
@@ -41,7 +41,7 @@
 // An entry whose description or version no longer matches its source is rewritten from
 // that source: the plugin manifest in reconcile mode, the skill frontmatter in bulk mode.
 // Entry order is preserved and new entries are appended, so the file stays readable in
-// diffs. Pass --no-overwrite to make drift an error instead — that is what --check does.
+// diffs. Pass --no-overwrite to make drift an error instead - that is what --check does.
 
 const fs = require('fs');
 const path = require('path');
@@ -98,12 +98,15 @@ function parseArgs(argv) {
     else if (arg === '--check') opts.check = true;
     else if (arg === '--dry-run') opts.dryRun = true;
     else if (arg === '--no-overwrite') opts.overwrite = false;
-    else if (arg === '--sync') opts.overwrite = true; // kept for the earlier spelling
-    else if (arg === '--verbose' || arg === '-v') continue; // handled by the logger
+    else if (arg === '--sync')
+      opts.overwrite = true; // kept for the earlier spelling
+    else if (arg === '--verbose' || arg === '-v')
+      continue; // handled by the logger
     else if (arg === '--help' || arg === '-h') opts.help = true;
-    else if (arg.startsWith('--description=')) opts.description = arg.slice('--description='.length);
+    else if (arg.startsWith('--description='))
+      opts.description = arg.slice('--description='.length);
     else if (arg.startsWith('--version=')) opts.version = arg.slice('--version='.length);
-    else if (arg.startsWith('-')) errors.push(`unknown option '${arg}' — run with --help`);
+    else if (arg.startsWith('-')) errors.push(`unknown option '${arg}' - run with --help`);
     else opts.names.push(arg.replace(/^(?:plugins|skills)\//, '').replace(/\/$/, ''));
   }
   return opts;
@@ -189,17 +192,19 @@ function resolveEntry(name, opts) {
 
   if (fs.existsSync(manifestPath) && !skillFirst) {
     const { data: manifest, error } = readJson(manifestPath);
-    if (error) return { error: `${name}: invalid plugin manifest — ${error}` };
+    if (error) return { error: `${name}: invalid plugin manifest - ${error}` };
     if (manifest.name && manifest.name !== name) {
       return {
         error:
-          `${name}: ${rel(manifestPath)} declares "name": "${manifest.name}" — ` +
+          `${name}: ${rel(manifestPath)} declares "name": "${manifest.name}" - ` +
           'the manifest name must match its directory',
       };
     }
     const description = opts.description || manifest.description;
     if (!description) {
-      return { error: `${name}: ${rel(manifestPath)} has no "description" — add one or pass --description` };
+      return {
+        error: `${name}: ${rel(manifestPath)} has no "description" - add one or pass --description`,
+      };
     }
     return {
       entry: {
@@ -216,7 +221,9 @@ function resolveEntry(name, opts) {
   if (fs.existsSync(skillMdPath)) {
     const description = opts.description || extractSkillDescription(skillMdPath);
     if (!description) {
-      return { error: `${name}: no description in skills/${name}/SKILL.md frontmatter — pass --description` };
+      return {
+        error: `${name}: no description in skills/${name}/SKILL.md frontmatter - pass --description`,
+      };
     }
     return {
       entry: {
@@ -233,7 +240,7 @@ function resolveEntry(name, opts) {
 
   return {
     error:
-      `${name}: no plugins/${name}/.github/plugin/plugin.json and no skills/${name}/SKILL.md — ` +
+      `${name}: no plugins/${name}/.github/plugin/plugin.json and no skills/${name}/SKILL.md - ` +
       'create the root skill first, or check the name',
   };
 }
@@ -245,7 +252,8 @@ function localPluginNames() {
     .filter((name) => {
       const dir = path.join(pluginsDir, name);
       return (
-        fs.statSync(dir).isDirectory() && fs.existsSync(path.join(dir, '.github/plugin/plugin.json'))
+        fs.statSync(dir).isDirectory() &&
+        fs.existsSync(path.join(dir, '.github/plugin/plugin.json'))
       );
     })
     .sort();
@@ -289,7 +297,7 @@ function bulkSkillTargets() {
   const skipped = [];
 
   for (const name of skills) {
-    // Shipped inside somebody else's bundle — it must not also be a plugin of its own.
+    // Shipped inside somebody else's bundle - it must not also be a plugin of its own.
     const owner = owners.get(name);
     if (owner && owner !== name) {
       skipped.push({ name, reason: `shipped by the ${owner} plugin` });
@@ -299,7 +307,11 @@ function bulkSkillTargets() {
     // with the parent for the same triggers.
     const parent = /-quick$/.test(name) ? name.replace(/-quick$/, '') : null;
     if (parent && skillSet.has(parent)) {
-      skipped.push({ name, reason: `quick variant — bundle it with ${parent}`, bundleWith: parent });
+      skipped.push({
+        name,
+        reason: `quick variant - bundle it with ${parent}`,
+        bundleWith: parent,
+      });
       continue;
     }
     take.push(name);
@@ -317,7 +329,7 @@ function reportSkipped(skipped) {
   // spell it out when asked.
   if (packaged.length) {
     log.kept(`${packaged.length} skill(s) shipped inside another plugin`);
-    if (log.verbose) log.names(packaged.map((s) => `${s.name} — ${s.reason}`));
+    if (log.verbose) log.names(packaged.map((s) => `${s.name} - ${s.reason}`));
   }
   for (const item of bundle) {
     log.kept(`${item.name}`, 'quick variant, not shipped on its own');
@@ -338,7 +350,9 @@ function main() {
     errors.push('--description applies to a single name; pass exactly one name with it');
   }
   if (opts.allSkills && opts.names.length) {
-    errors.push('--all-skills covers every unpackaged skill; drop the explicit names or drop the flag');
+    errors.push(
+      '--all-skills covers every unpackaged skill; drop the explicit names or drop the flag',
+    );
   }
   if (!fs.existsSync(marketplacePath)) {
     errors.push(`${rel(marketplacePath)}: not found`);
@@ -348,7 +362,7 @@ function main() {
   const originalText = fs.readFileSync(marketplacePath, 'utf8');
   const { data: marketplace, error } = readJson(marketplacePath);
   if (error) {
-    errors.push(`invalid marketplace manifest — ${error}`);
+    errors.push(`invalid marketplace manifest - ${error}`);
     return finish(false);
   }
   if (!Array.isArray(marketplace.plugins)) marketplace.plugins = [];
@@ -395,7 +409,7 @@ function main() {
     // Already registered.
     if (existing.source !== entry.source) {
       warnings.push(
-        `${name}: marketplace "source" is '${existing.source}', not '${entry.source}' — left as is`,
+        `${name}: marketplace "source" is '${existing.source}', not '${entry.source}' - left as is`,
       );
     }
 
@@ -409,11 +423,11 @@ function main() {
     }
 
     // Direction matters. skills/ is upstream of the marketplace, so a skill's frontmatter
-    // overwrites the entry. plugin.json is downstream — materialize rewrites it from the
-    // marketplace entry — so pulling it back here would make the two scripts fight.
+    // overwrites the entry. plugin.json is downstream - materialize rewrites it from the
+    // marketplace entry - so pulling it back here would make the two scripts fight.
     if (from !== 'skill') {
       warnings.push(
-        `${name}: ${origin} does not match the marketplace entry (${drifted.join(', ')}) — ` +
+        `${name}: ${origin} does not match the marketplace entry (${drifted.join(', ')}) - ` +
           "'npm run plugin:materialize' rewrites the manifest from marketplace.json",
       );
       continue;
@@ -421,7 +435,7 @@ function main() {
 
     if (!opts.overwrite) {
       errors.push(
-        `${name}: the marketplace entry does not match ${origin} (${drifted.join(', ')}) — ` +
+        `${name}: the marketplace entry does not match ${origin} (${drifted.join(', ')}) - ` +
           'drop --no-overwrite to take the skill value, or reconcile by hand',
       );
       continue;
@@ -431,8 +445,8 @@ function main() {
     updated.push({ name, origin, fields: drifted });
   }
 
-  // Entries pointing at a local directory that does not exist yet are fine — materialize
-  // scaffolds them — but a typo looks the same, so say something. Entries this run staged
+  // Entries pointing at a local directory that does not exist yet are fine - materialize
+  // scaffolds them - but a typo looks the same, so say something. Entries this run staged
   // are expected to have no directory, so they are not worth a warning.
   const addedNames = new Set(added.map((item) => item.name));
   for (const entry of marketplace.plugins) {
@@ -440,7 +454,7 @@ function main() {
     if (addedNames.has(entry.name)) continue;
     if (fs.existsSync(path.join(repoRoot, entry.source))) continue;
     warnings.push(
-      `${entry.name}: '${entry.source}' does not exist yet — run 'npm run plugin:materialize' to scaffold it`,
+      `${entry.name}: '${entry.source}' does not exist yet - run 'npm run plugin:materialize' to scaffold it`,
     );
   }
 
@@ -452,13 +466,13 @@ function main() {
 
   if (opts.check) {
     // A plugin folder with no marketplace entry is a real defect. A root skill with no
-    // plugin is not — it is only a candidate, so --all-skills reports, never fails.
+    // plugin is not - it is only a candidate, so --all-skills reports, never fails.
     const unregistered = added.filter((item) => item.from === 'manifest');
     const candidates = added.filter((item) => item.from === 'skill');
 
     for (const item of unregistered) {
       errors.push(
-        `${rel(marketplacePath)}: no entry for '${item.name}' (declared in ${item.origin}) — ` +
+        `${rel(marketplacePath)}: no entry for '${item.name}' (declared in ${item.origin}) - ` +
           "run 'npm run plugin:generate' and commit the result",
       );
     }
@@ -468,11 +482,14 @@ function main() {
     }
     if (changed && !added.length && !updated.length) {
       errors.push(
-        `${rel(marketplacePath)} is out of date — run 'npm run plugin:generate' and commit the result`,
+        `${rel(marketplacePath)} is out of date - run 'npm run plugin:generate' and commit the result`,
       );
     }
     if (candidates.length) {
-      log.kept(`${candidates.length} skill(s) not packaged`, 'run with --all-skills to register them');
+      log.kept(
+        `${candidates.length} skill(s) not packaged`,
+        'run with --all-skills to register them',
+      );
       log.names(candidates.map((item) => item.name));
     }
 
@@ -499,8 +516,8 @@ function main() {
 
   if (opts.dryRun) {
     reportEntries(added, updated, 'would be added');
-    log.note('nothing written — drop --dry-run to apply');
-    return finish(true, { ok: `${summary()} — dry run` });
+    log.note('nothing written - drop --dry-run to apply');
+    return finish(true, { ok: `${summary()} - dry run` });
   }
 
   fs.writeFileSync(marketplacePath, nextText);
@@ -524,13 +541,17 @@ function reportEntries(added, updated, verb) {
   const derived = added.filter((item) => item.derivedFromSkill);
   if (derived.length) {
     log.note(
-      `${derived.length} description(s) came from skill frontmatter — rewrite them to say what ` +
+      `${derived.length} description(s) came from skill frontmatter - rewrite them to say what ` +
         'the plugin bundles and when to install it',
     );
   }
 
   if (updated.length === 1) {
-    log.change('~', updated[0].name, `${updated[0].fields.join(', ')} taken from ${updated[0].origin}`);
+    log.change(
+      '~',
+      updated[0].name,
+      `${updated[0].fields.join(', ')} taken from ${updated[0].origin}`,
+    );
   } else if (updated.length) {
     log.change('~', `${updated.length} entries rewritten from their source`);
     log.names(updated.map((item) => `${item.name} (${item.fields.join(', ')})`));

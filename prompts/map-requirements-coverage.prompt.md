@@ -21,7 +21,7 @@ Then do the following:
 
 1. Normalize the requirements into atomic, testable statements with stable IDs. Split compound requirements.
 2. Search the workspace for tests related to each statement: unit, API, E2E, and manual test case documents.
-3. Build the traceability matrix, marking each requirement as **covered**, **partially covered**, or **not covered**, with the covering test files cited as evidence. A test that merely touches the feature does not count as coverage — it must assert the required behavior.
+3. Build the traceability matrix, marking each requirement as **covered**, **partially covered**, or **not covered**, with the covering test files cited as evidence. A test that merely touches the feature does not count as coverage - it must assert the required behavior.
 4. Classify each gap by risk: business impact and likelihood of regression.
 5. Recommend, for each significant gap, the cheapest test level that would close it and whether it is an automation candidate.
 

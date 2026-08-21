@@ -6,7 +6,7 @@
 //   'execute' tool; agents told to write files/documents should have an 'edit' tool.
 //   Scanned per line, skipping negations ("you CANNOT run commands"), descriptions
 //   ("how to run tests"), and template blocks whose contents the agent emits rather
-//   than follows — see instructionLines().
+//   than follows - see instructionLines().
 
 const fs = require('fs');
 const path = require('path');
@@ -74,14 +74,16 @@ function parseAgent(filePath) {
     }
   }
 
-  const toolsMatch = fm.match(/^tools\s*:\s*(\[[\s\S]*?\])/m) || fm.match(/^tools\s*:\s*\r?\n([\s\S]*?\])/m);
+  const toolsMatch =
+    fm.match(/^tools\s*:\s*(\[[\s\S]*?\])/m) || fm.match(/^tools\s*:\s*\r?\n([\s\S]*?\])/m);
   const tools = toolsMatch ? toolsMatch[1] : '';
 
   return { name, handoffTargets, agentRefs, tools, body };
 }
 
 const RUNS_COMMANDS = /\brun (the )?(relevant )?(tests?|test suites?|test commands?|commands?)\b/;
-const WRITES_FILES = /\b(write|create|save)\b[^.\n]{0,60}\b(file|document|report|plan|summary|\.md)\b/;
+const WRITES_FILES =
+  /\b(write|create|save)\b[^.\n]{0,60}\b(file|document|report|plan|summary|\.md)\b/;
 
 // A line that forbids something is not an instruction to do it: "you CANNOT run
 // commands" must not read as "run commands".

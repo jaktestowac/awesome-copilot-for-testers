@@ -1,0 +1,25 @@
+{
+  "name": "testing-llm-features",
+  "description": "Builds an offline eval suite for LLM-powered features: golden reference cases per prompt template, deterministic scoring where possible, a regression gate on prompt, model and retrieval changes, and CI wiring with promptfoo, Vitest or deepeval. Use when a product ships prompts, agents or RAG, when a model or prompt upgrade needs a regression check, when LLM output is currently verified by someone eyeballing it, or when asked how to test a feature whose output is non-deterministic.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "llm testing",
+    "ai evaluation",
+    "evals",
+    "promptfoo",
+    "prompt regression",
+    "rag testing",
+    "ai quality",
+    "golden cases",
+    "non deterministic testing",
+    "software testing"
+  ],
+  "skills": [
+    "./skills/testing-llm-features/"
+  ]
+}

@@ -27,12 +27,12 @@ Use the read and search tools to understand the code, its context, and its calle
 
 Then provide an explanation covering:
 
-- **Purpose** — what it does and why it exists
-- **How it works** — control flow, key data, and important state transitions
-- **Key components** — main functions, classes, or blocks and their roles
-- **Patterns and practices** — notable patterns, idioms, or anti-patterns
-- **Testing perspective** — inputs and edge cases, error paths, side effects, external dependencies, and the behaviors most worth testing
-- **Risks and improvements** — potential bugs, unclear contracts, and concrete suggestions
+- **Purpose** - what it does and why it exists
+- **How it works** - control flow, key data, and important state transitions
+- **Key components** - main functions, classes, or blocks and their roles
+- **Patterns and practices** - notable patterns, idioms, or anti-patterns
+- **Testing perspective** - inputs and edge cases, error paths, side effects, external dependencies, and the behaviors most worth testing
+- **Risks and improvements** - potential bugs, unclear contracts, and concrete suggestions
 
 # Output format
 

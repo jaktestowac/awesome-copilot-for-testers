@@ -1,4 +1,4 @@
-# Troubleshooting — Static Code Analysis for TypeScript
+# Troubleshooting - Static Code Analysis for TypeScript
 
 ## `source.organizeImports` fights with import sorting
 

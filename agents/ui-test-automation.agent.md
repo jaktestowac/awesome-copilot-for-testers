@@ -81,7 +81,7 @@ For UI tests:
 
 ### 6. Run regression tests (mandatory)
 
-After every change — no matter how small — run the **full existing test suite** before proceeding:
+After every change - no matter how small - run the **full existing test suite** before proceeding:
 
 - Execute all tests using suitable command, eg: `npx playwright test`
 - If any **pre-existing** test fails:

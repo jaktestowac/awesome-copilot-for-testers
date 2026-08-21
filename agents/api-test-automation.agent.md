@@ -56,7 +56,7 @@ Optional:
    - Each test should be self-contained and independent, allowing for parallel execution and isolated debugging.
 6. Run generated tests locally to verify they execute and pass (assuming the API is accessible and testable in the current environment). If tests fail due to issues in the generated code, fix them and re-run until they pass.
 7. Make output deterministic and readable:
-   - stable test names: "<METHOD> <path> — <scenario>"
+   - stable test names: "<METHOD> <path> - <scenario>"
    - small helpers instead of massive monolith tests
 
 # Boundaries

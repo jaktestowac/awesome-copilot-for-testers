@@ -3,7 +3,7 @@
 Worked before/after pairs for the rules in `SKILL.md`.
 
 The examples use neutral `test` / `expect` pseudocode so the point stays framework-independent.
-Translate them into whatever runner and assertion style the project already uses — the shape of the problem is the same everywhere.
+Translate them into whatever runner and assertion style the project already uses - the shape of the problem is the same everywhere.
 
 ---
 
@@ -242,9 +242,13 @@ The bad shape is one of the most common silent-pass bugs in async suites.
 // BAD - the test's intent is buried in irrelevant setup
 test('blocks checkout for a suspended account', () => {
   const user = {
-    id: 'u1', name: 'Alice', email: 'alice@example.com', createdAt: '2025-01-01',
+    id: 'u1',
+    name: 'Alice',
+    email: 'alice@example.com',
+    createdAt: '2025-01-01',
     address: { street: 'Main 1', city: 'Kraków', zip: '30-001', country: 'PL' },
-    preferences: { newsletter: false, theme: 'dark' }, status: 'suspended',
+    preferences: { newsletter: false, theme: 'dark' },
+    status: 'suspended',
   };
   expect(canCheckout(user)).toBe(false);
 });

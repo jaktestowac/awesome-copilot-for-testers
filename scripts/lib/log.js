@@ -112,7 +112,9 @@ function createLogger(scriptName, { verbose = isVerbose() } = {}) {
       if (errors.length) {
         const counts = `${errors.length} error(s)`;
         const withWarnings = warnings.length ? `, ${warnings.length} warning(s)` : '';
-        console.error(`${style.bold(scriptName)}: ${style.red(`FAILED — ${counts}${withWarnings}`)}`);
+        console.error(
+          `${style.bold(scriptName)}: ${style.red(`FAILED - ${counts}${withWarnings}`)}`,
+        );
         process.exit(1);
       }
 

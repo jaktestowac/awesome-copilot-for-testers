@@ -16,11 +16,11 @@ If the user did not provide specific requirements, ask clarifying questions to d
    - Frontmatter fields and description format
    - Body structure (progressive disclosure: principles, workflows, templates, references)
    - How skills reference supporting files (this repo's convention is a `resources/` folder; `scripts/` and `assets/` are allowed extras)
-   - Testing domain specificity — how existing skills approach test strategies
+   - Testing domain specificity - how existing skills approach test strategies
 
 2. **Clarify requirements**: Determine the skill's design parameters with the user:
    - Core purpose and target domain (e.g., test automation strategy, Playwright patterns, CI/CD testing)
-   - What triggers activation — when should agents load this skill?
+   - What triggers activation - when should agents load this skill?
    - Primary workflows and step-by-step processes the skill teaches
    - Supporting resources needed (templates, code examples, reference documentation)
    - If the user's message already contains requirements, confirm understanding before proceeding
@@ -29,21 +29,21 @@ If the user did not provide specific requirements, ask clarifying questions to d
    - **Skill name** in gerund form (e.g., `testing-playwright-patterns`, `implementing-e2e-workflows`, not `e2e-testing-guide`)
    - **Folder structure** and file organization (SKILL.md, supporting templates/references/examples)
    - **Progressive disclosure tiers**: discovery (~100 tokens), activation (< 500 lines), resources (as needed)
-   - **Domain focus** — how this skill fits within the testing ecosystem and relates to other skills
-   - **Max body size** — keep SKILL.md under 500 lines; move detailed content to separate files in resources/
+   - **Domain focus** - how this skill fits within the testing ecosystem and relates to other skills
+   - **Max body size** - keep SKILL.md under 500 lines; move detailed content to separate files in resources/
 
 4. **Create the skill files**: Build the skill directory and SKILL.md following established conventions:
    - Create folder: `skills/<skill-name>/`
    - Create `SKILL.md` with YAML frontmatter (name, description, user-invokable)
    - Create supporting directories as needed: `references/`, `scripts/`, `assets/`
    - Structure SKILL.md body: principles, workflows, templates, reference sections
-   - Apply progressive disclosure — link to supporting files rather than embedding everything
+   - Apply progressive disclosure - link to supporting files rather than embedding everything
    - Reference supporting files with descriptive names and relative paths
 
 5. **Populate supporting resources**: Create supporting files if the skill is complex:
-   - **references/** — detailed documentation, decision matrices, rule sets, checklists
-   - **scripts/** — executable code, CLI tools, test templates
-   - **assets/** — configuration files, sample data, downloadable resources
+   - **references/** - detailed documentation, decision matrices, rule sets, checklists
+   - **scripts/** - executable code, CLI tools, test templates
+   - **assets/** - configuration files, sample data, downloadable resources
    - Keep file references shallow (one level deep from SKILL.md)
 
 6. **Review and validate**: Review the created skill against best practices:

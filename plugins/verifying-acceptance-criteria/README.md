@@ -8,7 +8,7 @@ Compares implementation evidence against acceptance criteria and shows what is m
 
 ## What's inside
 
-- `skills/verifying-acceptance-criteria/` — the agent skill, generated from the repository's `skills/verifying-acceptance-criteria/` directory, which is the source of truth
+- `skills/verifying-acceptance-criteria/` - the agent skill, generated from the repository's `skills/verifying-acceptance-criteria/` directory, which is the source of truth
 
 ## Installation
 
@@ -22,4 +22,4 @@ copilot plugin install verifying-acceptance-criteria
 ## Note on source of truth
 
 The skill content is a copy of `skills/verifying-acceptance-criteria/` at the repository root. Do not edit the plugin copy
-directly — update the root skill and run `npm run plugin:materialize`.
+directly - update the root skill and run `npm run plugin:materialize`.

@@ -1,0 +1,25 @@
+{
+  "name": "testing-llm-guardrails",
+  "description": "Tests the runtime validation around model output — schema conformance, PII leakage, moderation, refusal behaviour, tool-call safety — and the adversarial suite that tries to defeat it: direct prompt injection, jailbreaks, and indirect injection through retrieved documents, tool results and user content. Use when an LLM feature reaches real users, when a model can call tools or read untrusted content, when an AI feature needs a security-style test suite, or when asked whether a chatbot or agent can be manipulated.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "prompt injection",
+    "llm security",
+    "ai guardrails",
+    "red teaming",
+    "indirect injection",
+    "output validation",
+    "tool authorization",
+    "ai safety testing",
+    "security testing",
+    "owasp llm"
+  ],
+  "skills": [
+    "./skills/testing-llm-guardrails/"
+  ]
+}

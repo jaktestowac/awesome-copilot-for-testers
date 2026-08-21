@@ -18,7 +18,7 @@ Do the following:
 1. Identify failing tests:
    - Run the test suite (limited to the given scope) to identify which tests are failing.
    - Analyze error messages, logs, and traces to understand the root cause of each failure.
-   - Classify each failure before fixing: application defect, test bug, environment/config issue, or flaky test. Rerun a failing test in isolation when you suspect flakiness — an intermittent failure needs a root-cause fix (waiting strategy, test isolation, data setup), not a retry.
+   - Classify each failure before fixing: application defect, test bug, environment/config issue, or flaky test. Rerun a failing test in isolation when you suspect flakiness - an intermittent failure needs a root-cause fix (waiting strategy, test isolation, data setup), not a retry.
 2. Fix failing tests:
    - Modify the test or the code under test to address the root cause.
    - Ensure that fixes are aligned with the overall test strategy and quality standards.

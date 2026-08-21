@@ -1,7 +1,7 @@
 ---
 name: Generate exploratory testing charters
 agent: test-planner
-description: 'Create prioritized, timeboxed exploratory testing session charters from a feature description, release notes, or live app exploration — with risk focus, test ideas, and oracle notes for each session.'
+description: 'Create prioritized, timeboxed exploratory testing session charters from a feature description, release notes, or live app exploration - with risk focus, test ideas, and oracle notes for each session.'
 tools: ['vscode', 'read', 'search', 'web', 'playwright/*', 'todo']
 ---
 

@@ -1,0 +1,25 @@
+{
+  "name": "verifying-change-coverage",
+  "description": "Verifies that the lines and branches a change actually touched are executed by tests, using LCOV or Cobertura diff coverage instead of whole-repo percentages, and escalates uncovered high-risk changes into a blocking finding. Use when a pull request needs a coverage gate that unrelated tests cannot satisfy, when total coverage looks healthy but the diff is untested, when wiring diff coverage into CI, or when someone claims a change is covered because the suite is green.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "diff coverage",
+    "code coverage",
+    "lcov",
+    "cobertura",
+    "coverage gate",
+    "pull request review",
+    "continuous integration",
+    "test quality",
+    "software testing",
+    "quality gates"
+  ],
+  "skills": [
+    "./skills/verifying-change-coverage/"
+  ]
+}

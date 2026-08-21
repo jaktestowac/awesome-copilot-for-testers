@@ -1152,7 +1152,7 @@ function main() {
         if (checkMode) {
           staleFiles.push(readmeFile);
           errors.push(
-            `${readmeFile} is out of date (${changedLines} line(s) differ) — ` +
+            `${readmeFile} is out of date (${changedLines} line(s) differ) - ` +
               "run 'npm run generate' and commit the result",
           );
           // The differing lines are the evidence; a few are enough to see which table drifted.

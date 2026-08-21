@@ -34,7 +34,7 @@ Your task is to generate a **Playwright TypeScript test** using `@playwright/tes
      - Assert meaningful outcomes (visible content, state changes), not just the URL.
      - Group logical steps with `test.step()` so reports read like the scenario.
      - Add scenario-appropriate tags in the test title (e.g. `@smoke`, `@regression`) when the project uses tagging.
-     - No hardcoded credentials or secrets — use environment variables or existing fixtures.
+     - No hardcoded credentials or secrets - use environment variables or existing fixtures.
    - Match the project's existing conventions (fixtures, page objects, naming) if a Playwright setup already exists.
    - Save the generated file in the `tests/` directory.
 

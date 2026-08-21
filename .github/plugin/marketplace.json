@@ -218,6 +218,84 @@
       "source": "plugins/verifying-acceptance-criteria",
       "description": "Compares implementation evidence against acceptance criteria and shows what is met, partial, missing, or untestable. Use when checking feature readiness, preparing QA sign-off, or turning criteria into a concrete verification matrix without inventing missing behavior.",
       "version": "1.0.0"
+    },
+    {
+      "name": "deriving-a-quality-contract",
+      "source": "plugins/deriving-a-quality-contract",
+      "description": "Derives a project-specific quality contract from three axes - risk profile, team maturity, and product surface - labelling each testing practice MUST, SHOULD, or COULD, then produces a PRESENT/PARTIAL/MISSING/WAIVED gap matrix with an ordered remediation plan. Use when a project has no agreed testing strategy, when a team argues about which practices are mandatory, when onboarding a legacy or inherited repository, when a quality strategy document has to be derived from evidence instead of opinion, or when someone asks \"what testing should we actually be doing here\".",
+      "version": "1.0.0"
+    },
+    {
+      "name": "scoping-change-relevance",
+      "source": "plugins/scoping-change-relevance",
+      "description": "Classifies a diff into file tags and hunk tags - new public export, new endpoint, modified auth, SQL string, migration, added dependency, touched prompt - then maps each tag to the quality practices it makes relevant, producing a defensible per-change check scope instead of running everything or guessing. Use when deciding what to test for a specific pull request, when a full regression run is too slow to gate on, when a pre-push or PR gate needs a scope someone can argue with, or when asked \"which checks does this change actually need\".",
+      "version": "1.0.0"
+    },
+    {
+      "name": "verifying-change-coverage",
+      "source": "plugins/verifying-change-coverage",
+      "description": "Verifies that the lines and branches a change actually touched are executed by tests, using LCOV or Cobertura diff coverage instead of whole-repo percentages, and escalates uncovered high-risk changes into a blocking finding. Use when a pull request needs a coverage gate that unrelated tests cannot satisfy, when total coverage looks healthy but the diff is untested, when wiring diff coverage into CI, or when someone claims a change is covered because the suite is green.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "governing-quality-waivers",
+      "source": "plugins/governing-quality-waivers",
+      "description": "Turns \"we will skip this check for now\" into a dated, attributed, expiring waiver with a stated reason and owner, inventories the silent skips already hiding in a repo - skipped tests, disabled lint rules, ts-expect-error, continue-on-error, lowered thresholds, coverage ignores - and reports expired waivers as findings. Use when a team wants to bypass a quality gate, when skip lists and quarantined tests accumulate without owners, when an audit asks why a check is off, or when a repo needs to know what it has quietly stopped enforcing.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "recording-change-intent",
+      "source": "plugins/recording-change-intent",
+      "description": "Requires an externalised rationale for high-risk changes - new public exports, new endpoints, auth edits, migrations, removed guards - recorded as an Intent commit trailer, an ADR reference, or a module intent register, and reports high-risk changes that carry none. Use when agent-generated or AI-assisted changes ship without a recorded why, when reviewers cannot tell what a diff was for, when a codebase is losing its decision history, or when setting up an intent gate alongside test and coverage gates.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "testing-llm-features",
+      "source": "plugins/testing-llm-features",
+      "description": "Builds an offline eval suite for LLM-powered features: golden reference cases per prompt template, deterministic scoring where possible, a regression gate on prompt, model and retrieval changes, and CI wiring with promptfoo, Vitest or deepeval. Use when a product ships prompts, agents or RAG, when a model or prompt upgrade needs a regression check, when LLM output is currently verified by someone eyeballing it, or when asked how to test a feature whose output is non-deterministic.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "testing-llm-guardrails",
+      "source": "plugins/testing-llm-guardrails",
+      "description": "Tests the runtime validation around model output - schema conformance, PII leakage, moderation, refusal behaviour, tool-call safety - and the adversarial suite that tries to defeat it: direct prompt injection, jailbreaks, and indirect injection through retrieved documents, tool results and user content. Use when an LLM feature reaches real users, when a model can call tools or read untrusted content, when an AI feature needs a security-style test suite, or when asked whether a chatbot or agent can be manipulated.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "attesting-manual-verification",
+      "source": "plugins/attesting-manual-verification",
+      "description": "Records human verification - code review, exploratory sessions, UAT, accessibility passes, UX and observability reviews - as dated, attributed attestations in a register, so human-centric practices stay in the quality contract without pretending to be automated checks. Use when a strategy requires verification no tool can prove, when sign-off evidence is scattered across chats and tickets, when a gap matrix needs to distinguish \"attested\" from \"passed\", or when an audit asks who verified what and when.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "assessing-comprehension-debt",
+      "source": "plugins/assessing-comprehension-debt",
+      "description": "Measures the risk that code shipped without anyone understanding it: a teach-back attestation on high-risk changes, a risk band from changed-code complexity, diff size and whether a human explanation accompanied it, and optional AI-authorship provenance. Findings stay advisory by design. Use when an AI-assisted codebase grows faster than the team reads it, when reviews are rubber-stamped, when nobody can explain a module that ships weekly, or when leadership asks how much of the code the team can actually maintain.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "reviewing-ai-output-groundedness",
+      "source": "plugins/reviewing-ai-output-groundedness",
+      "description": "Human review protocol for whether AI output is grounded in its sources: claim-by-claim attribution, hallucination classes, citation verification, sampling that is defensible, and a recorded attestation because groundedness cannot be fully automated. Also covers the responsible-AI pass - harmful output, bias, disclosure and privacy. Use when reviewing a RAG or summarisation feature, when factuality matters more than fluency, or when an eval suite needs the human check it cannot replace.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "generating-quality-gate-workflows",
+      "source": "plugins/generating-quality-gate-workflows",
+      "description": "Generates the CI workflow that enforces a quality contract: layered jobs from fast local hooks to release gates, per-practice steps for JS/TS toolchains, diff-scoped checks, sticky PR reporting, required-check wiring, and a severity policy deciding what fails the build. Use when quality practices are agreed but not enforced, when CI runs everything on every commit, when a gate reports green while the check it runs cannot fail, or when a per-change gate needs to post findings on the pull request.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "tracking-quality-trends",
+      "source": "plugins/tracking-quality-trends",
+      "description": "Turns point-in-time quality readings into a trend: archives each run, diffs against the previous one, and reports direction per metric - practices newly present or regressed, coverage movement, flake rate, waivers expiring, eval scores - using limit/current/goal framing. Use when quality reporting is a series of disconnected snapshots, when a team needs to show improvement over a quarter, when a number is quoted with no baseline, or when a regression in the quality system itself should be visible.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "unslop-answers",
+      "source": "plugins/unslop-answers",
+      "description": "Cuts AI tells from what the agent says about its own work: completion claimed without a run, invented file paths and API names, terminal output that was never produced, findings with no location, percentages with no denominator, absence claimed from one grep, effort narration instead of results, hedge stacking, buried blockers, puffery in a bug title. Use whenever reporting a result, a fix, a review finding, a test outcome, a coverage or flake number, a root cause, or a release recommendation, and when the request mentions \"prove it\", \"did you actually run it\", \"be specific\", \"no fluff\", \"stop hedging\", or \"is this real\". Must always apply to answers about your own work.",
+      "version": "1.0.0"
     }
   ]
 }

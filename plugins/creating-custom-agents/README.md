@@ -8,7 +8,7 @@ Creates GitHub Copilot custom agents (`.agent.md`) for VS Code. Use when definin
 
 ## What's inside
 
-- `skills/creating-custom-agents/` — the agent skill, generated from the repository's `skills/creating-custom-agents/` directory, which is the source of truth
+- `skills/creating-custom-agents/` - the agent skill, generated from the repository's `skills/creating-custom-agents/` directory, which is the source of truth
 
 ## Installation
 
@@ -22,4 +22,4 @@ copilot plugin install creating-custom-agents
 ## Note on source of truth
 
 The skill content is a copy of `skills/creating-custom-agents/` at the repository root. Do not edit the plugin copy
-directly — update the root skill and run `npm run plugin:materialize`.
+directly - update the root skill and run `npm run plugin:materialize`.

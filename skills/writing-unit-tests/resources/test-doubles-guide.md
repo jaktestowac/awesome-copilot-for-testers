@@ -5,13 +5,13 @@ Examples use neutral pseudocode; translate to the project's existing mocking app
 
 ## The five doubles
 
-| Double | What it does | Use it when |
-| --- | --- | --- |
-| **Dummy** | Filler that is never actually used | A signature requires an argument the behavior ignores |
-| **Stub** | Returns canned values | The unit needs an answer from a boundary to proceed |
-| **Spy** | A stub that also records how it was called | The call itself is the observable outcome (e.g. an email was sent) |
-| **Fake** | A working lightweight implementation | You need realistic behavior — in-memory store, fake clock |
-| **Mock** | Pre-programmed with expectations that it verifies | Rarely. Only when the interaction *is* the contract |
+| Double    | What it does                                      | Use it when                                                        |
+| --------- | ------------------------------------------------- | ------------------------------------------------------------------ |
+| **Dummy** | Filler that is never actually used                | A signature requires an argument the behavior ignores              |
+| **Stub**  | Returns canned values                             | The unit needs an answer from a boundary to proceed                |
+| **Spy**   | A stub that also records how it was called        | The call itself is the observable outcome (e.g. an email was sent) |
+| **Fake**  | A working lightweight implementation              | You need realistic behavior - in-memory store, fake clock          |
+| **Mock**  | Pre-programmed with expectations that it verifies | Rarely. Only when the interaction _is_ the contract                |
 
 Default to **stub** and **fake**. Reach for a spy only when the side effect is the whole point, and treat a mock with strict call-order expectations as a smell.
 
@@ -29,8 +29,8 @@ Do **not** substitute:
 
 - your own modules, classes, and internal collaborators
 - private helpers of the unit under test
-- pure functions — just call them
-- value objects and data structures — build real ones
+- pure functions - just call them
+- value objects and data structures - build real ones
 
 The moment a test stubs an internal collaborator, it stops testing behavior and starts freezing the current design. The tell: a pure refactor turns the suite red.
 
@@ -48,13 +48,11 @@ test('sends the welcome email', async () => {
 test('sends a welcome email to the new address', async () => {
   const mailbox = createFakeMailbox();
   await registerUser({ email: 'a@example.com' }, mailbox);
-  expect(mailbox.messagesTo('a@example.com')).toEqual([
-    { subject: 'Welcome' },
-  ]);
+  expect(mailbox.messagesTo('a@example.com')).toEqual([{ subject: 'Welcome' }]);
 });
 ```
 
-When the call genuinely is the contract — "this must not be charged twice" — asserting on the call is legitimate. Assert on the arguments that carry meaning, not on invocation counts you do not care about.
+When the call genuinely is the contract - "this must not be charged twice" - asserting on the call is legitimate. Assert on the arguments that carry meaning, not on invocation counts you do not care about.
 
 ## Designing so you need fewer doubles
 
@@ -117,7 +115,7 @@ A stub encodes an assumption about a boundary you do not control. That assumptio
 
 - keep one integration test that exercises the real boundary, so drift gets caught somewhere
 - build stub responses from real captured payloads rather than hand-written guesses
-- when the provider ships a change, update the stubs deliberately — a green unit suite proves nothing about a changed contract
+- when the provider ships a change, update the stubs deliberately - a green unit suite proves nothing about a changed contract
 
 State this explicitly when handing over a heavily stubbed unit suite: it proves the unit's logic, not the integration.
 

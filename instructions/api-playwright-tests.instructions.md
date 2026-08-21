@@ -85,4 +85,4 @@ Write deterministic, isolated API tests that verify:
 ## Boundaries (what not to test here)
 
 - Do not test third-party APIs directly. Mock/stub them at your boundary if needed.
-- Avoid validating the same contract/business rule in dozens of tests—centralize repeated checks in reusable assertions/helpers.
+- Avoid validating the same contract/business rule in dozens of tests-centralize repeated checks in reusable assertions/helpers.

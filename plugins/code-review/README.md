@@ -8,7 +8,7 @@ Performs a quick, lightweight review of a small diff or single file, giving conc
 
 ## What's inside
 
-- `skills/code-review/` — the agent skill, generated from the repository's `skills/code-review/` directory, which is the source of truth
+- `skills/code-review/` - the agent skill, generated from the repository's `skills/code-review/` directory, which is the source of truth
 
 ## Installation
 
@@ -22,4 +22,4 @@ copilot plugin install code-review
 ## Note on source of truth
 
 The skill content is a copy of `skills/code-review/` at the repository root. Do not edit the plugin copy
-directly — update the root skill and run `npm run plugin:materialize`.
+directly - update the root skill and run `npm run plugin:materialize`.

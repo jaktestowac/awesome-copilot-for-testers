@@ -23,14 +23,14 @@ Then do the following:
 
 1. Inventory the source tests: what each one verifies, shared commands/helpers, custom waits, fixtures, and configuration (base URL, viewports, retries).
 2. Set up or reuse Playwright scaffolding: `playwright.config.ts` with `baseURL`, `trace: 'on-first-retry'`, CI-aware `retries` and `forbidOnly`; do not duplicate an existing setup.
-3. Translate idiomatically — never line-by-line:
+3. Translate idiomatically - never line-by-line:
    - selector chains and `cy.get`/`findElement` calls become user-facing locators (`getByRole`, `getByLabel`, `getByTestId` as fallback)
    - implicit waits, `cy.wait(ms)`, and `sleep` calls become web-first assertions or waits on concrete conditions
    - custom commands and helper classes become fixtures or page objects following existing project patterns
    - request stubs (`cy.intercept`) become `page.route()` mocks
    - assertions map to Playwright `expect`, preserving the exact behavior each original assertion checked
 4. Run each migrated test and iterate until it passes. Where the environment allows, run the original test too and compare what they verify.
-5. Produce a migration report: per source test — migrated & passing, migrated with noted differences, or blocked (and why). List source-suite behaviors that have no Playwright equivalent and how you handled them.
+5. Produce a migration report: per source test - migrated & passing, migrated with noted differences, or blocked (and why). List source-suite behaviors that have no Playwright equivalent and how you handled them.
 
 # Guardrails
 
