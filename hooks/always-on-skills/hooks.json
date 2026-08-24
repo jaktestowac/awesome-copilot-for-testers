@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "command": "bash scripts/always-on-skills.sh session",
+        "windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts\\always-on-skills.ps1 -Mode session",
+        "cwd": ".github/hooks/always-on-skills",
+        "timeoutSec": 10,
+        "comment": "Materialize the always-apply skill invariants into an instructions file and report which are armed"
+      }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "command": "bash scripts/always-on-skills.sh post-tool",
+        "windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts\\always-on-skills.ps1 -Mode post-tool",
+        "cwd": ".github/hooks/always-on-skills",
+        "timeoutSec": 5,
+        "comment": "After a file edit, restate the invariant of any always-apply skill whose scope the edited path falls in"
+      }
+    ]
+  }
+}

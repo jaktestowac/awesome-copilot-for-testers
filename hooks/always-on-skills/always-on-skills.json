@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "instructionsPath": ".github/instructions/always-on-skills.instructions.md",
+  "logPath": ".github/logs/always-on-skills.log",
+  "skills": [
+    {
+      "name": "unslop-tests",
+      "enabled": true,
+      "invariant": "A test that cannot fail proves nothing. No tautological assertions, no mock-only tests, no hardcoded waits, no retries used as a fix. Every new or edited test must be seen failing against the broken behaviour before it counts as passing.",
+      "appliesTo": ["*.test.*", "*.spec.*", "tests/*", "test/*", "e2e/*", "*conftest.py"]
+    },
+    {
+      "name": "unslop-answers",
+      "enabled": true,
+      "invariant": "Every claim is evidenced, quantified, or marked unverified. Name the command and paste what it printed, or write 'changed, not run'. Numbers carry their denominator and window. Findings carry a file:line. What was skipped is stated in the first two lines.",
+      "appliesTo": ["*"]
+    },
+    {
+      "name": "communicating-quality-findings",
+      "enabled": false,
+      "invariant": "Result and blocker in the first two lines. One decision per report. Findings ordered by stated cost. The full artifact goes to a file under .qa/, at most five decision items in the message. Brevity never removes an evidence rung.",
+      "appliesTo": ["*"]
+    }
+  ]
+}
