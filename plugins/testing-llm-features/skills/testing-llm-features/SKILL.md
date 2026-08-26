@@ -49,7 +49,7 @@ Find everything that can change model behaviour, because each is a trigger for t
 | Output contract | Zod/schema on the response, structured-output config, parsing code |
 | Orchestration | chain and agent-loop structure, retries, fallbacks between models |
 
-Write down what the feature *promises* — the user-visible contract. "Summarise the ticket in ≤3 sentences, never invent a customer name, always cite the ticket id." That sentence is where the cases come from.
+Write down what the feature *promises* - the user-visible contract. "Summarise the ticket in ≤3 sentences, never invent a customer name, always cite the ticket id." That sentence is where the cases come from.
 
 ### Phase 1: Design the case set
 
@@ -87,12 +87,12 @@ The ordering is the advice. Teams reach for an LLM judge first because it feels 
 
 Two viable shapes, both in `./resources/promptfoo-setup.md`:
 
-- **promptfoo** — config-driven, good matrix support across prompts and models, built-in assertion types, decent reporting. The default choice for a suite that will grow.
-- **Vitest + the SDK** — the eval suite as ordinary tests. Better when evals must share fixtures with the app, or when the team will not adopt another tool.
+- **promptfoo** - config-driven, good matrix support across prompts and models, built-in assertion types, decent reporting. The default choice for a suite that will grow.
+- **Vitest + the SDK** - the eval suite as ordinary tests. Better when evals must share fixtures with the app, or when the team will not adopt another tool.
 
 Non-negotiables whichever you pick:
 
-- pin the exact model version (`claude-sonnet-4-5-20250929`, not `latest`) — a floating alias makes every run unreproducible
+- pin the exact model version (`claude-sonnet-4-5-20250929`, not `latest`) - a floating alias makes every run unreproducible
 - temperature 0 unless the feature's value depends on variation
 - freeze retrieval: snapshot the documents, do not query a live index
 - record model, prompt hash, and case-set version with every result
@@ -105,9 +105,9 @@ The gate is comparative:
 
 | Condition | Verdict |
 | --- | --- |
-| A case that passed on the baseline now fails | **BLOCK** — this is the whole point |
-| Aggregate score drops beyond the noise band | **WARN** — investigate before merging |
-| New cases fail | **INFO** — they were added because they fail |
+| A case that passed on the baseline now fails | **BLOCK** - this is the whole point |
+| Aggregate score drops beyond the noise band | **WARN** - investigate before merging |
+| New cases fail | **INFO** - they were added because they fail |
 | Cost or latency regresses beyond budget | **WARN** |
 | Flaky case (passes and fails across N runs) | fix the case or the determinism, do not average it away |
 
@@ -117,12 +117,12 @@ Store the baseline as a committed artifact so the comparison is reviewable in th
 
 ### Phase 5: Report
 
-- **Regressions** — case, what it asserted, baseline versus now, the actual output
-- **Score by capability** — not one global number; "citation accuracy 94%, refusal 100%, summary faithfulness 81%" is actionable
-- **Retrieval versus generation** — for RAG, always split
-- **Cost and latency** — per case and total, against budget
-- **Variance** — which cases are unstable across runs
-- **Coverage gaps** — prompt templates with no cases, capabilities with no negative case
+- **Regressions** - case, what it asserted, baseline versus now, the actual output
+- **Score by capability** - not one global number; "citation accuracy 94%, refusal 100%, summary faithfulness 81%" is actionable
+- **Retrieval versus generation** - for RAG, always split
+- **Cost and latency** - per case and total, against budget
+- **Variance** - which cases are unstable across runs
+- **Coverage gaps** - prompt templates with no cases, capabilities with no negative case
 
 ## Common Failure Modes
 

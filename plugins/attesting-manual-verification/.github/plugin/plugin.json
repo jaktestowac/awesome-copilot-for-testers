@@ -19,5 +19,7 @@
     "audit trail",
     "software testing"
   ],
-  "skills": ["./skills/attesting-manual-verification/"]
+  "skills": [
+    "./skills/attesting-manual-verification/"
+  ]
 }

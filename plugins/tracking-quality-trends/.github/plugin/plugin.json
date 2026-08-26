@@ -1,6 +1,6 @@
 {
   "name": "tracking-quality-trends",
-  "description": "Turns point-in-time quality readings into a trend: archives each run, diffs against the previous one, and reports direction per metric — practices newly present or regressed, coverage movement, flake rate, waivers expiring, eval scores — using limit/current/goal framing. Use when quality reporting is a series of disconnected snapshots, when a team needs to show improvement over a quarter, when a number is quoted with no baseline, or when a regression in the quality system itself should be visible.",
+  "description": "Turns point-in-time quality readings into a trend: archives each run, diffs against the previous one, and reports direction per metric - practices newly present or regressed, coverage movement, flake rate, waivers expiring, eval scores - using limit/current/goal framing. Use when quality reporting is a series of disconnected snapshots, when a team needs to show improvement over a quarter, when a number is quoted with no baseline, or when a regression in the quality system itself should be visible.",
   "version": "1.0.0",
   "author": {
     "name": "jaktestowac.pl"

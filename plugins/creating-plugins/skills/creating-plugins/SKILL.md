@@ -24,7 +24,7 @@ The rule that governs everything here: **`skills/` at the repository root is the
 - **The root skill is the source of truth.** Every change starts in `skills/<name>/` and flows outward.
 - **Plugin skill copies are generated.** Never hand-edited, always regenerated.
 - **A plugin is self-contained.** The plugin format resolves skill paths relative to the plugin root, so a plugin cannot reference `skills/` at the repository root. That is why the copies exist.
-- **The marketplace entry comes first.** The scaffolder builds the plugin directory from it, and rewrites the generated fields from it on every run — edits flow downstream, never back up.
+- **The marketplace entry comes first.** The scaffolder builds the plugin directory from it, and rewrites the generated fields from it on every run - edits flow downstream, never back up.
 - **A bundle is justified by use together.** Two skills in one plugin because a user reaching for one reaches for the other, not because they share a topic.
 - **The description is the install decision.** It is what a user reads in a marketplace listing, and it is the only thing they read.
 
@@ -75,7 +75,7 @@ skills/<name>/SKILL.md  →  marketplace.json  →  plugins/<name>/  →  README
 ```
 
 `plugin:generate:all` therefore rewrites an existing entry's description from the skill's
-frontmatter — a marketplace description edited by hand does not survive it. Write the listing
+frontmatter - a marketplace description edited by hand does not survive it. Write the listing
 description in the skill's frontmatter, or use `--description=` per plugin, or pass
 `--no-overwrite` to keep what is there and have the drift reported instead. A `version` somebody
 bumped is never reset by a refresh; only `--version=` changes it.
@@ -84,10 +84,10 @@ bumped is never reset by a refresh; only `--version=` changes it.
 ships, and it skips `<name>-quick` when `skills/<name>/` exists, printing the `plugin.json` line
 that bundles the quick variant with its parent instead. Pair it with `--dry-run` first, and read
 Phase 0 before accepting the result: one plugin per skill is a defensible default, but a pair used
-together belongs in one plugin. `--check` never demands a plugin for a root skill — an unpackaged
-skill is a normal state — so bulk mode stays opt-in and CI stays quiet about it.
+together belongs in one plugin. `--check` never demands a plugin for a root skill - an unpackaged
+skill is a normal state - so bulk mode stays opt-in and CI stays quiet about it.
 
-A description derived from the skill frontmatter is a starting point, not the finished entry — the
+A description derived from the skill frontmatter is a starting point, not the finished entry - the
 generator says so when it uses one. Rewrite it as a marketplace listing, then continue.
 
 The resulting entry, hand-written or generated:
@@ -115,7 +115,7 @@ This does two things, per `scripts/materialize-plugins.js`:
 
    | File | Overwritten | Preserved |
    | --- | --- | --- |
-   | `plugin.json` | `name`, `description`, `version`, `author`, `repository`, `license` | `keywords` and `skills` — curated by hand, and not derivable from the entry |
+   | `plugin.json` | `name`, `description`, `version`, `author`, `repository`, `license` | `keywords` and `skills` - curated by hand, and not derivable from the entry |
    | `README.md` | the frontmatter `description` | the whole body, which is hand-written prose |
 
    `--force-readme` rewrites plugin READMEs wholesale from the template, discarding that prose. Use it to reset a README the scaffolder generated, not one somebody wrote.
@@ -155,7 +155,7 @@ The scaffolder writes a `plugin.json`; fill in what it cannot know.
 
 - `skills` paths are **relative to the plugin root** and resolve to `skills/<name>/` at the repository root during materialize
 - `keywords` are how a user finds the plugin; include the terms they would search, including the ones the skill's own description does not need
-- `keywords` and `skills` are the two fields a re-materialize leaves alone — edit them here
+- `keywords` and `skills` are the two fields a re-materialize leaves alone - edit them here
 - `description` and `version` come from the marketplace entry and are rewritten on every materialize; change them there, not here
 
 ### Phase 4: Write the plugin README

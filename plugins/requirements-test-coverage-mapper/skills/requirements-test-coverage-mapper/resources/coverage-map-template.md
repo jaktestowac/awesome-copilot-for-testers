@@ -1,4 +1,4 @@
-# RTM Output Schema — Strict Structure
+# RTM Output Schema - Strict Structure
 
 The output must follow this structure and order.
 
@@ -86,9 +86,9 @@ If tooling is known (e.g., Azure DevOps/Jira/TestRail), propose how to encode li
 
 ### RTM (excerpt)
 
-| Req ID  | Requirement                                                    | Source          | Risk | Levels     | Scenarios              | Auto | Status  | Notes                |
-| ------: | -------------------------------------------------------------- | --------------- | ---- | ---------- | ---------------------- | ---- | ------- | -------------------- |
-| REQ-001 | User can reset password via email link valid for 15 minutes    | US-002 / AC-004 | H×M  | API/UI/E2E | TS-001, TS-002, TS-003 | Yes  | Planned | Need rate-limit spec |
+|  Req ID | Requirement                                                 | Source          | Risk | Levels     | Scenarios              | Auto | Status  | Notes                |
+| ------: | ----------------------------------------------------------- | --------------- | ---- | ---------- | ---------------------- | ---- | ------- | -------------------- |
+| REQ-001 | User can reset password via email link valid for 15 minutes | US-002 / AC-004 | H×M  | API/UI/E2E | TS-001, TS-002, TS-003 | Yes  | Planned | Need rate-limit spec |
 
 ### Scenario (excerpt)
 

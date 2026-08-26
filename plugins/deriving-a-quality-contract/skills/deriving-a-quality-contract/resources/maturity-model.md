@@ -1,10 +1,10 @@
-# Maturity Model — crawl / walk / run
+# Maturity Model - crawl / walk / run
 
-Maturity gates *ambition*. It answers "what should this team adopt next", not "what would be ideal". Read the level off the repository as it is today, not off the team's seniority or intentions.
+Maturity gates _ambition_. It answers "what should this team adopt next", not "what would be ideal". Read the level off the repository as it is today, not off the team's seniority or intentions.
 
-A practice whose `From` column is above the current level is **deferred**, not missing. Deferred practices belong in the contract's "next level" section — visible, sequenced, not counted as a gap.
+A practice whose `From` column is above the current level is **deferred**, not missing. Deferred practices belong in the contract's "next level" section - visible, sequenced, not counted as a gap.
 
-## `crawl` — no reliable safety net
+## `crawl` - no reliable safety net
 
 **You are here if any of these is true:**
 
@@ -21,7 +21,7 @@ A practice whose `From` column is above the current level is **deferred**, not m
 
 **The trap:** buying coverage before trust. A team at crawl that adopts a coverage threshold gets assertion-free tests written to satisfy it. Trust first, thresholds second.
 
-## `walk` — a trusted gate exists
+## `walk` - a trusted gate exists
 
 **You are here if:**
 
@@ -29,15 +29,15 @@ A practice whose `From` column is above the current level is **deferred**, not m
 - there is a real test suite people extend when they add features
 - failures get investigated rather than retried
 
-**Goal of this level:** widen coverage from units to the paths that actually break — integration, API, E2E on critical journeys — and start measuring instead of guessing.
+**Goal of this level:** widen coverage from units to the paths that actually break - integration, API, E2E on critical journeys - and start measuring instead of guessing.
 
 **Adopt, in this order:** diff coverage on changed lines → integration tests over real collaborators → API or E2E tests on critical journeys → SAST and dependency audit → flake control with a quarantine register → accessibility automation if there is a UI → the LLM eval suite if there is an AI surface.
 
 **Exit criteria for `run`:** critical journeys are covered end to end, coverage is measured per change rather than per repo, flake rate is known and under control, and the suite runs fast enough that nobody is tempted to skip it.
 
-**The trap:** an E2E suite that grows faster than the team can stabilise it. Flake control is on the `walk` list for a reason — an untrusted E2E suite is worse than none, because it teaches people to ignore red.
+**The trap:** an E2E suite that grows faster than the team can stabilise it. Flake control is on the `walk` list for a reason - an untrusted E2E suite is worse than none, because it teaches people to ignore red.
 
-## `run` — the suite is fast, trusted, and measured
+## `run` - the suite is fast, trusted, and measured
 
 **You are here if:**
 
@@ -54,14 +54,14 @@ A practice whose `From` column is above the current level is **deferred**, not m
 
 ## Reading the level from the repo
 
-| Signal | Level it implies |
-| --- | --- |
-| No `test` script, or no CI test step | crawl |
-| CI test step exists but `continue-on-error: true` | crawl (the gate does not gate) |
-| Blocking lint + typecheck + unit tests in CI | walk |
-| Coverage measured per change, not just per repo | walk, upper end |
-| A quarantine register or flake dashboard exists | walk → run |
-| Mutation, property-based, or performance thresholds in CI | run |
+| Signal                                                    | Level it implies               |
+| --------------------------------------------------------- | ------------------------------ |
+| No `test` script, or no CI test step                      | crawl                          |
+| CI test step exists but `continue-on-error: true`         | crawl (the gate does not gate) |
+| Blocking lint + typecheck + unit tests in CI              | walk                           |
+| Coverage measured per change, not just per repo           | walk, upper end                |
+| A quarantine register or flake dashboard exists           | walk → run                     |
+| Mutation, property-based, or performance thresholds in CI | run                            |
 
 When signals conflict, take the **lowest** level the evidence supports. Over-assigning maturity is how a team ends up with a contract full of practices it cannot yet keep.
 

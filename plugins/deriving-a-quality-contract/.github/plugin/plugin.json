@@ -1,6 +1,6 @@
 {
   "name": "deriving-a-quality-contract",
-  "description": "Derives a project-specific quality contract from three axes — risk profile, team maturity, and product surface — labelling each testing practice MUST, SHOULD, or COULD, then produces a PRESENT/PARTIAL/MISSING/WAIVED gap matrix with an ordered remediation plan. Use when a project has no agreed testing strategy, when a team argues about which practices are mandatory, when onboarding a legacy or inherited repository, when a quality strategy document has to be derived from evidence instead of opinion, or when someone asks \"what testing should we actually be doing here\".",
+  "description": "Derives a project-specific quality contract from three axes - risk profile, team maturity, and product surface - labelling each testing practice MUST, SHOULD, or COULD, then produces a PRESENT/PARTIAL/MISSING/WAIVED gap matrix with an ordered remediation plan. Use when a project has no agreed testing strategy, when a team argues about which practices are mandatory, when onboarding a legacy or inherited repository, when a quality strategy document has to be derived from evidence instead of opinion, or when someone asks \"what testing should we actually be doing here\".",
   "version": "1.0.0",
   "author": {
     "name": "jaktestowac.pl"

@@ -19,5 +19,7 @@
     "software testing",
     "continuous integration"
   ],
-  "skills": ["./skills/governing-quality-waivers/"]
+  "skills": [
+    "./skills/governing-quality-waivers/"
+  ]
 }

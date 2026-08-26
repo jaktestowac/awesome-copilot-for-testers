@@ -87,7 +87,7 @@ Report orphans classified, not counted. For a full bidirectional pass over an ex
 
 ### Phase 4: Produce the Output
 
-Follow the strict output schema in `./resources/coverage-map-template.md` — document metadata, executive coverage summary, RTM table, scenario catalog, gap report, risk-based prioritization, automation/CI recommendations, and assumptions/change-impact notes, in that order.
+Follow the strict output schema in `./resources/coverage-map-template.md` - document metadata, executive coverage summary, RTM table, scenario catalog, gap report, risk-based prioritization, automation/CI recommendations, and assumptions/change-impact notes, in that order.
 
 ## Quality Rules (Non-Negotiable)
 

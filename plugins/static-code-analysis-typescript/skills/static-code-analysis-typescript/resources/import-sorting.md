@@ -1,4 +1,4 @@
-# Import Sorting — Strategy, Decision Tree, and Migrations
+# Import Sorting - Strategy, Decision Tree, and Migrations
 
 ## Recommended approach: `eslint-plugin-simple-import-sort`
 
@@ -6,12 +6,12 @@ Import sorting belongs in ESLint, not in Prettier. The recommended plugin is `es
 
 **Why ESLint-based import sorting is preferred:**
 
-1. **Clean separation of concerns** — Prettier handles formatting (whitespace, quotes, semicolons); ESLint handles code quality and structure (including import order)
-2. **Auto-fixable** — `eslint --fix` sorts imports, which integrates naturally with `lint-staged`
-3. **No Prettier plugin complexity** — Prettier plugins for import sorting add a parser layer (often Babel-based) that can be slow, fragile, or incompatible with newer Prettier versions
-4. **No VS Code conflicts** — Prettier import sorting plugins fight with VS Code's `source.organizeImports`; ESLint-based sorting does not
-5. **Future-proof** — No coupling to Prettier's plugin API changes; ESLint plugin API is stable
-6. **Lightweight** — `eslint-plugin-simple-import-sort` has zero dependencies
+1. **Clean separation of concerns** - Prettier handles formatting (whitespace, quotes, semicolons); ESLint handles code quality and structure (including import order)
+2. **Auto-fixable** - `eslint --fix` sorts imports, which integrates naturally with `lint-staged`
+3. **No Prettier plugin complexity** - Prettier plugins for import sorting add a parser layer (often Babel-based) that can be slow, fragile, or incompatible with newer Prettier versions
+4. **No VS Code conflicts** - Prettier import sorting plugins fight with VS Code's `source.organizeImports`; ESLint-based sorting does not
+5. **Future-proof** - No coupling to Prettier's plugin API changes; ESLint plugin API is stable
+6. **Lightweight** - `eslint-plugin-simple-import-sort` has zero dependencies
 
 **Setup:**
 
@@ -52,7 +52,7 @@ Do you need import sorting?
    │   │       and has no Prettier 4 support
    │   └── Otherwise → migrate to eslint-plugin-simple-import-sort
    ├── Does the project already use @ianvs/prettier-plugin-sort-imports?
-   │   └── Acceptable — it uses TS parser and supports Prettier 4
+   │   └── Acceptable - it uses TS parser and supports Prettier 4
    │       Consider migrating to ESLint-based sorting for cleaner separation
    └── Does the project use eslint-plugin-perfectionist?
        └── Acceptable for teams wanting broader sorting (objects, types, enums)

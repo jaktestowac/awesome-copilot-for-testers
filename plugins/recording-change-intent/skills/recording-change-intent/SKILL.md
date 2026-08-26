@@ -1,6 +1,6 @@
 ---
 name: recording-change-intent
-description: 'Requires an externalised rationale for high-risk changes — new public exports, new endpoints, auth edits, migrations, removed guards — recorded as an Intent commit trailer, an ADR reference, or a module intent register, and reports high-risk changes that carry none. Use when agent-generated or AI-assisted changes ship without a recorded why, when reviewers cannot tell what a diff was for, when a codebase is losing its decision history, or when setting up an intent gate alongside test and coverage gates.'
+description: 'Requires an externalised rationale for high-risk changes - new public exports, new endpoints, auth edits, migrations, removed guards - recorded as an Intent commit trailer, an ADR reference, or a module intent register, and reports high-risk changes that carry none. Use when agent-generated or AI-assisted changes ship without a recorded why, when reviewers cannot tell what a diff was for, when a codebase is losing its decision history, or when setting up an intent gate alongside test and coverage gates.'
 argument-hint: 'Commit range or PR, and where rationale is expected to live (commit trailers, ADRs, issue tracker)'
 user-invocable: true
 ---
@@ -38,9 +38,9 @@ The fix is small and unfashionable: on high-risk changes, require the rationale 
 
 Take the tags from `scoping-change-relevance`, or apply the rules in `./resources/high-risk-surface-rules.md` directly. High-risk surface is:
 
-- a **new public export** — a new capability other code can now call
+- a **new public export** - a new capability other code can now call
 - a **new endpoint** or externally reachable operation
-- a **modified auth** path — anything touching who can do what
+- a **modified auth** path - anything touching who can do what
 - a **schema or migration** change, especially an irreversible one
 - a **removed guard, removed validation, or removed test**
 - a **new external dependency or call** that adds a failure mode
@@ -66,7 +66,7 @@ git log <base>..HEAD --format='%(trailers:key=Intent,valueonly)'
 git log <base>..HEAD --format='%(trailers:key=Intent-Ref,valueonly)'
 ```
 
-Trailers are the standard `Key: value` block at the end of a commit message — the same mechanism as `Signed-off-by:`. No tooling, no external service, and they survive rebase and squash if written into the final message. See `./resources/intent-trailer-spec.md`.
+Trailers are the standard `Key: value` block at the end of a commit message - the same mechanism as `Signed-off-by:`. No tooling, no external service, and they survive rebase and squash if written into the final message. See `./resources/intent-trailer-spec.md`.
 
 ### Phase 3: Classify each high-risk change
 
@@ -74,7 +74,7 @@ Trailers are the standard `Key: value` block at the end of a commit message — 
 | --- | --- | --- |
 | **Covered** | a valid rationale covers this surface | nothing |
 | **Undeclared** | high-risk surface, no rationale anywhere | write one |
-| **Malformed** | a trailer exists but fails its rule — too short, unresolvable ref, wrong key | fix it, and quote the exact problem |
+| **Malformed** | a trailer exists but fails its rule - too short, unresolvable ref, wrong key | fix it, and quote the exact problem |
 | **Restated diff** | a rationale that only says what the diff says | rewrite it; this is the most common failure |
 | **Waived** | covered by a path-scoped intent waiver | cite the waiver and its expiry |
 
@@ -82,13 +82,13 @@ Trailers are the standard `Key: value` block at the end of a commit message — 
 
 ### Phase 4: Draft, then hand over
 
-Where a rationale is missing, draft one from the evidence available — the diff, the linked ticket, the branch name, the surrounding code, the conversation. Then hand it to the author with the draft clearly marked as a draft, because a rationale the author has not confirmed is not a rationale.
+Where a rationale is missing, draft one from the evidence available - the diff, the linked ticket, the branch name, the surrounding code, the conversation. Then hand it to the author with the draft clearly marked as a draft, because a rationale the author has not confirmed is not a rationale.
 
 A good record answers three questions in a few lines:
 
-1. **Why now** — the trigger. A bug, a requirement, a limit that was hit.
-2. **What constrained the shape** — the reason it is not the obvious implementation.
-3. **What was rejected** — the alternative someone will otherwise propose in six months.
+1. **Why now** - the trigger. A bug, a requirement, a limit that was hit.
+2. **What constrained the shape** - the reason it is not the obvious implementation.
+3. **What was rejected** - the alternative someone will otherwise propose in six months.
 
 ```
 feat(billing): allow partial refunds on settled orders
@@ -99,7 +99,7 @@ reversal, which breaks the monthly reconciliation report.
 Intent: Partial refunds must be idempotent because the provider retries
   webhooks up to 5 times; we key on (orderId, providerRefundId) rather
   than generating our own id, so a retry cannot double-refund. Rejected
-  a queue-based approach — it would have needed a new consumer and the
+  a queue-based approach - it would have needed a new consumer and the
   reconciliation window is 15 minutes, not seconds.
 Intent-Ref: ADR-0042
 ```
@@ -108,17 +108,17 @@ More examples, including bad ones and why they fail, in `./resources/intent-trai
 
 ### Phase 5: Report
 
-- **Undeclared high-risk surface** — file, what makes it high-risk, and what a rationale should answer
-- **Malformed records** — the exact rule that failed and the corrected form
-- **Restated-diff records** — quoted, with what is missing
-- **Severity by profile** — `critical-regulated`: undeclared MUST surface is a blocker. `standard`: a warning. `prototype-internal`: informational.
-- **Low-risk changes needing nothing** — say this out loud; it is what keeps the gate credible
+- **Undeclared high-risk surface** - file, what makes it high-risk, and what a rationale should answer
+- **Malformed records** - the exact rule that failed and the corrected form
+- **Restated-diff records** - quoted, with what is missing
+- **Severity by profile** - `critical-regulated`: undeclared MUST surface is a blocker. `standard`: a warning. `prototype-internal`: informational.
+- **Low-risk changes needing nothing** - say this out loud; it is what keeps the gate credible
 
 ## Enforcement Layers
 
-**Layer 1 — commit-msg hook (advisory, bypassable).** Warns when an `Intent:` trailer is too short or an `Intent-Ref:` looks malformed. Never blocks. Its job is to catch the typo while the author still has context.
+**Layer 1 - commit-msg hook (advisory, bypassable).** Warns when an `Intent:` trailer is too short or an `Intent-Ref:` looks malformed. Never blocks. Its job is to catch the typo while the author still has context.
 
-**Layer 2 — pre-push or CI (enforcing).** Parses trailers on the commits in the range, resolves high-risk surface from the diff, and fails when MUST-level surface has no valid rationale. Wired into required checks. Hook snippets and a CI job are in `./resources/intent-trailer-spec.md`.
+**Layer 2 - pre-push or CI (enforcing).** Parses trailers on the commits in the range, resolves high-risk surface from the diff, and fails when MUST-level surface has no valid rationale. Wired into required checks. Hook snippets and a CI job are in `./resources/intent-trailer-spec.md`.
 
 Roll it out warn-first, like any gate: report for one iteration, then warn, then block on the escalated surface only (auth, migrations, endpoints), then everywhere the contract says MUST.
 
@@ -130,7 +130,7 @@ Roll it out warn-first, like any gate: report for one iteration, then warn, then
 - **Rationale only in the PR description.** Squash-merge discards it, and the repo keeps the code without the reason.
 - **Bare ticket references.** `Intent-Ref: JIRA-1234` with no accessible ticket is a dead link with extra steps. Reference something durable, or write the reason inline.
 - **Confusing malformed with missing.** They need different fixes and reporting them identically makes the gate feel capricious.
-- **Blocking at commit time.** The layer that must stay fast, made slow and mandatory, gets `--no-verify`'d — see `governing-quality-waivers`.
+- **Blocking at commit time.** The layer that must stay fast, made slow and mandatory, gets `--no-verify`'d - see `governing-quality-waivers`.
 
 ## Resource Map
 

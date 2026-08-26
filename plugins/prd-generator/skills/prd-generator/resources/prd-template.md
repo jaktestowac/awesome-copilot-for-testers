@@ -1,4 +1,4 @@
-# PRD Output Schema — Mandatory Structure
+# PRD Output Schema - Mandatory Structure
 
 The PRD output must follow this exact structure and order.
 
@@ -11,9 +11,9 @@ The PRD output must follow this exact structure and order.
 
 **Purpose**: Provide a concise, decision-friendly overview.
 
-- **Problem Statement** — 1–3 sentences describing the core pain or opportunity.
-- **Proposed Solution** — 1–3 sentences describing the approach (not implementation details).
-- **Success Criteria** — 3–5 measurable KPIs (business, technical, or quality).
+- **Problem Statement** - 1–3 sentences describing the core pain or opportunity.
+- **Proposed Solution** - 1–3 sentences describing the approach (not implementation details).
+- **Success Criteria** - 3–5 measurable KPIs (business, technical, or quality).
 
 ## 2. Context & Strategic Alignment
 
@@ -27,29 +27,29 @@ The PRD output must follow this exact structure and order.
 
 **Purpose**: Anchor requirements in user value.
 
-- **User Personas** — primary personas with goals and pain points.
-- **User Scenarios / Flows** — high-level description of how users interact with the system.
-- **User Stories** — `As a [persona], I want to [action] so that [benefit].`
-- **Acceptance Criteria** — clear, testable "done" conditions per story.
-- **Out of Scope / Non-Goals** — explicit exclusions to prevent scope creep.
+- **User Personas** - primary personas with goals and pain points.
+- **User Scenarios / Flows** - high-level description of how users interact with the system.
+- **User Stories** - `As a [persona], I want to [action] so that [benefit].`
+- **Acceptance Criteria** - clear, testable "done" conditions per story.
+- **Out of Scope / Non-Goals** - explicit exclusions to prevent scope creep.
 
 ## 4. Success Metrics & Release Criteria
 
 **Purpose**: Define outcomes and readiness.
 
-- **Business KPIs** — adoption, retention, revenue, efficiency.
-- **Technical KPIs** — latency, throughput, error rates.
-- **Quality KPIs** — availability, reliability, correctness.
-- **Release Readiness Checklist** — conditions required for MVP and subsequent releases.
+- **Business KPIs** - adoption, retention, revenue, efficiency.
+- **Technical KPIs** - latency, throughput, error rates.
+- **Quality KPIs** - availability, reliability, correctness.
+- **Release Readiness Checklist** - conditions required for MVP and subsequent releases.
 
 ## 5. Technical Requirements & Constraints
 
 **Purpose**: Enable engineering execution.
 
-- **High-Level Architecture Overview** — text or ASCII-based description of components and data flow.
-- **Component Breakdown** — services, APIs, data stores, integrations.
-- **Non-Functional Requirements** — performance, security, scalability, privacy, compliance.
-- **Integration Points & Dependencies** — external systems, internal services, third parties.
+- **High-Level Architecture Overview** - text or ASCII-based description of components and data flow.
+- **Component Breakdown** - services, APIs, data stores, integrations.
+- **Non-Functional Requirements** - performance, security, scalability, privacy, compliance.
+- **Integration Points & Dependencies** - external systems, internal services, third parties.
 
 ## 6. AI / ML Requirements (If Applicable)
 
@@ -65,9 +65,9 @@ Include only if AI is a core or supporting capability.
 
 **Purpose**: Surface uncertainty explicitly.
 
-- **Risks** — description, impact, likelihood, mitigation strategy
-- **Assumptions** — unvalidated conditions treated as true
-- **Dependencies** — teams, systems, vendors, or approvals
+- **Risks** - description, impact, likelihood, mitigation strategy
+- **Assumptions** - unvalidated conditions treated as true
+- **Dependencies** - teams, systems, vendors, or approvals
 
 ## 8. Roadmap & Phased Delivery
 

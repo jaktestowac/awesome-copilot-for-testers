@@ -19,16 +19,16 @@
 
 ## Debt Register
 
-| ID | Category | Location | Symptom | Evidence | Severity | Risk | Effort | ROI | Recommendation |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| TD-01 | Test Debt | `tests/auth/*.spec.ts` | Hard waits drive flakiness and slow feedback | Multiple `waitForTimeout(...)` calls in auth and checkout flows | S1 | Low | S | High | Replace fixed waits with deterministic signals and stronger assertions |
-| TD-02 | Process Debt | `.github/workflows/e2e.yml` | Global retries normalize unstable tests | Workflow and config rely on broad retries for the full suite | S2 | Medium | M | High | Reduce retries, isolate noisy tests, and add diagnostic reporting |
-| TD-03 | Architecture Debt | `tests/pages/HomePage.ts` | Page object has too many responsibilities | Navigation, assertions, environment setup, and domain workflows live together | S2 | Medium | M | Medium | Split by page responsibility or business capability |
-| TD-04 | Documentation Debt | `README.md`, onboarding docs | Local test prerequisites are tribal knowledge | Setup requires undocumented accounts and environment assumptions | S3 | Low | S | Medium | Document setup, fixture rules, and CI expectations |
+| ID    | Category           | Location                     | Symptom                                       | Evidence                                                                      | Severity | Risk   | Effort | ROI    | Recommendation                                                         |
+| ----- | ------------------ | ---------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------- | -------- | ------ | ------ | ------ | ---------------------------------------------------------------------- |
+| TD-01 | Test Debt          | `tests/auth/*.spec.ts`       | Hard waits drive flakiness and slow feedback  | Multiple `waitForTimeout(...)` calls in auth and checkout flows               | S1       | Low    | S      | High   | Replace fixed waits with deterministic signals and stronger assertions |
+| TD-02 | Process Debt       | `.github/workflows/e2e.yml`  | Global retries normalize unstable tests       | Workflow and config rely on broad retries for the full suite                  | S2       | Medium | M      | High   | Reduce retries, isolate noisy tests, and add diagnostic reporting      |
+| TD-03 | Architecture Debt  | `tests/pages/HomePage.ts`    | Page object has too many responsibilities     | Navigation, assertions, environment setup, and domain workflows live together | S2       | Medium | M      | Medium | Split by page responsibility or business capability                    |
+| TD-04 | Documentation Debt | `README.md`, onboarding docs | Local test prerequisites are tribal knowledge | Setup requires undocumented accounts and environment assumptions              | S3       | Low    | S      | Medium | Document setup, fixture rules, and CI expectations                     |
 
 ## Top Priority Items
 
-### TD-01 — Hard waits in critical UI flows
+### TD-01 - Hard waits in critical UI flows
 
 - **Category:** `test`
 - **Location:** `tests/auth/*.spec.ts`
@@ -39,7 +39,7 @@
 - **Recommended strategy:** Replace the worst fixed waits first, starting with the highest-frequency failures, then expand the pattern to other specs.
 - **Validation:** Track rerun frequency, average suite time, and failure diagnostics before and after the change.
 
-### TD-02 — Global retries hiding instability
+### TD-02 - Global retries hiding instability
 
 - **Category:** `process`
 - **Location:** `.github/workflows/e2e.yml`, `Playwright config`
@@ -58,17 +58,17 @@ The dominant debt in this area is test debt with strong spillover into delivery 
 
 ### Fix Now
 
-- `TD-01` — hard waits are low-risk to improve and high-ROI
+- `TD-01` - hard waits are low-risk to improve and high-ROI
 - strengthen assertions in the most brittle auth and checkout flows
 
 ### Fix Soon
 
-- `TD-02` — CI retry strategy needs staged reduction
-- `TD-03` — split overloaded page abstractions after stabilizing the most brittle specs
+- `TD-02` - CI retry strategy needs staged reduction
+- `TD-03` - split overloaded page abstractions after stabilizing the most brittle specs
 
 ### Accept for Now
 
-- `TD-04` — onboarding docs should be improved soon, but it does not block short-term stabilization work
+- `TD-04` - onboarding docs should be improved soon, but it does not block short-term stabilization work
 - revisit after the first stabilization sprint when the real setup friction is clearer
 
 ## Quick Wins

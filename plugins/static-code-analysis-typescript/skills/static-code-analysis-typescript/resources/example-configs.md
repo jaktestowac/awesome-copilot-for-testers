@@ -1,4 +1,4 @@
-# Example Configs — Static Code Analysis for TypeScript
+# Example Configs - Static Code Analysis for TypeScript
 
 Practical baseline snippets for Node.js + TypeScript repositories (Playwright-flavored where noted).
 
@@ -71,7 +71,7 @@ export default [
 **Key design decisions:**
 
 - `simple-import-sort/imports` and `simple-import-sort/exports` enforce consistent import order as an ESLint rule, not a Prettier plugin
-- `eslintPluginPrettierRecommended` must be last — it disables formatting rules that conflict with Prettier and adds the Prettier rule
+- `eslintPluginPrettierRecommended` must be last - it disables formatting rules that conflict with Prettier and adds the Prettier rule
 - The `files: ['**/*.ts']` block scopes TypeScript rules to `.ts` files only
 - Playwright `globalAliases` tells the Playwright plugin that `setup` and `health` are valid test functions
 
@@ -121,7 +121,7 @@ This example mirrors the recommended architecture:
 }
 ```
 
-Set `engines.node` to the Node versions your team and CI actually support — check each tool's documented minimum.
+Set `engines.node` to the Node versions your team and CI actually support - check each tool's documented minimum.
 
 Install dev dependencies at their latest stable versions:
 
@@ -195,10 +195,10 @@ See `./import-sorting.md` for rationale and migration steps.
 
 **Key design decisions:**
 
-- `module: "ESNext"` — aligns with ESM syntax used throughout TypeScript source files (`import`/`export`). Avoids the inconsistency of targeting modern JS with `target: "ESNext"` while using a legacy module system.
-- `moduleResolution: "bundler"` — required when `module` is `"ESNext"`. Without it, TypeScript falls back to `"classic"` resolution which does not understand `node_modules`. The `"bundler"` strategy is the correct choice when TypeScript does not emit code (e.g. `noEmit: true`) and files are processed by a bundler or test runner (Playwright uses ESBuild internally).
-- `noEmit: true` — TypeScript is used only for type checking, not code generation.
-- Path aliases (`paths`) are optional — only add them when justified by project structure. If used, ensure they are also supported by the test runner.
+- `module: "ESNext"` - aligns with ESM syntax used throughout TypeScript source files (`import`/`export`). Avoids the inconsistency of targeting modern JS with `target: "ESNext"` while using a legacy module system.
+- `moduleResolution: "bundler"` - required when `module` is `"ESNext"`. Without it, TypeScript falls back to `"classic"` resolution which does not understand `node_modules`. The `"bundler"` strategy is the correct choice when TypeScript does not emit code (e.g. `noEmit: true`) and files are processed by a bundler or test runner (Playwright uses ESBuild internally).
+- `noEmit: true` - TypeScript is used only for type checking, not code generation.
+- Path aliases (`paths`) are optional - only add them when justified by project structure. If used, ensure they are also supported by the test runner.
 
 **Why not `"module": "CommonJS"`?**
 
@@ -241,7 +241,7 @@ Recommended extensions for this style of repo:
 }
 ```
 
-## Example CI workflow — integrated into existing pipeline (PREFERRED)
+## Example CI workflow - integrated into existing pipeline (PREFERRED)
 
 When the repository already has a CI workflow (e.g. for Playwright tests), add a `quality` job to that workflow and make the test job depend on it:
 
@@ -280,11 +280,11 @@ jobs:
 **Key integration points:**
 
 - The `quality` job is added as a **separate job** within the same workflow
-- The existing test job gets `needs: quality` — tests only run after quality checks pass
+- The existing test job gets `needs: quality` - tests only run after quality checks pass
 - Shared workflow triggers (`on:`) and `concurrency` settings apply to both jobs
 - No need for duplicate `permissions`, `on`, or `concurrency` blocks
 
-## Example CI workflow — standalone (FALLBACK)
+## Example CI workflow - standalone (FALLBACK)
 
 Use this only when the repository has **no existing CI workflow** to integrate into:
 
@@ -329,9 +329,9 @@ jobs:
 
 **CI design principles:**
 
-- Every command is non-mutating — no `--write` or `--fix`
+- Every command is non-mutating - no `--write` or `--fix`
 - `npm ci` ensures reproducible installs
 - Steps are separate for clear failure diagnosis
 - Node version matches `engines.node` from `package.json`
 - `permissions: contents: read` follows least-privilege principle
-- **Prefer integrating into an existing pipeline** — only use a standalone workflow as a fallback
+- **Prefer integrating into an existing pipeline** - only use a standalone workflow as a fallback

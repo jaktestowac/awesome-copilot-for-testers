@@ -101,9 +101,9 @@ Identify:
 
 Choose the current model before editing anything:
 
-- **Model A — Separate responsibilities**: ESLint for code quality; Prettier for formatting; `prettier --check` used directly; `eslint-config-prettier` avoids rule conflicts.
-- **Model B — ESLint also enforces Prettier in TypeScript**: `eslint-plugin-prettier` runs formatting checks inside ESLint, often paired with a separate Prettier CLI check for non-TS files.
-- **Model C — Mixed or inconsistent**: scripts overlap, responsibilities are unclear, TS formatting may be checked twice or not clearly at all.
+- **Model A - Separate responsibilities**: ESLint for code quality; Prettier for formatting; `prettier --check` used directly; `eslint-config-prettier` avoids rule conflicts.
+- **Model B - ESLint also enforces Prettier in TypeScript**: `eslint-plugin-prettier` runs formatting checks inside ESLint, often paired with a separate Prettier CLI check for non-TS files.
+- **Model C - Mixed or inconsistent**: scripts overlap, responsibilities are unclear, TS formatting may be checked twice or not clearly at all.
 
 When possible, make the final state explicit in docs so the split is understandable.
 
@@ -172,11 +172,11 @@ For `tsconfig.json`, prefer:
 
 - `strict: true`
 - `module: "ESNext"` when the project uses ESM `import`/`export` syntax (the default for modern TypeScript projects)
-- `moduleResolution: "bundler"` — **required** when `module` is `"ESNext"` and TypeScript does not emit code; without it TS falls back to `"classic"` resolution which cannot resolve `node_modules`
+- `moduleResolution: "bundler"` - **required** when `module` is `"ESNext"` and TypeScript does not emit code; without it TS falls back to `"classic"` resolution which cannot resolve `node_modules`
 - `noEmit: true` when TypeScript is used only for type checking
 - explicit `baseUrl` / `paths` only when justified
 
-**Common mistake:** `"module": "CommonJS"` with `"target": "ESNext"` — the project writes ESM but tells TypeScript to resolve modules as CJS. See the tsconfig notes in `./resources/example-configs.md` for the full rationale.
+**Common mistake:** `"module": "CommonJS"` with `"target": "ESNext"` - the project writes ESM but tells TypeScript to resolve modules as CJS. See the tsconfig notes in `./resources/example-configs.md` for the full rationale.
 
 If the repo uses path aliases, confirm they are supported consistently by TypeScript, runtime/test tooling, and editor tooling.
 
@@ -210,16 +210,16 @@ A minimal CI quality job should:
 
 **Pipeline discovery strategy (IMPORTANT): always prefer integrating quality checks into an existing CI workflow rather than creating a separate one.**
 
-1. **Search for existing workflows** — look in `.github/workflows/` for any existing CI pipeline (e.g. `playwright-e2e-tests.yml`, `ci.yml`, `test.yml`, `build.yml`)
-2. **If a main pipeline exists** — add a `quality` job to that workflow, with the test job depending on it via `needs: quality`
-3. **Only if NO existing pipeline is found** — create a new standalone workflow (example in `./resources/example-configs.md`)
+1. **Search for existing workflows** - look in `.github/workflows/` for any existing CI pipeline (e.g. `playwright-e2e-tests.yml`, `ci.yml`, `test.yml`, `build.yml`)
+2. **If a main pipeline exists** - add a `quality` job to that workflow, with the test job depending on it via `needs: quality`
+3. **Only if NO existing pipeline is found** - create a new standalone workflow (example in `./resources/example-configs.md`)
 
 Why integrate rather than separate: a single workflow gives one status check in PRs, shared triggers and concurrency reduce drift, and `needs` ensures tests don't waste CI minutes on code that fails basic quality checks.
 
 CI principles:
 
 - use non-mutating commands only
-- do not rely solely on local hooks — CI is the authoritative gate
+- do not rely solely on local hooks - CI is the authoritative gate
 - keep CI aligned with local script names
 - use `permissions: contents: read` for least-privilege
 - cache `npm` dependencies for speed
@@ -235,10 +235,10 @@ Document clearly: required Node version, what each quality script does, whether 
 
 After editing, verify:
 
-- `npm run lint` — passes with zero warnings
-- `npm run format:check` — passes
-- `npm run tsc:check` — passes
-- `npm run lint-staged` — exits cleanly (may report nothing staged)
+- `npm run lint` - passes with zero warnings
+- `npm run format:check` - passes
+- `npm run tsc:check` - passes
+- `npm run lint-staged` - exits cleanly (may report nothing staged)
 
 The final report should distinguish between configuration problems, dependency problems, and code-quality violations in the current codebase.
 

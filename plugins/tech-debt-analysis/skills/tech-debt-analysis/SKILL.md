@@ -80,7 +80,7 @@ Capture evidence such as:
 - fragile pipelines and noisy feedback loops
 - missing ownership, docs, or operational knowledge
 
-If no evidence exists, record an assumption or unknown — not a debt item.
+If no evidence exists, record an assumption or unknown - not a debt item.
 
 ### Phase 2: Turn signals into atomic debt items
 

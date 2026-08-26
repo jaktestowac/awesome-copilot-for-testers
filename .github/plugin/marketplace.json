@@ -296,6 +296,18 @@
       "source": "plugins/unslop-answers",
       "description": "Cuts AI tells from what the agent says about its own work: completion claimed without a run, invented file paths and API names, terminal output that was never produced, findings with no location, percentages with no denominator, absence claimed from one grep, effort narration instead of results, hedge stacking, buried blockers, puffery in a bug title. Use whenever reporting a result, a fix, a review finding, a test outcome, a coverage or flake number, a root cause, or a release recommendation, and when the request mentions \"prove it\", \"did you actually run it\", \"be specific\", \"no fluff\", \"stop hedging\", or \"is this real\". Must always apply to answers about your own work.",
       "version": "1.0.0"
+    },
+    {
+      "name": "communicating-quality-findings",
+      "source": "plugins/communicating-quality-findings",
+      "description": "Shapes QA output for the person who has to act on it: result and blocker in the first two lines, one decision per report, findings ordered by what they cost, the long artifact in a file and the decisions in the message, and magnitude stated in units the reader can count. Use when a report is accurate but nobody acts on it, when a finding set is too long to read under time pressure, when the same findings must be retold for a developer, a release manager, and an on-call engineer, or when the request mentions \"too long\", \"make this readable\", \"just tell me what to do\", \"so what\", or \"summarize this for stakeholders\". Pairs with unslop-answers, which makes the same report honest.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "testing-agent-skills",
+      "source": "plugins/testing-agent-skills",
+      "description": "Tests the customization assets themselves - skills, prompts, custom agents, instructions - the way a product is tested: activation cases that check an asset fires when it should and stays quiet when it should not, output-contract cases, safety cases, collision cases between assets competing for the same trigger, a weighted rubric scored blind, and a baseline-versus-candidate gate before an edit ships. Use when a skill is edited and nobody knows whether behaviour changed, when two skills fight over the same request, when a description is being tuned for discoverability, when a collection has grown past manual spot-checking, or when the request mentions skill evals, prompt regression, or \"does this skill actually work\".",
+      "version": "1.0.0"
     }
   ]
 }

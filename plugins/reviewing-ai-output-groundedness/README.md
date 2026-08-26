@@ -1,5 +1,5 @@
 ---
-description: 'Human review protocol for whether AI output is grounded in its sources: claim-by-claim attribution, hallucination classes, citation verification, sampling that is defensible, and a recorded attestation because groundedness cannot be fully automated. Also covers the responsible-AI pass — harmful output, bias, disclosure and privacy. Use when reviewing a RAG or summarisation feature, when factuality matters more than fluency, or when an eval suite needs the human check it cannot replace.'
+description: 'Human review protocol for whether AI output is grounded in its sources: claim-by-claim attribution, hallucination classes, citation verification, sampling that is defensible, and a recorded attestation because groundedness cannot be fully automated. Also covers the responsible-AI pass - harmful output, bias, disclosure and privacy. Use when reviewing a RAG or summarisation feature, when factuality matters more than fluency, or when an eval suite needs the human check it cannot replace.'
 ---
 
 # Reviewing AI Output Groundedness Plugin

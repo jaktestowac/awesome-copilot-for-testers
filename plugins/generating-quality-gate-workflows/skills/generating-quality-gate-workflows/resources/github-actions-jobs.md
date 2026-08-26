@@ -28,9 +28,9 @@ jobs:
       - run: npm ci
 ```
 
-`concurrency` cancels superseded runs — on a busy repo it is the single biggest CI cost reduction available, and it costs one block.
+`concurrency` cancels superseded runs - on a busy repo it is the single biggest CI cost reduction available, and it costs one block.
 
-## Layer 2 — blocking jobs
+## Layer 2 - blocking jobs
 
 ```yaml
   lint:
@@ -90,7 +90,7 @@ jobs:
       - name: Guard against empty diff
         run: |
           changed=$(git diff origin/${{ github.base_ref }}...HEAD --name-only -- '*.ts' '*.tsx' | wc -l)
-          [ "$changed" -eq 0 ] && { echo "::error::No changed TS files detected — path matching is broken"; exit 1; }
+          [ "$changed" -eq 0 ] && { echo "::error::No changed TS files detected - path matching is broken"; exit 1; }
       - run: pipx install diff-cover
       - run: |
           diff-cover coverage/lcov.info \
@@ -150,19 +150,19 @@ The **empty-diff guard** in `diff-coverage` is the most valuable eight lines in 
 ```
 
 ```yaml
-  evals:
-    if: github.event.pull_request.head.repo.full_name == github.repository # forks have no secrets
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 20, cache: npm }
-      - run: npm ci
-      - env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: npx vitest run --config vitest.evals.config.ts --reporter=json --outputFile=results/now.json
-      - run: node scripts/compare-evals.mjs evals/baselines/current.json results/now.json
+evals:
+  if: github.event.pull_request.head.repo.full_name == github.repository # forks have no secrets
+  runs-on: ubuntu-latest
+  timeout-minutes: 20
+  steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with: { node-version: 20, cache: npm }
+    - run: npm ci
+    - env:
+        ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      run: npx vitest run --config vitest.evals.config.ts --reporter=json --outputFile=results/now.json
+    - run: node scripts/compare-evals.mjs evals/baselines/current.json results/now.json
 ```
 
 Trigger it with a `paths:` filter on the workflow, derived from the relevance recipes:
@@ -179,27 +179,27 @@ on:
       - 'package-lock.json'
 ```
 
-## Soft gates — visible, not hidden
+## Soft gates - visible, not hidden
 
 ```yaml
-  mutation:
-    needs: setup
-    runs-on: ubuntu-latest
-    timeout-minutes: 40
-    continue-on-error: true # soft gate: amber, not a fake green
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 20, cache: npm }
-      - run: npm ci
-      - run: npx stryker run
+mutation:
+  needs: setup
+  runs-on: ubuntu-latest
+  timeout-minutes: 40
+  continue-on-error: true # soft gate: amber, not a fake green
+  steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with: { node-version: 20, cache: npm }
+    - run: npm ci
+    - run: npx stryker run
 ```
 
 Never this:
 
 ```yaml
-      - run: npx stryker run || echo "mutation warnings"   # ❌ always green
-        continue-on-error: false                            # ❌ and this reads as strict
+- run: npx stryker run || echo "mutation warnings" # ❌ always green
+  continue-on-error: false # ❌ and this reads as strict
 ```
 
 The difference is what a reader sees on the PR: amber says "known soft gate", green says "this passed".
@@ -207,34 +207,34 @@ The difference is what a reader sees on the PR: amber says "known soft gate", gr
 ## Governance jobs
 
 ```yaml
-  waiver-expiry:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
-      - run: node scripts/check-waivers.mjs # fails on an expired or unbounded waiver
+waiver-expiry:
+  runs-on: ubuntu-latest
+  timeout-minutes: 5
+  steps:
+    - uses: actions/checkout@v4
+    - run: node scripts/check-waivers.mjs # fails on an expired or unbounded waiver
 
-  unregistered-suppressions:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
-      - run: |
-          added=$(git diff origin/${{ github.base_ref }}...HEAD -U0 \
-            | grep -E '^\+.*(eslint-disable|@ts-expect-error|@ts-nocheck|\.skip\(|\.only\(|continue-on-error|istanbul ignore|v8 ignore)' \
-            | grep -vE 'W-[0-9]+' || true)
-          if [ -n "$added" ]; then
-            echo "::error::Unregistered suppressions added:"; echo "$added"; exit 1
-          fi
+unregistered-suppressions:
+  runs-on: ubuntu-latest
+  timeout-minutes: 5
+  steps:
+    - uses: actions/checkout@v4
+      with: { fetch-depth: 0 }
+    - run: |
+        added=$(git diff origin/${{ github.base_ref }}...HEAD -U0 \
+          | grep -E '^\+.*(eslint-disable|@ts-expect-error|@ts-nocheck|\.skip\(|\.only\(|continue-on-error|istanbul ignore|v8 ignore)' \
+          | grep -vE 'W-[0-9]+' || true)
+        if [ -n "$added" ]; then
+          echo "::error::Unregistered suppressions added:"; echo "$added"; exit 1
+        fi
 
-  intent-gate:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
-      - run: bash scripts/check-intent.sh origin/${{ github.base_ref }}
+intent-gate:
+  runs-on: ubuntu-latest
+  timeout-minutes: 5
+  steps:
+    - uses: actions/checkout@v4
+      with: { fetch-depth: 0 }
+    - run: bash scripts/check-intent.sh origin/${{ github.base_ref }}
 ```
 
 `unregistered-suppressions` is the cheapest high-value job in this file: it stops silent-skip accumulation at the source rather than cleaning it up quarterly.
@@ -265,7 +265,7 @@ The difference is what a reader sees on the PR: amber says "known soft gate", gr
       - run: npm test --workspace=${{ matrix.package }}
 ```
 
-Two monorepo traps: a package matrix that resolves to empty must not report success for the whole gate, and coverage paths are package-relative while diff paths are repo-relative — normalise before intersecting, or diff coverage reports 0% and everyone panics about the wrong thing.
+Two monorepo traps: a package matrix that resolves to empty must not report success for the whole gate, and coverage paths are package-relative while diff paths are repo-relative - normalise before intersecting, or diff coverage reports 0% and everyone panics about the wrong thing.
 
 ## Making it enforce
 
@@ -282,4 +282,4 @@ Do not list soft gates or fork-skipped jobs as required. A required check that i
 
 - Use `pull_request`, never `pull_request_target`, for anything that runs PR code. `pull_request_target` runs with write permissions and repository secrets against untrusted code.
 - Skip secret-dependent jobs on forks with an `if:` on the head repo, and run a key-free subset instead.
-- Never interpolate untrusted input (`github.event.pull_request.title`, branch names) directly into a `run:` block — pass it through `env:` instead. Direct interpolation is a shell-injection path into your gate.
+- Never interpolate untrusted input (`github.event.pull_request.title`, branch names) directly into a `run:` block - pass it through `env:` instead. Direct interpolation is a shell-injection path into your gate.

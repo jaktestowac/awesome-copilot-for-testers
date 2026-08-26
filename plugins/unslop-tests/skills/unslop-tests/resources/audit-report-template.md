@@ -105,6 +105,6 @@ Raised, not fixed. These are production-code changes and belong in their own cha
 
 State anything that stopped being tested, so nobody discovers it later.
 
-- Deleted [reports.test.ts:14](src/reports/reports.test.ts#L14), pattern 8, a `not.toThrow()` check with no assertion. `buildReport` now has no test at all. Filed as #— replace with a real grouping test.
+- Deleted [reports.test.ts:14](src/reports/reports.test.ts#L14), pattern 8, a `not.toThrow()` check with no assertion. `buildReport` now has no test at all. Filed as #- replace with a real grouping test.
 
 Never delete a slop test silently. A useless test still marked where somebody thought coverage existed.

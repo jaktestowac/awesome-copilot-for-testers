@@ -1,5 +1,5 @@
 ---
-description: 'Requires an externalised rationale for high-risk changes — new public exports, new endpoints, auth edits, migrations, removed guards — recorded as an Intent commit trailer, an ADR reference, or a module intent register, and reports high-risk changes that carry none. Use when agent-generated or AI-assisted changes ship without a recorded why, when reviewers cannot tell what a diff was for, when a codebase is losing its decision history, or when setting up an intent gate alongside test and coverage gates.'
+description: 'Requires an externalised rationale for high-risk changes - new public exports, new endpoints, auth edits, migrations, removed guards - recorded as an Intent commit trailer, an ADR reference, or a module intent register, and reports high-risk changes that carry none. Use when agent-generated or AI-assisted changes ship without a recorded why, when reviewers cannot tell what a diff was for, when a codebase is losing its decision history, or when setting up an intent gate alongside test and coverage gates.'
 ---
 
 # Recording Change Intent Plugin

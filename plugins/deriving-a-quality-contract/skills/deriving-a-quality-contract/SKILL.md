@@ -1,6 +1,6 @@
 ---
 name: deriving-a-quality-contract
-description: 'Derives a project-specific quality contract from three axes — risk profile, team maturity, and product surface — labelling each testing practice MUST, SHOULD, or COULD, then produces a PRESENT/PARTIAL/MISSING/WAIVED gap matrix with an ordered remediation plan. Use when a project has no agreed testing strategy, when a team argues about which practices are mandatory, when onboarding a legacy or inherited repository, when a quality strategy document has to be derived from evidence instead of opinion, or when someone asks "what testing should we actually be doing here".'
+description: 'Derives a project-specific quality contract from three axes - risk profile, team maturity, and product surface - labelling each testing practice MUST, SHOULD, or COULD, then produces a PRESENT/PARTIAL/MISSING/WAIVED gap matrix with an ordered remediation plan. Use when a project has no agreed testing strategy, when a team argues about which practices are mandatory, when onboarding a legacy or inherited repository, when a quality strategy document has to be derived from evidence instead of opinion, or when someone asks "what testing should we actually be doing here".'
 argument-hint: 'Repo path or product description, how critical the system is, how experienced the team is with testing, the stack, and any existing CI config'
 user-invocable: true
 ---
@@ -9,7 +9,7 @@ user-invocable: true
 
 Use this skill when a team needs to know which testing practices are mandatory for **this** project, which are expected, which are optional, and which of them are actually in place today.
 
-"We should test more" is not a strategy. A quality contract is: a named list of practices, each labelled MUST, SHOULD, or COULD for this specific project, each with an exit criterion, an owner, and a current state. The label is derived from three axes, not from taste — which is what makes the contract survive an argument.
+"We should test more" is not a strategy. A quality contract is: a named list of practices, each labelled MUST, SHOULD, or COULD for this specific project, each with an exit criterion, an owner, and a current state. The label is derived from three axes, not from taste - which is what makes the contract survive an argument.
 
 ## When to Use
 
@@ -36,9 +36,9 @@ Use this skill when a team needs to know which testing practices are mandatory f
 
 Read the repo and ask what the repo cannot tell you.
 
-**Stack and tooling** — from `package.json`, lockfiles, `tsconfig.json`, test config, CI workflows. Record the test runner, assertion style, and CI provider.
+**Stack and tooling** - from `package.json`, lockfiles, `tsconfig.json`, test config, CI workflows. Record the test runner, assertion style, and CI provider.
 
-**Product surface** — what the thing actually exposes, because it decides which practices are even applicable:
+**Product surface** - what the thing actually exposes, because it decides which practices are even applicable:
 
 | Surface | Evidence to look for |
 | --- | --- |
@@ -50,9 +50,9 @@ Read the repo and ask what the repo cannot tell you.
 | `library` | package `exports`/`main` with no server entry point, published to a registry |
 | `cli` | `bin` field, `commander`/`yargs`/`clipanion` |
 
-A repo has several surfaces. Record all of them with the evidence, and record what is confidently **absent** — absence is what lets you drop rows.
+A repo has several surfaces. Record all of them with the evidence, and record what is confidently **absent** - absence is what lets you drop rows.
 
-**Profile** — the risk class. Ask, do not guess:
+**Profile** - the risk class. Ask, do not guess:
 
 - who is harmed if this breaks, and how badly
 - is there regulatory, contractual, or financial exposure
@@ -61,7 +61,7 @@ A repo has several surfaces. Record all of them with the evidence, and record wh
 
 Map the answers onto a profile from `./resources/profiles.md` (`critical-regulated`, `standard`, `prototype-internal`) and write down the one sentence that justifies it.
 
-**Maturity** — where the team is now, from `./resources/maturity-model.md` (`crawl`, `walk`, `run`). Read it from the repo, not from ambition: no test script at all is crawl, however senior the team.
+**Maturity** - where the team is now, from `./resources/maturity-model.md` (`crawl`, `walk`, `run`). Read it from the repo, not from ambition: no test script at all is crawl, however senior the team.
 
 Write the triple down and confirm it with a human before continuing. **Everything downstream is derived from it, so a wrong triple produces a confidently wrong contract.**
 
@@ -69,7 +69,7 @@ Write the triple down and confirm it with a human before continuing. **Everythin
 
 Walk `./resources/approach-catalog.md`. For each practice:
 
-1. Skip it if `requires-surface` names a surface this repo confidently lacks. Record it as `N/A` with the reason — do not silently omit it.
+1. Skip it if `requires-surface` names a surface this repo confidently lacks. Record it as `N/A` with the reason - do not silently omit it.
 2. Skip it if its `introduced-at` maturity is above the team's current level. Record it as `deferred to <level>`, because it is the next contract, not this one.
 3. Otherwise take the level for the resolved profile: **MUST**, **SHOULD**, or **COULD**.
 4. Copy the exit criterion and pick the tool from the catalog's tool column.
@@ -91,13 +91,13 @@ Rules that keep this honest:
 
 - Quote the evidence: a file path, a dependency name, a CI step. A state with no evidence is not a finding, it is a guess.
 - A tool in `devDependencies` that no script and no workflow invokes is PARTIAL, not PRESENT.
-- A CI step written as `tool || true`, `continue-on-error: true`, or `|| echo "non-blocking"` is PARTIAL — it runs and cannot fail.
+- A CI step written as `tool || true`, `continue-on-error: true`, or `|| echo "non-blocking"` is PARTIAL - it runs and cannot fail.
 - If a check exists but excludes most of the codebase, it is PARTIAL, and name the exclusion.
-- When you genuinely cannot tell, write **UNKNOWN** and say what you would need. Never collapse "could not determine" into MISSING — that produces a plan for work that may already be done.
+- When you genuinely cannot tell, write **UNKNOWN** and say what you would need. Never collapse "could not determine" into MISSING - that produces a plan for work that may already be done.
 
 ### Phase 3: Grade the gap
 
-A MUST in state MISSING is a **blocker**. Blockers are not waivable; they are either fixed or the profile was wrong. If a blocker list is long, that is usually a signal the profile was set aspirationally — revisit Phase 0 with the human rather than issuing a 20-item blocker list.
+A MUST in state MISSING is a **blocker**. Blockers are not waivable; they are either fixed or the profile was wrong. If a blocker list is long, that is usually a signal the profile was set aspirationally - revisit Phase 0 with the human rather than issuing a 20-item blocker list.
 
 Order everything else by risk × effort using the effort labels in the catalog (XS ≈ 1h, S ≈ half a day, M ≈ 2 days, L ≈ a week). Front-load the practices that protect the surfaces you identified as critical.
 
@@ -106,9 +106,9 @@ Order everything else by risk × effort using the effort labels in the catalog (
 Use `./resources/contract-template.md`. The deliverable has four parts:
 
 1. **The triple**, with the sentence justifying each axis.
-2. **The contract table** — practice, level, tool, exit criterion, owner.
-3. **The gap matrix** — practice, level, state, evidence, verdict.
-4. **The remediation plan** — ordered, each item with a concrete first command, an effort label, and its exit criterion.
+2. **The contract table** - practice, level, tool, exit criterion, owner.
+3. **The gap matrix** - practice, level, state, evidence, verdict.
+4. **The remediation plan** - ordered, each item with a concrete first command, an effort label, and its exit criterion.
 
 Save to `.qa/quality-contract.md`. If the project wants a machine-readable copy for gate tooling, also emit `.qa/quality-contract.yaml` in the shape shown in the template.
 

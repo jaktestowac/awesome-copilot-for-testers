@@ -1,4 +1,4 @@
-# Functional Test Plan — [Feature / Flow Name]
+# Functional Test Plan - [Feature / Flow Name]
 
 ## 1. Goal
 
@@ -31,7 +31,7 @@ State the user or business outcome this plan is validating.
 
 ## 5. Scenario catalog
 
-### SCN-001 — [Short scenario title]
+### SCN-001 - [Short scenario title]
 
 - **Type:** happy / negative / boundary / permission / recovery / a11y-smoke
 - **Priority:** High / Medium / Low
@@ -42,7 +42,7 @@ State the user or business outcome this plan is validating.
 - **Expected result:** [observable outcome]
 - **Notes:** [data, assumptions, open questions]
 
-### SCN-002 — [Short scenario title]
+### SCN-002 - [Short scenario title]
 
 - **Type:** happy / negative / boundary / permission / recovery / a11y-smoke
 - **Priority:** High / Medium / Low

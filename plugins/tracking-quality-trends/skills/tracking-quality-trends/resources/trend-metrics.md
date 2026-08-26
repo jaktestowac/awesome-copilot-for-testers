@@ -9,7 +9,7 @@ Six to eight metrics, each with a limit, a goal, an owner, an action at the limi
 - **Limit / goal:** ≥ 75% / ≥ 85% (per profile)
 - **Measure:** `diff-cover coverage/lcov.info --compare-branch=origin/main`, per PR, aggregated per period
 - **Caveat:** proves execution, not assertion quality
-- **Gaming risk:** high — assertion-free tests satisfy it. Always pair with a periodic assertion-quality review (`unslop-tests`)
+- **Gaming risk:** high - assertion-free tests satisfy it. Always pair with a periodic assertion-quality review (`unslop-tests`)
 - **Action at limit:** the diff-coverage gate blocks; a period average below the limit means the gate is being waived too often
 
 ### Repo coverage direction
@@ -24,14 +24,14 @@ Six to eight metrics, each with a limit, a goal, an owner, an action at the limi
 - **Limit / goal:** < 1% / < 0.3%
 - **Measure:** runs that passed only after a retry ÷ total runs, from CI history or a reporter
 - **Caveat:** only measurable if retries are recorded. `retries: 3` with no telemetry means flake is being hidden, and the honest reading is "unknown"
-- **Gaming risk:** medium — quarantining flaky tests improves the rate without fixing anything. Track the quarantine count beside it
+- **Gaming risk:** medium - quarantining flaky tests improves the rate without fixing anything. Track the quarantine count beside it
 - **Action at limit:** stop adding tests to the suite until it is under control; an untrusted suite teaches people to ignore red
 
 ### Suite duration (p95)
 
 - **Limit / goal:** < 10 min / < 5 min for the PR gate
 - **Measure:** CI job duration, p95 over the period
-- **Caveat:** rising duration predicts shortcuts — skipped hooks, `--no-verify`, requests to make jobs non-blocking
+- **Caveat:** rising duration predicts shortcuts - skipped hooks, `--no-verify`, requests to make jobs non-blocking
 - **Action at limit:** parallelise or split before anyone proposes weakening the gate
 
 ### Escaped defects
@@ -47,7 +47,7 @@ Six to eight metrics, each with a limit, a goal, an owner, an action at the limi
 
 - **Limit / goal:** all MUST practices PRESENT
 - **Measure:** the gap matrix from `deriving-a-quality-contract`
-- **Caveat:** PRESENT means configured *and* enforced — recheck for fake gates each run
+- **Caveat:** PRESENT means configured _and_ enforced - recheck for fake gates each run
 - **Note:** report as `MUST 11/12 · SHOULD 6/9 · COULD 2/7`, never as a single percentage
 
 ### Blockers open
@@ -74,11 +74,11 @@ Six to eight metrics, each with a limit, a goal, an owner, an action at the limi
 
 - **Limit / goal:** ≥ 50% / ≥ 80% (per profile)
 - **Measure:** high-risk changes carrying a valid rationale ÷ high-risk changes
-- **Caveat:** measures presence, not quality. A period of `Intent: refactor` records would score well and mean nothing — sample and read a few
+- **Caveat:** measures presence, not quality. A period of `Intent: refactor` records would score well and mean nothing - sample and read a few
 
 ### Comprehension risk band
 
-- **Limit:** none — advisory
+- **Limit:** none - advisory
 - **Measure:** share of changes in the high band; modules with a single author and no reviewer
 - **Caveat:** measures absence of evidence, not understanding. **Never gate on it**
 
@@ -95,7 +95,7 @@ Six to eight metrics, each with a limit, a goal, an owner, an action at the limi
 
 - **Limit / goal:** per budget
 - **Measure:** recorded per run by the suite
-- **Caveat:** a cost rise can be a quality *gain* someone paid for. Read it beside the pass rate, never alone
+- **Caveat:** a cost rise can be a quality _gain_ someone paid for. Read it beside the pass rate, never alone
 
 ### Adversarial findings open
 
@@ -105,16 +105,16 @@ Six to eight metrics, each with a limit, a goal, an owner, an action at the limi
 
 ## Metrics not to trend
 
-| Candidate | Why not |
-| --- | --- |
-| Test count | grows by writing bad tests; says nothing about coverage of risk |
-| Lines of code | not a quality property in either direction |
-| Bugs found by QA | rises when the product gets worse *and* when testing gets better |
+| Candidate                    | Why not                                                                    |
+| ---------------------------- | -------------------------------------------------------------------------- |
+| Test count                   | grows by writing bad tests; says nothing about coverage of risk            |
+| Lines of code                | not a quality property in either direction                                 |
+| Bugs found by QA             | rises when the product gets worse _and_ when testing gets better           |
 | Commits or PRs per developer | activity, not quality, and it changes behaviour the moment it is displayed |
-| Story points delivered | not a quality metric, and it will be read as one |
-| Aggregate "quality score" | combines incomparable things and hides every movement inside it |
+| Story points delivered       | not a quality metric, and it will be read as one                           |
+| Aggregate "quality score"    | combines incomparable things and hides every movement inside it            |
 
-The rule: **if a metric would change someone's behaviour in a way you would not want, do not display it.** Test count is the clearest example — it goes up reliably the moment it appears on a dashboard, and none of that rise is quality.
+The rule: **if a metric would change someone's behaviour in a way you would not want, do not display it.** Test count is the clearest example - it goes up reliably the moment it appears on a dashboard, and none of that rise is quality.
 
 ## Measurement discipline
 

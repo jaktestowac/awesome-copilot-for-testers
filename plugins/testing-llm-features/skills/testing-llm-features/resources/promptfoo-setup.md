@@ -2,7 +2,7 @@
 
 Two shapes. Pick promptfoo when the suite will grow and needs matrix runs across models; pick Vitest when the evals must share fixtures and helpers with the app, or when the team will not adopt another tool.
 
-## Option A — promptfoo
+## Option A - promptfoo
 
 `promptfooconfig.yaml`
 
@@ -63,7 +63,7 @@ npx promptfoo@latest eval --output results/latest.json --repeat 5   # variance
 npx promptfoo@latest view                                          # local report
 ```
 
-## Option B — Vitest
+## Option B - Vitest
 
 ```ts
 // evals/summarize.eval.ts
@@ -102,7 +102,7 @@ describe('summarize-ticket-v3', () => {
 });
 ```
 
-Keep evals out of the default unit run — they cost money and need network:
+Keep evals out of the default unit run - they cost money and need network:
 
 ```ts
 // vitest.evals.config.ts
@@ -148,12 +148,15 @@ const regressions = now.results.filter((r) => was.get(r.id) === true && r.pass =
 const newPasses = now.results.filter((r) => was.get(r.id) === false && r.pass === true);
 const brandNew = now.results.filter((r) => !was.has(r.id));
 
-console.log(`regressions ${regressions.length} · fixed ${newPasses.length} · new ${brandNew.length}`);
-for (const r of regressions) console.error(`REGRESSION ${r.id}\n  expected: ${r.expected}\n  got: ${r.actual}`);
+console.log(
+  `regressions ${regressions.length} · fixed ${newPasses.length} · new ${brandNew.length}`,
+);
+for (const r of regressions)
+  console.error(`REGRESSION ${r.id}\n  expected: ${r.expected}\n  got: ${r.actual}`);
 if (regressions.length) process.exit(1);
 ```
 
-A regression is a case that **used to pass and now fails**. Gate on that, not on an absolute score — a score threshold on a deliberately hard case set either blocks forever or gates nothing.
+A regression is a case that **used to pass and now fails**. Gate on that, not on an absolute score - a score threshold on a deliberately hard case set either blocks forever or gates nothing.
 
 Refresh the baseline in its own commit, reviewed on purpose. A baseline refreshed in the same commit as a prompt change hides the regression it was supposed to catch.
 
@@ -199,37 +202,37 @@ jobs:
 
 The `paths` filter is the trigger list from `scoping-change-relevance`: prompts, model config, retrieval, tool definitions, and the lockfile (an SDK bump changes behaviour). Everything else does not need to pay for an eval run.
 
-**Forks:** they cannot read secrets, so the job must be skipped rather than failed — a red required check on every external PR gets the check removed. Run the deterministic, key-free subset on forks if you have one, and require the full run on `main`.
+**Forks:** they cannot read secrets, so the job must be skipped rather than failed - a red required check on every external PR gets the check removed. Run the deterministic, key-free subset on forks if you have one, and require the full run on `main`.
 
 ## Cost control
 
 ```ts
-// evals/harness/cache.ts — key on everything that changes behaviour
+// evals/harness/cache.ts - key on everything that changes behaviour
 const key = sha256(JSON.stringify({ promptHash, model, temperature, input, corpusVersion }));
 ```
 
 - cache by that key; unchanged cases are free on re-run
 - tier the suite: deterministic checks on every PR, judge checks on prompt changes and `main`, full matrix nightly
-- cap spend per run and **fail on the cap** — a truncated run reporting a pass is a false green
+- cap spend per run and **fail on the cap** - a truncated run reporting a pass is a false green
 - report cost per run in the sticky comment; a doubling is a finding
 
 ## Reporting shape
 
 ```
-Evals — summarize-ticket-v3 · claude-sonnet-4-5-20250929 · cases v14 · corpus v3
+Evals - summarize-ticket-v3 · claude-sonnet-4-5-20250929 · cases v14 · corpus v3
 
   citation-accuracy        47/50   94%   ↓ 2pp
-  refusal                  12/12  100%   —
+  refusal                  12/12  100%   -
   summary-faithfulness     34/42   81%   ↓ 11pp   ← REGRESSION
-  format-conformance       50/50  100%   —
+  format-conformance       50/50  100%   -
 
   REGRESSION  summarize-ticket-multi-thread
     expected: ≤3 sentences, mentions the blocking issue
     got:      5 sentences, omits the blocking issue, invented owner "J. Smith"
 
-  variance     2 unstable cases (4/5) — see below
+  variance     2 unstable cases (4/5) - see below
   cost         $0.42 (budget $2.00) · p50 1.9s · p95 4.1s
   gaps         prompts/classify-intent.md has no cases
 ```
 
-Per capability, never one number. The global figure here is 89% — high enough to pass any aggregate threshold, and it would have hidden an 11-point faithfulness drop plus an invented name.
+Per capability, never one number. The global figure here is 89% - high enough to pass any aggregate threshold, and it would have hidden an 11-point faithfulness drop plus an invented name.

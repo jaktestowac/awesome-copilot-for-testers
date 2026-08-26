@@ -1,6 +1,6 @@
 # Tag Rules
 
-Two layers. **File tags** come from the path and say where the change landed. **Hunk tags** come from the added and removed lines and say what changed. Patterns are a floor, not a definition — the intent column is what you are actually matching against.
+Two layers. **File tags** come from the path and say where the change landed. **Hunk tags** come from the added and removed lines and say what changed. Patterns are a floor, not a definition - the intent column is what you are actually matching against.
 
 ## File tags
 
@@ -14,7 +14,7 @@ Two layers. **File tags** come from the path and say where the change landed. **
 | `public-api`     | `**/{api,routes,controllers,handlers,endpoints,pages/api,app/api}/**`, `**/trpc/**`                    | externally reachable surface                                  |
 | `schema`         | `openapi*.{yaml,yml,json}`, `swagger*`, `**/*.proto`, `**/*.graphql`, `**/schema.prisma`, `**/*.sql`   | a published contract others depend on                         |
 | `auth`           | `**/{auth,authn,authz,security,permissions,acl,iam,session,rbac}/**`, `**/middleware/auth*`            | who can do what                                               |
-| `critical-path`  | `**/{payment,payments,billing,checkout,order,orders,invoice,pricing,subscription}/**`                  | money, or the flow that earns it — tune this list per project |
+| `critical-path`  | `**/{payment,payments,billing,checkout,order,orders,invoice,pricing,subscription}/**`                  | money, or the flow that earns it - tune this list per project |
 | `db-migration`   | `**/{migrations,migrate}/**`, `**/*.migration.*`, Prisma/Drizzle/Knex migration dirs                   | irreversible data change                                      |
 | `ai`             | `**/prompts/**`, `**/*.prompt.*`, `**/evals/**`, `**/*.eval.*`, `**/{agents,chains}/**`                | LLM behaviour                                                 |
 | `generated`      | `**/dist/**`, `**/build/**`, `**/*.generated.*`, `**/__snapshots__/**`, `*.lock`, `**/node_modules/**` | not hand-written; excluded from hunk tagging                  |
@@ -24,11 +24,11 @@ Rules:
 
 - A path may carry several tags. `src/api/payments/refund.ts` is `source` + `public-api` + `critical-path`.
 - `test` beats `source`: a path that matches both is a test.
-- `generated` suppresses hunk tagging but not file tagging — a lockfile change is still `added-dependency`.
+- `generated` suppresses hunk tagging but not file tagging - a lockfile change is still `added-dependency`.
 - **Tune `critical-path` per project.** The default list is e-commerce-shaped. In a healthcare product the critical path is patient records; in a logistics product it is dispatch. Set it in the contract, not in the reviewer's head.
 - **Monorepos:** a change to `packages/shared/**` carries the tags of its consumers too. Resolve importers before tagging.
 
-## Hunk tags — additions
+## Hunk tags - additions
 
 Read the `+` lines. Patterns are illustrative; the intent is what matters.
 
@@ -37,7 +37,7 @@ Read the `+` lines. Patterns are illustrative; the intent is what matters.
 | `new-public-export`       | `+ export function\|class\|const\|interface\|type\|default`, a new entry in an `index.ts` barrel, a new field on an exported type                                           | new capability others can now call               |
 | `new-endpoint`            | `+ app.get/post/put/patch/delete(`, `+ router.*(`, `+ export async function GET/POST` (Next route handlers), `+ .procedure.mutation(` (tRPC), `+ @Get()/@Post()` decorators | new externally reachable operation               |
 | `modified-auth`           | `+` lines mentioning `token`, `jwt`, `session`, `role`, `permission`, `scope`, `hash`, `password`, `bcrypt`, `cookie`, `sameSite`, `cors`                                   | changed access control                           |
-| `secret-like-string`      | `+ apiKey\|secret\|token\|password = "…"` with an 8+ char literal, base64-looking blobs, `sk-`/`ghp_`/`AKIA` prefixes                                                       | possible committed credential — always escalate  |
+| `secret-like-string`      | `+ apiKey\|secret\|token\|password = "…"` with an 8+ char literal, base64-looking blobs, `sk-`/`ghp_`/`AKIA` prefixes                                                       | possible committed credential - always escalate  |
 | `sql-string`              | `+` with `SELECT/INSERT/UPDATE/DELETE … FROM`, template literals interpolating into SQL, `db.$queryRaw`                                                                     | query surface, injection risk                    |
 | `exec-call`               | `+ eval(`, `new Function(`, `child_process.exec`, `execSync`, `spawn`, dynamic `import(` of a variable                                                                      | code execution surface                           |
 | `db-migration`            | `+ CREATE/ALTER/DROP TABLE\|INDEX\|COLUMN`, a new migration file, a changed Prisma/Drizzle model                                                                            | schema and data change, usually irreversible     |
@@ -48,7 +48,7 @@ Read the `+` lines. Patterns are illustrative; the intent is what matters.
 | `new-external-call`       | `+ fetch(`, `axios.`, a new SDK client construction, a new webhook target                                                                                                   | new network dependency and failure mode          |
 | `new-feature-flag`        | `+ flags.`, `isEnabled(`, a new toggle key                                                                                                                                  | behaviour that differs per environment or cohort |
 
-## Hunk tags — removals
+## Hunk tags - removals
 
 The tags most reviews miss. Read the `-` lines.
 
@@ -65,7 +65,7 @@ The tags most reviews miss. Read the `-` lines.
 ## Precision notes
 
 - **Match added lines only** for addition tags. A pattern in an unchanged context line is noise.
-- **Skip non-source content** for hunk tagging: markdown, patches, fixtures, snapshots and generated clients regularly contain code-shaped text. Prompt files are the exception — they are content _and_ behaviour, so they get `modified-prompt`.
+- **Skip non-source content** for hunk tagging: markdown, patches, fixtures, snapshots and generated clients regularly contain code-shaped text. Prompt files are the exception - they are content _and_ behaviour, so they get `modified-prompt`.
 - **Comments count for nothing.** A `// TODO: add auth` line is not `modified-auth`.
 - **Test files still get hunk tags.** `removed-test` and `disabled-check` are found there, and a test that starts calling a real network is `new-external-call`.
 - **Prefer over-tagging.** A false positive costs one check run; a false negative ships the defect.

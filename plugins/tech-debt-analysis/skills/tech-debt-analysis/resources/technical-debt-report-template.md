@@ -29,7 +29,7 @@ Keep the structure, remove placeholder text, and omit only sections that are cle
 
 ## Top Priority Items
 
-### TD-01 — `<title>`
+### TD-01 - `<title>`
 
 - **Category:** `<architecture / code / test / dependency / process / operational / documentation>`
 - **Location:** `<path / module / workflow>`
@@ -40,7 +40,7 @@ Keep the structure, remove placeholder text, and omit only sections that are cle
 - **Recommended strategy:** `<minimal fix / staged refactor / containment>`
 - **Validation:** `<how the team will know this improved>`
 
-### TD-02 — `<title>`
+### TD-02 - `<title>`
 
 - **Category:** `<category>`
 - **Location:** `<location>`

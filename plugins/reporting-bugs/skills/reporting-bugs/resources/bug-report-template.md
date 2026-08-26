@@ -2,7 +2,7 @@
 
 ## Title
 
-[Surface] — [Broken behavior] when [trigger]
+[Surface] - [Broken behavior] when [trigger]
 
 ## Severity
 

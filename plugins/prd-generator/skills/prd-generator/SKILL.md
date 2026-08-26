@@ -64,7 +64,7 @@ Ask targeted questions only where the answer would change the PRD. When answers 
 
 ### Phase 2: Draft the PRD
 
-Produce the PRD following the mandatory output schema in `./resources/prd-template.md` — exact section structure, order, and the worked example live there.
+Produce the PRD following the mandatory output schema in `./resources/prd-template.md` - exact section structure, order, and the worked example live there.
 
 ### Phase 3: Self-Review
 

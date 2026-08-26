@@ -29,13 +29,13 @@ Reach for this skill **before** writing production code, not after. If tests are
 
 ## What TDD Is Here
 
-TDD is a **design technique that produces tests as a by-product** — not a coverage technique. The loop's value is the pressure it puts on the interface: code that is hard to test first is usually code that is hard to use.
+TDD is a **design technique that produces tests as a by-product** - not a coverage technique. The loop's value is the pressure it puts on the interface: code that is hard to test first is usually code that is hard to use.
 
 Judge a session by whether the design got clearer and every change was verified, not by the coverage number it produced.
 
 ### The seam
 
-A **seam** is the public boundary the test observes behavior through — the interface a real caller would use. Tests live at seams, never against internals.
+A **seam** is the public boundary the test observes behavior through - the interface a real caller would use. Tests live at seams, never against internals.
 
 Every cycle starts by knowing which seam it drives. If you cannot name the seam, you are not ready to write the test.
 
@@ -45,8 +45,8 @@ Every cycle starts by knowing which seam it drives. If you cannot name the seam,
 
 | Situation | Loop shape |
 | --- | --- |
-| A single unit's logic, interface already known | **Inner loop only** — unit-level red-green-refactor |
-| A feature crossing several units | **Double loop** — one failing acceptance test held red on the outside, inner unit cycles until it goes green |
+| A single unit's logic, interface already known | **Inner loop only** - unit-level red-green-refactor |
+| A feature crossing several units | **Double loop** - one failing acceptance test held red on the outside, inner unit cycles until it goes green |
 | The interface itself is the open question | Write the call you wish existed as the first test, and let it define the shape |
 | Behavior depends on a real boundary (DB, HTTP, browser) | Drive the owned logic with unit cycles; verify the boundary separately in integration coverage |
 
@@ -54,7 +54,7 @@ In the double loop, the outer test stays red for several inner cycles. Say so ex
 
 **Never drive the loop with a slow test.** Red-green pays for itself only while the feedback is fast. A browser or end-to-end test as the cycle signal costs minutes per iteration, and looping on one for a feature that does not exist yet reliably ends in concluding the *test* is broken. Drive with the fastest thing that can observe the behavior; in a double loop the outer acceptance test is the cheapest test that proves the feature, not the heaviest. Browser coverage is written after the behavior works.
 
-Before the first cycle, decide whether this change deserves the loop at all — `./resources/tdd-fit-check.md` has the decision table and what to verify with when the answer is no.
+Before the first cycle, decide whether this change deserves the loop at all - `./resources/tdd-fit-check.md` has the decision table and what to verify with when the answer is no.
 
 ## Core Rules
 
@@ -90,7 +90,7 @@ Then detect what the project already does, so the loop matches it instead of imp
 - the exact command to run **one** test file, and the command to run the **full suite**
 - the runner's assertion and parameterized-test style
 - helpers, factories, fixtures, and custom matchers already available
-- project instruction files — `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, ADRs — and the domain vocabulary they establish, so test names and interface terms match it
+- project instruction files - `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, ADRs - and the domain vocabulary they establish, so test names and interface terms match it
 
 The single-test command matters more than it looks: the loop only works while observing red and green is cheap. Do not introduce a new runner, library, or folder layout unless the user asks for it.
 
@@ -105,7 +105,7 @@ Sequence the list so that each entry:
 - can be made to pass in a few lines
 - builds on what the previous cycle established
 
-Start with the simplest case that is still interesting — usually a degenerate or empty input — then work outward to the general case.
+Start with the simplest case that is still interesting - usually a degenerate or empty input - then work outward to the general case.
 
 Keep the list visible and update it as cycles reveal new cases. Use `./resources/tdd-cycle-log-template.md` when the session runs long enough to need a record.
 
@@ -117,10 +117,10 @@ Repeat for one entry at a time. `./resources/worked-example.md` shows several co
 
 1. Write exactly one failing test for the next behavior.
 2. Run it and read the actual output.
-3. Confirm it fails, and that the failure message describes the **missing behavior** — not a syntax error, missing file, or broken fixture. If it fails for a mechanical reason, fix that first and run again; the mechanical failure does not count as red.
+3. Confirm it fails, and that the failure message describes the **missing behavior** - not a syntax error, missing file, or broken fixture. If it fails for a mechanical reason, fix that first and run again; the mechanical failure does not count as red.
 4. If it passes immediately, stop: either the behavior already exists, or the test asserts nothing meaningful. Fix the test before continuing.
-5. Check where the expected value came from. It must come from outside the implementation — the spec, a worked example, a known-good literal, the reported symptom. An expected value recomputed the way the code computes it, or imported from the implementation's own constants, passes by construction and can never disagree with the code.
-6. Check the failure message would be understandable to someone who did not write the test. If not, improve the assertion now — this is the cheapest moment to do it.
+5. Check where the expected value came from. It must come from outside the implementation - the spec, a worked example, a known-good literal, the reported symptom. An expected value recomputed the way the code computes it, or imported from the implementation's own constants, passes by construction and can never disagree with the code.
+6. Check the failure message would be understandable to someone who did not write the test. If not, improve the assertion now - this is the cheapest moment to do it.
 
 #### Green
 
@@ -140,9 +140,9 @@ Then:
 2. Confirm green with real output.
 3. Do not clean up yet.
 
-Hardcoding is legitimate — the next test is what forces generalization. What is not legitimate is leaving a fake in place with no test on the list that will remove it.
+Hardcoding is legitimate - the next test is what forces generalization. What is not legitimate is leaving a fake in place with no test on the list that will remove it.
 
-**Doubles only at real boundaries.** Substitute what you do not own — the clock, randomness, the network, storage. If reaching green pushes you to mock a module you *do* own, the seam is in the wrong place: stop and say so rather than mocking your way to green. A test held up by stubs of your own code proves the stubs were called, freezes the current design, and breaks on the next refactor.
+**Doubles only at real boundaries.** Substitute what you do not own - the clock, randomness, the network, storage. If reaching green pushes you to mock a module you *do* own, the seam is in the wrong place: stop and say so rather than mocking your way to green. A test held up by stubs of your own code proves the stubs were called, freezes the current design, and breaks on the next refactor.
 
 See `./resources/green-step-strategies.md` for how to choose between them and how to triangulate deliberately, and the test-doubles guide in `writing-unit-tests` for the double taxonomy and the boundary rule.
 
@@ -150,19 +150,19 @@ See `./resources/green-step-strategies.md` for how to choose between them and ho
 
 With everything green, look for these in order, in both the production code and the tests:
 
-1. **Duplication** — including duplication between the test's expected value and the implementation
-2. **Naming** — do the names now match the vocabulary the tests revealed?
-3. **Structure** — long functions, misplaced responsibility, a parameter list that keeps growing
-4. **Test cleanliness** — extract a factory, collapse near-identical tests into a parameterized one
+1. **Duplication** - including duplication between the test's expected value and the implementation
+2. **Naming** - do the names now match the vocabulary the tests revealed?
+3. **Structure** - long functions, misplaced responsibility, a parameter list that keeps growing
+4. **Test cleanliness** - extract a factory, collapse near-identical tests into a parameterized one
 
 Rules:
 
 - change structure only, never behavior
 - one refactoring at a time, running the suite after each
 - if a refactor turns the suite red, revert it rather than chasing the failure forward
-- duplication is a signal, not a sin — wait until the third occurrence before extracting an abstraction
+- duplication is a signal, not a sin - wait until the third occurrence before extracting an abstraction
 
-Refactoring is optional per cycle but not optional overall. Skipping it repeatedly is how a green suite ends up guarding a mess — and it is the step that quietly disappears first, because the next test is always more interesting than cleaning up the last one. At session close, state whether it happened. If it consistently does not, hand the cleanup to `code-review` as an explicit follow-up instead of leaving it implied.
+Refactoring is optional per cycle but not optional overall. Skipping it repeatedly is how a green suite ends up guarding a mess - and it is the step that quietly disappears first, because the next test is always more interesting than cleaning up the last one. At session close, state whether it happened. If it consistently does not, hand the cleanup to `code-review` as an explicit follow-up instead of leaving it implied.
 
 Then take the next entry from the list.
 
@@ -172,7 +172,7 @@ If two or three attempts do not reach green:
 
 1. **Stop adding code.** Revert to the last green commit rather than piling fixes onto a broken state.
 2. **Take a smaller step.** Split the behavior; find a case that can pass in a couple of lines.
-3. **Check the test, not just the code.** A test that is awkward to write is usually pointing at an interface problem — too many dependencies, hidden state, a boundary in the wrong place. Say that out loud; it is a design finding.
+3. **Check the test, not just the code.** A test that is awkward to write is usually pointing at an interface problem - too many dependencies, hidden state, a boundary in the wrong place. Say that out loud; it is a design finding.
 4. **Re-check the seam.** If the test needs heavy setup or many doubles, it is probably driving the wrong boundary.
 
 Never leave the suite red at the end of a work session without saying so explicitly.
@@ -182,20 +182,20 @@ Never leave the suite red at the end of a work session without saying so explici
 For a defect, the cycle starts with reproduction.
 
 1. **Find the correct seam.** The right seam is one where the test exercises the real bug pattern as it occurs at the call site. A test at a seam too shallow to reproduce the actual conditions gives false confidence.
-2. **Write a test that fails because of the bug**, and confirm the failure matches the reported symptom — not a different failure that happens to be nearby. Wrong symptom means wrong bug.
+2. **Write a test that fails because of the bug**, and confirm the failure matches the reported symptom - not a different failure that happens to be nearby. Wrong symptom means wrong bug.
 3. **Minimise the repro.** Cut inputs, setup, and steps one at a time, re-running after each cut, until every remaining element is load-bearing. The minimal case becomes the permanent regression test.
 4. **Fix the code** until the test passes.
 5. **Re-run the original, un-minimised scenario** to confirm the real-world symptom is gone.
-6. **Keep the test permanently** — it is the regression guard.
+6. **Keep the test permanently** - it is the regression guard.
 
 Two conditions change the procedure:
 
-- **The bug is intermittent.** Make the repro deterministic before fixing it — pin the clock, the seed, the ordering, the concurrency — and state which signal the test locks down. A flaky test cannot prove a fix; it can only fail to disprove one. The flaky-test triage resource in `writing-unit-tests` has the reproduction configurations and the symptom-to-cause table.
+- **The bug is intermittent.** Make the repro deterministic before fixing it - pin the clock, the seed, the ordering, the concurrency - and state which signal the test locks down. A flaky test cannot prove a fix; it can only fail to disprove one. The flaky-test triage resource in `writing-unit-tests` has the reproduction configurations and the symptom-to-cause table.
 - **The bug exposes a class of failures.** Land the focused regression test first, then propose the sibling cases as separate cycles. Do not widen the repro into general coverage while the fix is still unproven.
 
-Stage the commits so history reads red then green: the failing repro lands first, the fix on top. A reviewer can then replay the bug and its resolution instead of taking the fix on trust. Keep the regression test focused — no unrelated fixture churn riding along.
+Stage the commits so history reads red then green: the failing repro lands first, the fix on top. A reviewer can then replay the bug and its resolution instead of taking the fix on trust. Keep the regression test focused - no unrelated fixture churn riding along.
 
-If no correct seam exists — the bug can only be reproduced through a path nothing can drive in a test — **that is itself the finding**. Say so, fix the bug, and flag the missing seam as a design problem rather than pretending a shallow test covers it.
+If no correct seam exists - the bug can only be reproduced through a path nothing can drive in a test - **that is itself the finding**. Say so, fix the bug, and flag the missing seam as a design problem rather than pretending a shallow test covers it.
 
 Never fix first and test afterwards. A test written after the fix has never been seen catching the bug.
 
@@ -213,16 +213,16 @@ See the legacy phase in `writing-unit-tests` for how to write those characteriza
 
 TDD is not the right tool for everything. Step out and say so when:
 
-- the behavior can only be proven across a real network, database, or browser — that is integration or end-to-end work
+- the behavior can only be proven across a real network, database, or browser - that is integration or end-to-end work
 - the task is a pure rename or mechanical migration with no behavior change
-- the design question is too open to express as an assertion yet — spike first, throw the spike away, then start the cycle properly
+- the design question is too open to express as an assertion yet - spike first, throw the spike away, then start the cycle properly
 - the code is exploratory and genuinely disposable
-- **there is no independent source of truth to assert against** — config, wiring, glue, straight delegation. The only assertion available restates the implementation, which is the tautology the loop exists to prevent, arrived at from the other direction.
-- **the only available test would be a bad test** — one that mostly exercises its own mocks, needs expensive infrastructure for a small change, depends on production-only state, or would be deleted the moment it went green. Prefer no test to a bad test.
+- **there is no independent source of truth to assert against** - config, wiring, glue, straight delegation. The only assertion available restates the implementation, which is the tautology the loop exists to prevent, arrived at from the other direction.
+- **the only available test would be a bad test** - one that mostly exercises its own mocks, needs expensive infrastructure for a small change, depends on production-only state, or would be deleted the moment it went green. Prefer no test to a bad test.
 
 Say which of these applies instead of forcing a unit-shaped test onto the problem.
 
-**Stepping out is not skipping verification.** Name the closest check you can actually execute — a targeted script, a manual reproduction command, a log or output comparison, an existing focused integration test, a type or startup check for wiring — run it before and after the change, and report its output in place of the red-green pair. Deciding a failing test is impractical is a legitimate call; reporting only the fix, with no substitute check named, is not.
+**Stepping out is not skipping verification.** Name the closest check you can actually execute - a targeted script, a manual reproduction command, a log or output comparison, an existing focused integration test, a type or startup check for wiring - run it before and after the change, and report its output in place of the red-green pair. Deciding a failing test is impractical is a legitimate call; reporting only the fix, with no substitute check named, is not.
 
 `./resources/tdd-fit-check.md` holds the decision table, the bad-test definition, and the fallback checks.
 
@@ -231,7 +231,7 @@ Say which of these applies instead of forcing a unit-shaped test onto the proble
 Before declaring the work finished:
 
 - run the full suite one final time and quote the result
-- read the tests end to end — do they describe the feature to someone who has not seen the code?
+- read the tests end to end - do they describe the feature to someone who has not seen the code?
 - list any test-list entries left unbuilt, rather than dropping them silently
 - name any fake implementation still in place and the test that should remove it
 - state what the loop revealed about the design, including seams that turned out to be in the wrong place
@@ -240,11 +240,11 @@ Report the evidence, not just the outcome:
 
 - the test that was **seen failing first**, and the failure output it produced
 - the run that shows it passing, and the full-suite result
-- any nearby validation run when the change carried wider risk — type check, lint, adjacent suites
+- any nearby validation run when the change carried wider risk - type check, lint, adjacent suites
 - where red-green evidence could not be produced: why, which check replaced it, and what that check showed
 - whether refactoring happened, or was deferred and to what
 
-"It works and the tests pass" is not a report — it names no check that was ever seen failing.
+"It works and the tests pass" is not a report - it names no check that was ever seen failing.
 
 ## Common Failure Modes
 
@@ -300,5 +300,5 @@ This skill is complete when:
 - the full suite passes and any bug fixed in the session has a minimised, permanent regression test
 - where the loop did not fit, that was stated and a substitute check was named and run
 - the closing report quotes the failing-before and passing-after output
-- design findings the loop surfaced — awkward seams, heavy setup, missing boundaries — were stated
+- design findings the loop surfaced - awkward seams, heavy setup, missing boundaries - were stated
 - remaining entries on the test list are stated explicitly rather than silently dropped

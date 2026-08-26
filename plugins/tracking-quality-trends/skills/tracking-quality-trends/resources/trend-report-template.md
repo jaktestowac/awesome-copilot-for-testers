@@ -4,7 +4,7 @@ Written to `.qa/trends.md`, regenerated each cadence, with the previous run arch
 
 ---
 
-# Quality Trend — <project>
+# Quality Trend - <project>
 
 **Period:** 2026-06-13 → 2026-08-21 (release 2026.08) · **Previous:** 2026-06-13
 **Profile:** standard · **Maturity:** walk · **Commit:** `a3f91c2`
@@ -17,18 +17,18 @@ That paragraph is the report. Everything below supports it.
 
 ## Metrics
 
-| Metric | Limit | Prev | Now | Goal | Dir | Caveat |
-| --- | --- | --- | --- | --- | --- | --- |
-| Diff coverage | 75% | 62% | 71% | 85% | ↑ 9pp | gate threshold lowered to 60% this period — see structural changes |
-| Repo coverage | no decrease | 68% | 69% | — | ↑ 1pp | inside noise |
-| Flake rate | < 1% | unknown | 2.4% | 0.3% | new | first period with retry telemetry; no baseline |
-| Suite duration p95 | < 10 min | 7m 20s | 12m 40s | 5 min | ↑ 73% | **third consecutive rise** |
-| MUST practices PRESENT | 12/12 | 10/12 | 11/12 | 12/12 | ↑ 1 | PRESENT = configured and enforced |
-| Blockers open | 0 | 2 | 1 | 0 | ↓ 1 | `coverage-rigor` remains |
-| Waivers (expired / oldest) | 0 / 180d | 3 (0 / 92d) | 4 (1 / 141d) | — | ↓ | W-003 expired 20 days ago |
-| Suppressions (whole-file) | trending down | 39 (1) | 46 (2) | — | ↑ 7 | second whole-file disable added |
-| Intent coverage | ≥ 50% | 18% | 26% | 80% | ↑ 8pp | presence only; sampled 5, two were restated diffs |
-| Comprehension high band | advisory | 22% | 31% | — | ↑ 9pp | **advisory — never blocks** |
+| Metric                     | Limit         | Prev        | Now          | Goal  | Dir   | Caveat                                                             |
+| -------------------------- | ------------- | ----------- | ------------ | ----- | ----- | ------------------------------------------------------------------ |
+| Diff coverage              | 75%           | 62%         | 71%          | 85%   | ↑ 9pp | gate threshold lowered to 60% this period - see structural changes |
+| Repo coverage              | no decrease   | 68%         | 69%          | -     | ↑ 1pp | inside noise                                                       |
+| Flake rate                 | < 1%          | unknown     | 2.4%         | 0.3%  | new   | first period with retry telemetry; no baseline                     |
+| Suite duration p95         | < 10 min      | 7m 20s      | 12m 40s      | 5 min | ↑ 73% | **third consecutive rise**                                         |
+| MUST practices PRESENT     | 12/12         | 10/12       | 11/12        | 12/12 | ↑ 1   | PRESENT = configured and enforced                                  |
+| Blockers open              | 0             | 2           | 1            | 0     | ↓ 1   | `coverage-rigor` remains                                           |
+| Waivers (expired / oldest) | 0 / 180d      | 3 (0 / 92d) | 4 (1 / 141d) | -     | ↓     | W-003 expired 20 days ago                                          |
+| Suppressions (whole-file)  | trending down | 39 (1)      | 46 (2)       | -     | ↑ 7   | second whole-file disable added                                    |
+| Intent coverage            | ≥ 50%         | 18%         | 26%          | 80%   | ↑ 8pp | presence only; sampled 5, two were restated diffs                  |
+| Comprehension high band    | advisory      | 22%         | 31%          | -     | ↑ 9pp | **advisory - never blocks**                                        |
 
 ## Structural changes
 
@@ -41,15 +41,15 @@ The section no snapshot contains.
 
 **Regressed:**
 
-- `e2e-testing` PRESENT → PARTIAL — the job moved to `schedule` on 2026-07-14, so it no longer runs on pull requests
+- `e2e-testing` PRESENT → PARTIAL - the job moved to `schedule` on 2026-07-14, so it no longer runs on pull requests
 
 **Thresholds and gates changed:**
 
-| Change | When | Effect |
-| --- | --- | --- |
-| Diff coverage threshold 75% → 60% | 2026-07-02 | the 9pp coverage rise is measured against a weaker gate |
-| `mutation` job `continue-on-error: true` | 2026-07-19 | was blocking, now soft |
-| Playwright `retries: 1` → `3` | 2026-08-04 | flake now hidden rather than measured; the 2.4% reading is a floor |
+| Change                                   | When       | Effect                                                             |
+| ---------------------------------------- | ---------- | ------------------------------------------------------------------ |
+| Diff coverage threshold 75% → 60%        | 2026-07-02 | the 9pp coverage rise is measured against a weaker gate            |
+| `mutation` job `continue-on-error: true` | 2026-07-19 | was blocking, now soft                                             |
+| Playwright `retries: 1` → `3`            | 2026-08-04 | flake now hidden rather than measured; the 2.4% reading is a floor |
 
 **Contract edits:** `visual-regression` moved SHOULD → COULD on 2026-07-22, no waiver, no recorded reason. Check this was deliberate.
 
@@ -62,10 +62,10 @@ The section no snapshot contains.
 ## Findings
 
 1. **The coverage gain is partly a threshold change.** Diff coverage rose 9pp while its gate fell 15pp. Real coverage improved; enforcement did not. Restore the threshold to 75% or record the reduction as a contract change with an owner.
-2. **Suite duration has risen for three consecutive periods** (7m20 → 9m50 → 12m40). Magnitude aside, the direction is the finding — this is the period before someone asks to make the gate non-blocking.
+2. **Suite duration has risen for three consecutive periods** (7m20 → 9m50 → 12m40). Magnitude aside, the direction is the finding - this is the period before someone asks to make the gate non-blocking.
 3. **Flake is being hidden, not fixed.** `retries: 3` means the 2.4% reading is a lower bound. Cap retries at 1 and measure honestly before setting a limit.
 4. **`e2e-testing` regressed five weeks ago and nothing reported it.** A snapshot would still show a Playwright config and call it present.
-5. **W-003 expired 20 days ago** — `src/billing/**` has had no integration coverage since, and the blocking ticket is still open.
+5. **W-003 expired 20 days ago** - `src/billing/**` has had no integration coverage since, and the blocking ticket is still open.
 6. **Intent coverage is rising but thin.** Two of five sampled records were restated diffs. The number is improving faster than the practice.
 
 ## Series breaks
@@ -113,13 +113,11 @@ The section no snapshot contains.
       "sample": "42 merged PRs"
     }
   ],
-  "gates": [
-    { "practice": "e2e-testing", "blocking": false, "changed": "2026-07-14", "was": true }
-  ]
+  "gates": [{ "practice": "e2e-testing", "blocking": false, "changed": "2026-07-14", "was": true }]
 }
 ```
 
-The `gates` array is what makes finding 4 possible. Recording whether each gate blocks — and when that last changed — is the difference between a trend report and a prettier snapshot.
+The `gates` array is what makes finding 4 possible. Recording whether each gate blocks - and when that last changed - is the difference between a trend report and a prettier snapshot.
 
 ## Writing rules
 

@@ -1,13 +1,13 @@
 ---
 name: scoping-change-relevance
-description: 'Classifies a diff into file tags and hunk tags — new public export, new endpoint, modified auth, SQL string, migration, added dependency, touched prompt — then maps each tag to the quality practices it makes relevant, producing a defensible per-change check scope instead of running everything or guessing. Use when deciding what to test for a specific pull request, when a full regression run is too slow to gate on, when a pre-push or PR gate needs a scope someone can argue with, or when asked "which checks does this change actually need".'
+description: 'Classifies a diff into file tags and hunk tags - new public export, new endpoint, modified auth, SQL string, migration, added dependency, touched prompt - then maps each tag to the quality practices it makes relevant, producing a defensible per-change check scope instead of running everything or guessing. Use when deciding what to test for a specific pull request, when a full regression run is too slow to gate on, when a pre-push or PR gate needs a scope someone can argue with, or when asked "which checks does this change actually need".'
 argument-hint: 'Base branch or commit range (e.g. main...HEAD), plus the repo path or the diff itself'
 user-invocable: true
 ---
 
 # Scoping Change Relevance
 
-Use this skill to decide, from the diff alone, which quality practices a specific change makes relevant — and to be able to defend the answer.
+Use this skill to decide, from the diff alone, which quality practices a specific change makes relevant - and to be able to defend the answer.
 
 Running every check on every commit is slow, so teams stop gating on it. Running whatever the author felt like is fast and arbitrary. The middle path is a **tag grammar**: derive tags mechanically from the diff, map tags to practices with a fixed recipe table, and the scope becomes reproducible. Two people scoping the same diff should land on the same list.
 
@@ -26,7 +26,7 @@ Running every check on every commit is slow, so teams stop gating on it. Running
 - **Relevance is a filter, not a discount.** A practice out of scope is out of scope *for this change*; it does not become optional for the project.
 - **Any auth, secret, migration, or dependency signal wins.** These escalate immediately. There is no "small auth change".
 - **Under-tagging is the expensive error.** A false positive costs a check run. A false negative ships the defect. When a rule nearly matches, tag it.
-- **Deleted guards are changes.** A removed test, a removed validation, a loosened type — those are risk-increasing edits, not neutral cleanup.
+- **Deleted guards are changes.** A removed test, a removed validation, a loosened type - those are risk-increasing edits, not neutral cleanup.
 - **Path is not proof.** A file under `auth/` is auth-relevant; a file elsewhere that verifies a token is too. Read the hunk.
 
 ## Workflow
@@ -39,7 +39,7 @@ git diff <base>...HEAD -- <path>          # per-file hunks
 git log <base>..HEAD --oneline
 ```
 
-Use `main...HEAD` for a branch, `HEAD` for uncommitted work. Confirm the base ref resolves and the diff is non-empty before going further — a bad ref silently produces an empty scope, which reads as "nothing to check".
+Use `main...HEAD` for a branch, `HEAD` for uncommitted work. Confirm the base ref resolves and the diff is non-empty before going further - a bad ref silently produces an empty scope, which reads as "nothing to check".
 
 Exclude non-source noise from tagging, but **list what you excluded**: lockfiles are excluded from hunk tagging yet are themselves a `added-dependency` signal; snapshots, generated clients, and build output are excluded; docs are excluded unless they are the deliverable.
 
@@ -57,7 +57,7 @@ Do this by reading, not only by pattern matching. The patterns are a floor: they
 
 ### Phase 3: Resolve relevant practices
 
-Apply `./resources/relevance-recipes.md`. Each practice declares the tags that make it relevant; a practice is in scope if any of its declared tags is present. Record, per practice, **which tag triggered it** — that is what makes the scope reviewable.
+Apply `./resources/relevance-recipes.md`. Each practice declares the tags that make it relevant; a practice is in scope if any of its declared tags is present. Record, per practice, **which tag triggered it** - that is what makes the scope reviewable.
 
 Then subtract: a practice not in the project's quality contract is not in scope. If a contract exists (see `deriving-a-quality-contract`), intersect with it and note practices that *would* have been triggered but are not contracted. That list is useful evidence next time the contract is reviewed.
 
@@ -71,7 +71,7 @@ Use `./resources/change-scope-template.md`. Rank by escalation:
 | **Standard** | `new-public-export`, `modified-error-handling`, `modified-request-schema`, `added-dependency`, `ai` |
 | **Light** | `test`-only, `config`-only, docs, formatting |
 
-State the **blind spots** explicitly: what the tags cannot see. A pure-rename diff that changes behaviour through a config default, a change whose risk lives in the data rather than the code, a removal whose consequence is elsewhere in the system. The tag grammar is mechanical and therefore blind in known ways — name them rather than implying coverage.
+State the **blind spots** explicitly: what the tags cannot see. A pure-rename diff that changes behaviour through a config default, a change whose risk lives in the data rather than the code, a removal whose consequence is elsewhere in the system. The tag grammar is mechanical and therefore blind in known ways - name them rather than implying coverage.
 
 ## Worked Example
 
@@ -104,7 +104,7 @@ D  src/routes/orders.test.ts
 | Standard | `e2e-testing` | `public-api` + `critical-path` reachable from the UI |
 | Light | `linting`, `type-safety` | any `source` |
 
-**Flagged:** `removed-test` on the file covering the endpoint being changed. A deleted test is not a neutral edit — require the replacement or a reason.
+**Flagged:** `removed-test` on the file covering the endpoint being changed. A deleted test is not a neutral edit - require the replacement or a reason.
 
 **Blind spots:** the `stripe` integration's failure behaviour is not visible in the diff; whether the refund path is reachable from the UI needs a human to confirm; the prompt change's blast radius depends on which chains consume it.
 

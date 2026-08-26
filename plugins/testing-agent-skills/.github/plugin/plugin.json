@@ -1,0 +1,18 @@
+{
+  "name": "testing-agent-skills",
+  "description": "Tests the customization assets themselves - skills, prompts, custom agents, instructions - the way a product is tested: activation cases that check an asset fires when it should and stays quiet when it should not, output-contract cases, safety cases, collision cases between assets competing for the same trigger, a weighted rubric scored blind, and a baseline-versus-candidate gate before an edit ships. Use when a skill is edited and nobody knows whether behaviour changed, when two skills fight over the same request, when a description is being tuned for discoverability, when a collection has grown past manual spot-checking, or when the request mentions skill evals, prompt regression, or \"does this skill actually work\".",
+  "version": "1.0.0",
+  "author": {
+    "name": "jaktestowac.pl"
+  },
+  "repository": "https://github.com/jaktestowac/awesome-copilot-for-testers.git",
+  "license": "MIT",
+  "keywords": [
+    "testing",
+    "agent",
+    "skills"
+  ],
+  "skills": [
+    "./skills/testing-agent-skills/"
+  ]
+}

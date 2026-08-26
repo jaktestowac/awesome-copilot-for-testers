@@ -9,7 +9,7 @@ user-invocable: true
 
 A compact standard for the red-green-refactor loop: enough to keep every change verified, short enough to read in one pass.
 
-Framework-agnostic — match whatever runner and assertion style the project already uses. If none exists, ask which runner to target before the first test.
+Framework-agnostic - match whatever runner and assertion style the project already uses. If none exists, ask which runner to target before the first test.
 
 ## When to Use
 
@@ -24,12 +24,12 @@ Escalate to `test-driven-development` when the feature spans several units, need
 State three things:
 
 - the **behavior** being built, in the user's vocabulary
-- the **seam** — the public interface a real caller would use, which the tests observe through; name it and get it confirmed rather than assuming it
-- the **test list** — the behaviors to build, smallest and most central first, worked one at a time
+- the **seam** - the public interface a real caller would use, which the tests observe through; name it and get it confirmed rather than assuming it
+- the **test list** - the behaviors to build, smallest and most central first, worked one at a time
 
 The list is a queue, not a batch. Writing all the tests up front verifies imagined behavior and locks in a shape nobody has validated.
 
-Match the project's existing runner, test locations, and naming, and find the command that runs a single test file — the loop only works while observing red and green is cheap.
+Match the project's existing runner, test locations, and naming, and find the command that runs a single test file - the loop only works while observing red and green is cheap.
 
 ## The Loop
 
@@ -37,27 +37,27 @@ Match the project's existing runner, test locations, and naming, and find the co
 
 1. Write **one** failing test for the next list entry.
 2. Run it and read the real output.
-3. Confirm it fails on the **missing behavior** — not a typo, missing import, or broken fixture. A mechanical failure is not red: fix it and run again.
+3. Confirm it fails on the **missing behavior** - not a typo, missing import, or broken fixture. A mechanical failure is not red: fix it and run again.
 4. If it passes immediately, stop. Either the behavior exists already or the test asserts nothing.
-5. Check the expected value came from outside the implementation — the spec, a worked example, a known-good literal. A value recomputed the way the code computes it, or imported from the code's own constants, passes by construction.
+5. Check the expected value came from outside the implementation - the spec, a worked example, a known-good literal. A value recomputed the way the code computes it, or imported from the code's own constants, passes by construction.
 
 ### Green
 
 Write the simplest thing that passes. Pick by confidence:
 
-- **Obvious implementation** — you know exactly how it works
-- **Fake it** — return a constant, and let a queued test force the real logic
-- **Triangulation** — add a second test with different data that the constant cannot satisfy
+- **Obvious implementation** - you know exactly how it works
+- **Fake it** - return a constant, and let a queued test force the real logic
+- **Triangulation** - add a second test with different data that the constant cannot satisfy
 
 Then run the **full suite**, not just the new test. Do not clean up yet.
 
 A fake is fine only while a listed test will remove it. A fake with nothing scheduled to kill it is a bug with a passing test.
 
-Substitute only what you do not own — clock, randomness, network, storage. If getting to green needs a mock of your own module, the seam is wrong; say so instead of mocking your way through.
+Substitute only what you do not own - clock, randomness, network, storage. If getting to green needs a mock of your own module, the seam is wrong; say so instead of mocking your way through.
 
 ### Refactor
 
-Under green only, one change at a time, running the suite after each: remove duplication, fix names, split what grew too big — in the tests as well as the code. Structure only, never behavior. If a refactor goes red, revert it rather than debugging forward.
+Under green only, one change at a time, running the suite after each: remove duplication, fix names, split what grew too big - in the tests as well as the code. Structure only, never behavior. If a refactor goes red, revert it rather than debugging forward.
 
 Commit at green, then take the next entry.
 
@@ -65,13 +65,13 @@ Commit at green, then take the next entry.
 
 1. **Red before green.** No production code without a failing test demanding it.
 2. **Evidence, not assertion.** Actually run the tests and quote the real output. Never claim red or green unseen.
-3. **Minimal implementation.** Only the code the current test demands — no speculative branches.
+3. **Minimal implementation.** Only the code the current test demands - no speculative branches.
 4. **One slice at a time.** One behavior, one test, one implementation.
 5. **Refactor only under green**, and never mix it with the green step.
 6. **Drive the public seam**, never private methods.
 7. **Assert against an independent source of truth**, never a value the implementation hands you.
-8. **Never weaken a test to reach green.** If an assertion has to change, the specification changed — say so and get it confirmed.
-9. **Match step size to confidence.** Repeated failure to reach green means the step was too big — revert to the last green and split the behavior.
+8. **Never weaken a test to reach green.** If an assertion has to change, the specification changed - say so and get it confirmed.
+9. **Match step size to confidence.** Repeated failure to reach green means the step was too big - revert to the last green and split the behavior.
 
 ## Bugs: Reproduce First
 
@@ -79,18 +79,18 @@ Commit at green, then take the next entry.
 2. Confirm the failure matches the reported symptom, not a different one nearby.
 3. Shrink it until every remaining element is load-bearing.
 4. Fix the code until it passes, then re-check the original scenario.
-5. Keep the test — it is the regression guard. If the bug was intermittent, make the repro deterministic first and say which signal the test locks down.
+5. Keep the test - it is the regression guard. If the bug was intermittent, make the repro deterministic first and say which signal the test locks down.
 6. Stage the failing test before the fix, so history reads red then green.
 
 Never fix first and test after. A test written after the fix has never been seen catching the bug.
 
 ## When to Step Out
 
-Say so and stop looping when the behavior needs a real network, database, or browser to prove (integration work), when the change is a pure rename or mechanical migration, when there is no independent source of truth to assert against (config, wiring, straight delegation), or when the design is too open to express as an assertion yet — spike first, throw the spike away, then start cycling.
+Say so and stop looping when the behavior needs a real network, database, or browser to prove (integration work), when the change is a pure rename or mechanical migration, when there is no independent source of truth to assert against (config, wiring, straight delegation), or when the design is too open to express as an assertion yet - spike first, throw the spike away, then start cycling.
 
 Do not drive the loop with a browser or end-to-end test; the feedback is too slow to cycle on, and that coverage is written after the behavior works.
 
-Stepping out is not skipping verification. Name the closest check you can actually run — a script, a manual repro command, an output comparison, a type check — run it before and after, and report that output in place of the red-green pair. Prefer no test to a bad test, but never a silent skip.
+Stepping out is not skipping verification. Name the closest check you can actually run - a script, a manual repro command, an output comparison, a type check - run it before and after, and report that output in place of the red-green pair. Prefer no test to a bad test, but never a silent skip.
 
 ## Common Failure Modes
 

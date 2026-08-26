@@ -4,15 +4,15 @@ The profile is the risk class of the system. It decides the requirement level of
 
 ## Choosing a profile
 
-Ask these five questions. Answers push upward, never downward — one serious "yes" is enough to move a profile up.
+Ask these five questions. Answers push upward, never downward - one serious "yes" is enough to move a profile up.
 
-| Question | Pushes toward |
-| --- | --- |
-| Who is harmed by a defect, and how badly? | External paying users or the public → higher |
-| Is there regulatory, contractual, or audit exposure? (finance, health, public sector, GDPR-heavy, SOC2) | Any → `critical-regulated` |
-| Does it touch money, personal data, credentials, or safety? | Any → higher |
-| How fast can a bad release be undone? | Not in minutes → higher |
-| Would a silent wrong answer be worse than an outage? | Yes → higher |
+| Question                                                                                                | Pushes toward                                |
+| ------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| Who is harmed by a defect, and how badly?                                                               | External paying users or the public → higher |
+| Is there regulatory, contractual, or audit exposure? (finance, health, public sector, GDPR-heavy, SOC2) | Any → `critical-regulated`                   |
+| Does it touch money, personal data, credentials, or safety?                                             | Any → higher                                 |
+| How fast can a bad release be undone?                                                                   | Not in minutes → higher                      |
+| Would a silent wrong answer be worse than an outage?                                                    | Yes → higher                                 |
 
 The last question is the one teams forget. A crash gets paged; a wrong balance gets invoiced.
 
@@ -32,7 +32,7 @@ Metric thresholds: diff coverage ≥ 80%, no critical or high SAST findings, no 
 The default. Normal business logic and APIs, real users, ordinary oversight. Most product work lives here.
 
 - Core dev-gate practices are MUST; deeper verification is SHOULD; exotic techniques are COULD.
-- Intent debt is recommended, not enforced — a WARN, not a blocker.
+- Intent debt is recommended, not enforced - a WARN, not a blocker.
 - Waivers are allowed on SHOULD practices with reason, owner, and expiry.
 
 Metric thresholds: diff coverage ≥ 75%, no critical SAST findings, no known critical vulnerable dependencies, flake rate < 1%, suite duration monitored.
@@ -43,7 +43,7 @@ Prototypes, spikes, internal tools with a handful of known users, anything expli
 
 - A thin MUST set: lint, typecheck, a few tests on the logic that matters, secret scanning.
 - Most verification practices are COULD. Optimise for iteration speed and for not leaking credentials.
-- The honest risk: prototypes get promoted. Record the promotion trigger — "if this gets external users, re-derive at `standard`" — inside the contract, so the upgrade has a tripwire instead of a surprise.
+- The honest risk: prototypes get promoted. Record the promotion trigger - "if this gets external users, re-derive at `standard`" - inside the contract, so the upgrade has a tripwire instead of a surprise.
 
 Metric thresholds: no coverage floor, secret scanning still MUST, dependency audit advisory.
 
@@ -51,16 +51,16 @@ Metric thresholds: no coverage floor, secret scanning still MUST, dependency aud
 
 Thresholds are contract terms, not defaults to inherit silently. State them in the contract even where they match.
 
-| Metric | `prototype-internal` | `standard` | `critical-regulated` |
-| --- | --- | --- | --- |
-| Diff coverage (changed lines) | none | ≥ 75% | ≥ 80% |
-| Repo coverage direction | none | must not decrease | must not decrease |
-| SAST | advisory | block critical | block critical + high |
-| Dependency audit | advisory | block critical | block critical + high |
-| Secret scan | block | block | block |
-| Flake rate | none | < 1% | < 0.5% |
-| Mutation score | none | tracked | tracked with a floor |
-| Accessibility | none | WCAG 2.2 AA on key flows | WCAG 2.2 AA, attested |
+| Metric                        | `prototype-internal` | `standard`               | `critical-regulated`  |
+| ----------------------------- | -------------------- | ------------------------ | --------------------- |
+| Diff coverage (changed lines) | none                 | ≥ 75%                    | ≥ 80%                 |
+| Repo coverage direction       | none                 | must not decrease        | must not decrease     |
+| SAST                          | advisory             | block critical           | block critical + high |
+| Dependency audit              | advisory             | block critical           | block critical + high |
+| Secret scan                   | block                | block                    | block                 |
+| Flake rate                    | none                 | < 1%                     | < 0.5%                |
+| Mutation score                | none                 | tracked                  | tracked with a floor  |
+| Accessibility                 | none                 | WCAG 2.2 AA on key flows | WCAG 2.2 AA, attested |
 
 ## Anti-patterns
 

@@ -37,7 +37,7 @@ Every deliberate fake needs a queued test that will remove it. Empty at session 
 
 Copy one block per cycle.
 
-### Cycle N — <behavior>
+### Cycle N - <behavior>
 
 **Red**
 
@@ -86,7 +86,7 @@ Copy one block per cycle.
 - [ ] The suite reads as a description of the feature
 - [ ] Remaining test list entries are listed below, not silently dropped
 
-**Where the loop was stepped out of** — which entry, why, and the substitute check that was run instead:
+**Where the loop was stepped out of** - which entry, why, and the substitute check that was run instead:
 
 **Design findings surfaced by the loop:**
 

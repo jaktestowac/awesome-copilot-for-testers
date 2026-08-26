@@ -1,12 +1,12 @@
 # Guardrail Checks
 
-Deterministic tests on the code between the model and the world. None of these need a live model call — feed recorded or synthetic model output and assert on the app's behaviour. That makes them fast, free, and suitable for every PR.
+Deterministic tests on the code between the model and the world. None of these need a live model call - feed recorded or synthetic model output and assert on the app's behaviour. That makes them fast, free, and suitable for every PR.
 
 ## 1. Schema conformance
 
 Every model output crossing a trust boundary parses against a schema, and every way it can fail is a tested case.
 
-```ts
+````ts
 const Result = z.object({
   action: z.enum(['refund', 'escalate', 'close']),
   orderId: z.string().regex(/^ORD-\d{6}$/),
@@ -34,9 +34,9 @@ describe('model output contract', () => {
     expect(effect.error).toMatch(/invalid model output/i);
   });
 });
-```
+````
 
-Two assertions on every rejection: it was rejected, **and no side effect occurred**. The second is the one that matters — a rejection that still wrote a row is not a guardrail.
+Two assertions on every rejection: it was rejected, **and no side effect occurred**. The second is the one that matters - a rejection that still wrote a row is not a guardrail.
 
 The `amount over cap` case is worth its own note: a schema bound is a business control. `max(10_000)` in the schema is a real limit; the same limit written in the prompt is not.
 
@@ -73,11 +73,11 @@ it('blocks output containing forbidden patterns', async () => {
 });
 ```
 
-Also test the inverse — that a legitimate output containing a *reference* to card data (`card ending 1111`) is not blocked. A filter with false positives gets switched off, and then there is no filter.
+Also test the inverse - that a legitimate output containing a _reference_ to card data (`card ending 1111`) is not blocked. A filter with false positives gets switched off, and then there is no filter.
 
 ## 4. Moderation
 
-Test that it is called, that its verdict is honoured, and — most importantly — its failure mode:
+Test that it is called, that its verdict is honoured, and - most importantly - its failure mode:
 
 ```ts
 it('fails closed when moderation times out', async () => {
@@ -112,7 +112,7 @@ Also check what a markdown image or link can do: a model-emitted `![](https://ev
 
 ## 6. Tool-call authorisation
 
-The most important section. Authorisation belongs in the handler, keyed to the *caller's* identity — never to what the model asked for.
+The most important section. Authorisation belongs in the handler, keyed to the _caller's_ identity - never to what the model asked for.
 
 ```ts
 it('rejects a tool call for a resource the user cannot access', async () => {
@@ -126,7 +126,10 @@ it('rejects a tool call for a resource the user cannot access', async () => {
 });
 
 it('rejects a mutating tool call in a read-only session', async () => {
-  const res = await executeToolCall({ name: 'issue_refund', args: { amount: 100 } }, readOnlySession);
+  const res = await executeToolCall(
+    { name: 'issue_refund', args: { amount: 100 } },
+    readOnlySession,
+  );
   expect(res.status).toBe('forbidden');
 });
 
@@ -159,14 +162,14 @@ Caps to have and to test: input tokens, output tokens, tool calls per run, agent
 
 Go through every guardrail and record what happens when it cannot run:
 
-| Guardrail | Fails to | Correct behaviour |
-| --- | --- | --- |
-| Schema validation | parse error | no action, error surfaced |
-| Moderation | timeout / 5xx | do not publish |
-| PII filter | regex engine error | do not publish |
-| Tool authorisation | authz service down | deny |
-| Retrieval | index unavailable | answer without sources, and say so — never invent |
-| Rate limiter | store unavailable | deny or degrade, never unlimited |
+| Guardrail          | Fails to           | Correct behaviour                                 |
+| ------------------ | ------------------ | ------------------------------------------------- |
+| Schema validation  | parse error        | no action, error surfaced                         |
+| Moderation         | timeout / 5xx      | do not publish                                    |
+| PII filter         | regex engine error | do not publish                                    |
+| Tool authorisation | authz service down | deny                                              |
+| Retrieval          | index unavailable  | answer without sources, and say so - never invent |
+| Rate limiter       | store unavailable  | deny or degrade, never unlimited                  |
 
 Each row needs a test. "Fails open" written in this table is a finding, not a note.
 
@@ -182,18 +185,18 @@ it('records enough to replay a blocked interaction', async () => {
 });
 ```
 
-Enough to investigate, not enough to become the leak. Log the prompt hash, the model, the rejection reason and a truncated redacted excerpt — not the full raw output, which may contain the exact data the filter just blocked.
+Enough to investigate, not enough to become the leak. Log the prompt hash, the model, the rejection reason and a truncated redacted excerpt - not the full raw output, which may contain the exact data the filter just blocked.
 
 ## Coverage table for the report
 
-| Control | Exists | Tested | Fails closed |
-| --- | --- | --- | --- |
-| Output schema | yes | yes | yes |
-| Refusal handling | yes | **no** | n/a |
-| PII filter | yes | yes | yes |
-| Moderation | yes | yes | **no — fails open on timeout** |
-| HTML sanitisation | yes | yes | yes |
-| Tool authorisation | **prompt only** | no | **no** |
-| Step / cost caps | no | no | no |
+| Control            | Exists          | Tested | Fails closed                   |
+| ------------------ | --------------- | ------ | ------------------------------ |
+| Output schema      | yes             | yes    | yes                            |
+| Refusal handling   | yes             | **no** | n/a                            |
+| PII filter         | yes             | yes    | yes                            |
+| Moderation         | yes             | yes    | **no - fails open on timeout** |
+| HTML sanitisation  | yes             | yes    | yes                            |
+| Tool authorisation | **prompt only** | no     | **no**                         |
+| Step / cost caps   | no              | no     | no                             |
 
 Two rows here are findings before a single adversarial case is run: prompt-only tool authorisation, and moderation that fails open. That table is usually the most valuable artifact this skill produces.
